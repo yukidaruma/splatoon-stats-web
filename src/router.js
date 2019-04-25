@@ -1,20 +1,20 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 
-import Index from './components/Index.vue'
-import LeagueDatePicker from './components/LeagueDatePicker.vue'
+import Index from './components/Index.vue';
+import LeagueDatePicker from './components/LeagueDatePicker.vue';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
     {
       path: '/',
-      component: Index
+      component: Index,
     },
     {
       path: '/leagues',
-      component: LeagueDatePicker
-    }
-  ]
-})
+      component: LeagueDatePicker,
+    },
+  ],
+});

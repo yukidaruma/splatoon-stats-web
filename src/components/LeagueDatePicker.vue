@@ -7,7 +7,7 @@
 <script>
 export default {
   name: 'LeagueDatePicker',
-}
+};
 </script>
 
 <style scoped>
