@@ -1,8 +1,10 @@
 <template>
   <div id="app">
     <router-link to="/">Index</router-link> |
-    <router-link to="/leagues">Leagues</router-link>
     <router-link to="/weapons">Weapon popularity</router-link> |
+    X Rankings |
+    League Rankings |
+    <router-link to="/players">Players</router-link>
     <router-view></router-view>
 
     <global-footer></global-footer>
