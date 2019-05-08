@@ -56,6 +56,8 @@
 
 <script>
 import apiClient from '../api-client';
+import { weaponIcon } from '../helper.js';
+
 import LeagueDatePicker from './LeagueDatePicker.vue';
 
 const date = new Date();
@@ -96,8 +98,6 @@ export default {
       apiClient
         .get(`/${this.rankingType}/${this.weaponType}/${this.year}/${this.month}/${rankedRule}`)
         .then((res) => {
-          const singularWeaponType = this.weaponType.substring(0, this.weaponType.length - 1);
-
           this.weapons = res.data.map((weapon) => {
             const weaponIdKey = {
               weapons: 'weapon_id',
@@ -108,7 +108,7 @@ export default {
             const weaponTypeLocaleKey = this.weaponType === 'weapons' ? 'weapons' : `weapon_${this.weaponType}`;
 
             weapon.localizedName = this.locale[weaponTypeLocaleKey][weaponId].name;
-            weapon.icon = `http://localhost:3000/static/images/${singularWeaponType}/${weaponId}.png`;
+            weapon.icon = weaponIcon(this.weaponType, weaponId);
             return weapon;
           });
         })
