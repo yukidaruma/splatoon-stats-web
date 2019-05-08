@@ -25,7 +25,10 @@
       Filter by power
     </div>
     -->
-    <date-picker :rankingType="rankingType" :defaultYear="year" :defaultMonth="month" @year-change="onYearChange" @month-change="onMonthChange"></date-picker>
+    <div>
+      Date: <date-picker :rankingType="rankingType"
+        :defaultYear="year" :defaultMonth="month" @year-change="onYearChange" @month-change="onMonthChange" />
+    </div>
     <h2>Most used {{ weaponTypeTitleName }} for {{ rankingType === 'x' ? 'X Ranked' : rankingType | capitalizeFirstLetter }} Battles in {{ year }}-{{ month }}</h2>
     <div v-if="loading">
       Loading...
@@ -56,17 +59,17 @@ import { weaponIcon } from '../helper.js';
 import DatePicker from './DatePicker.vue';
 import RankedRulePicker from './RankedRulePicker.vue';
 
-const date = new Date();
-const year = date.getFullYear();
-const month = date.getMonth() + 1;
+const now = new Date();
+const currentYear = now.getFullYear();
+const currentMonth = now.getMonth() + 1;
 
 export default {
   name: 'Weapons',
   data() {
     return {
       loading: false,
-      year,
-      month: month - 1, // last month
+      year: currentYear,
+      month: currentMonth - 1, // last month
       rankingType: 'x',
       weaponType: 'weapons',
       rankedRule: null,
@@ -87,7 +90,7 @@ export default {
     },
   },
   methods: {
-    updateRanking() {
+    fetchRanking() {
       const rankedRule = this.rankedRule ? this.rankedRule : '';
 
       this.loading = true;
@@ -129,13 +132,13 @@ export default {
     },
   },
   mounted() {
-    this.updateRanking();
+    this.fetchRanking();
   },
   created() {
     this.$watch(
       () => [this.$data.rankingType, this.$data.weaponType, this.$data.rankedRule, this.$data.year, this.$data.month],
       () => {
-        this.updateRanking();
+        this.fetchRanking();
       },
     );
   },
