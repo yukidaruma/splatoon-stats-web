@@ -46,7 +46,7 @@
       <table>
         <tr v-for="weapon in weapons" :key="weapon.key">
           <td>{{ weapon.rank }}</td>
-          <td><img class="weapon-icon" :src="weapon.icon">{{ weapon.localizedName }}</td>
+          <td><img class="weapon-icon" :src="weapon.icon">{{ $t(weapon.namePath) }}</td>
           <td>{{ weapon.percentage | formatPercentage }}</td>
         </tr>
       </table>
@@ -107,7 +107,7 @@ export default {
             const weaponId = weapon[weaponIdKey];
             const weaponTypeLocaleKey = this.weaponType === 'weapons' ? 'weapons' : `weapon_${this.weaponType}`;
 
-            weapon.localizedName = this.locale[weaponTypeLocaleKey][weaponId].name;
+            weapon.namePath = `${weaponTypeLocaleKey}.${weaponId}.name`;
             weapon.icon = weaponIcon(this.weaponType, weaponId);
             return weapon;
           });
@@ -129,12 +129,7 @@ export default {
     },
   },
   mounted() {
-    apiClient
-      .get('/static/locale/en.json')
-      .then((res) => {
-        this.locale = res.data;
-        this.updateRanking();
-      });
+    this.updateRanking();
   },
   created() {
     this.$watch(
