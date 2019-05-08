@@ -46,7 +46,7 @@
       <table>
         <tr v-for="weapon in weapons" :key="weapon.key">
           <td>{{ weapon.rank }}</td>
-          <td><img :src="weapon.icon" style="height: 32px;">{{ weapon.localizedName }}</td>
+          <td><img class="weapon-icon" :src="weapon.icon">{{ weapon.localizedName }}</td>
           <td>{{ weapon.percentage | formatPercentage }}</td>
         </tr>
       </table>

@@ -44,4 +44,9 @@ html, body {
   bottom: 0;
   height: 3em;
 }
+
+.weapon-icon {
+  height: 32px;
+  width: 32px;
+}
 </style>
