@@ -17,15 +17,8 @@
       </select>
     </div>
     <div>
-      Ranked rule:
-      <select v-model="rankedRule">
-        <!-- Todo: disable and show "Turf wan" when splatfest -->
-        <option :value="null">All</option>
-        <option value="splat_zones">Splat Zones</option>
-        <option value="tower_control">Tower Control</option>
-        <option value="rainmaker">Rainmaker</option>
-        <option value="clam_blitz">Clam Blitz</option>
-      </select>
+      Rule:
+      <ranked-rule-picker :defaultRule="rankedRule" @rule-change="onRuleChange" />
     </div>
     <!-- Todo:
     <div>
@@ -61,6 +54,7 @@ import apiClient from '../api-client';
 import { weaponIcon } from '../helper.js';
 
 import DatePicker from './DatePicker.vue';
+import RankedRulePicker from './RankedRulePicker.vue';
 
 const date = new Date();
 const year = date.getFullYear();
@@ -82,6 +76,7 @@ export default {
   },
   components: {
     DatePicker,
+    RankedRulePicker,
   },
   filters: {
     formatPercentage(percentage) {
@@ -123,6 +118,9 @@ export default {
     },
     onMonthChange(month) {
       this.month = month;
+    },
+    onRuleChange(rule) {
+      this.rankedRule = rule;
     },
   },
   computed: {
