@@ -17,6 +17,21 @@ const findRuleKey = rankedRuleId => [
   { id: 4, key: 'clam_blitz' },
 ].find(rule => rule.id === rankedRuleId).key;
 
+const formatRankingEntry = (rankingEntry, weaponType) => {
+  const weaponIdKey = {
+    weapons: 'weapon_id',
+    subs: 'sub_weapon_id',
+    specials: 'special_weapon_id',
+  }[weaponType];
+  const weaponId = rankingEntry[weaponIdKey];
+  const weaponTypeLocaleKey = weaponType === 'weapons' ? 'weapons' : `weapon_${weaponType}`;
+
+  rankingEntry.namePath = `${weaponTypeLocaleKey}.${weaponId}.name`;
+  rankingEntry.icon = weaponIcon(weaponType, weaponId);
+
+  return rankingEntry;
+};
+
 // Examples:
 // calculateEndTime('league', moment.utc({ ...hour: 0 })) => Date(moment.utc({ ...hour: 2 }))
 // calculateEndTime('x', moment.utc({ year: 2019, month: 3 })) => Date(moment.utc({ year: 2019, month: 4 }))
@@ -30,5 +45,5 @@ const calculateEndTime = (matchmakingType, startTime) => {
 };
 
 export {
-  isValidPlayerId, weaponIcon, findRuleKey, calculateEndTime,
+  isValidPlayerId, weaponIcon, findRuleKey, formatRankingEntry, calculateEndTime,
 };

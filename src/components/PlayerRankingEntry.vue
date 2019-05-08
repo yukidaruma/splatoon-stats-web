@@ -3,7 +3,7 @@
     <td>#{{ rankingEntry.rank }}</td>
     <td>
       <div class="weapon-name-container">
-        <img class="weapon-icon" :src="rankingEntry.icon">{{ $t(`weapons.${rankingEntry.weapon_id}.name`) }}
+        <img class="weapon-icon" :src="rankingEntry.icon">{{ $t(rankingEntry.namePath) }}
       </div>
     </td>
     <td>{{ rankingEntry.rating }}</td>

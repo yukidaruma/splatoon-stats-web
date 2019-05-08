@@ -54,7 +54,7 @@
 
 <script>
 import apiClient from '../api-client';
-import { weaponIcon } from '../helper.js';
+import { formatRankingEntry } from '../helper.js';
 
 import DatePicker from './DatePicker.vue';
 import RankedRulePicker from './RankedRulePicker.vue';
@@ -98,19 +98,7 @@ export default {
       apiClient
         .get(`/${this.rankingType}/${this.weaponType}/${this.year}/${this.month}/${rankedRule}`)
         .then((res) => {
-          this.weapons = res.data.map((weapon) => {
-            const weaponIdKey = {
-              weapons: 'weapon_id',
-              subs: 'sub_weapon_id',
-              specials: 'special_weapon_id',
-            }[this.weaponType];
-            const weaponId = weapon[weaponIdKey];
-            const weaponTypeLocaleKey = this.weaponType === 'weapons' ? 'weapons' : `weapon_${this.weaponType}`;
-
-            weapon.namePath = `${weaponTypeLocaleKey}.${weaponId}.name`;
-            weapon.icon = weaponIcon(this.weaponType, weaponId);
-            return weapon;
-          });
+          this.weapons = res.data.map(weapon => formatRankingEntry(weapon, this.weaponType));
         })
         .finally(() => {
           this.loading = false;

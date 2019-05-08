@@ -31,7 +31,7 @@
 
 <script>
 import apiClient from '../api-client';
-import { isValidPlayerId, weaponIcon } from '../helper.js';
+import { isValidPlayerId, formatRankingEntry } from '../helper.js';
 
 import PlayerRankingEntry from './PlayerRankingEntry.vue';
 
@@ -72,11 +72,7 @@ export default {
 
       Promise.all(['x', 'league'].map(rankingType => apiClient.get(`/${rankingType}/players/${playerId}`)
         .then((res) => {
-          this.playerRankingHistory[rankingType] = res.data.map((ranking) => {
-            ranking.icon = weaponIcon('weapons', ranking.weapon_id);
-            console.log(ranking.start_time);
-            return ranking;
-          });
+          this.playerRankingHistory[rankingType] = res.data.map(weapon => formatRankingEntry(weapon, 'weapons'));
         })))
         .then(() => {
           this.loaded = true;
