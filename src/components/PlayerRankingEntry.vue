@@ -39,9 +39,4 @@ export default {
 </script>
 
 <style scoped>
-.weapon-name-container {
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-}
 </style>

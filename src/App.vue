@@ -47,6 +47,11 @@ html, body {
   height: 3em;
 }
 
+.weapon-name-container {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
 .weapon-icon {
   height: 32px;
   width: 32px;

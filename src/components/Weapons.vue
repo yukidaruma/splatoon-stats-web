@@ -1,7 +1,5 @@
 <template>
   <div>
-    Weapon Popularity
-
     <div>
       Data source:
       <select v-model="rankingType">
@@ -46,7 +44,11 @@
       <table>
         <tr v-for="weapon in weapons" :key="weapon.key">
           <td>{{ weapon.rank }}</td>
-          <td><img class="weapon-icon" :src="weapon.icon">{{ $t(weapon.namePath) }}</td>
+          <td>
+            <div class="weapon-name-container">
+              <img class="weapon-icon" :src="weapon.icon">{{ $t(weapon.namePath) }}
+            </div>
+          </td>
           <td>{{ weapon.percentage | formatPercentage }}</td>
         </tr>
       </table>
