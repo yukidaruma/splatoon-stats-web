@@ -40,6 +40,7 @@ html, body {
 .global-footer {
   width: 100%;
   position: absolute;
+  left: 0;
   bottom: 0;
   height: 3em;
 }
