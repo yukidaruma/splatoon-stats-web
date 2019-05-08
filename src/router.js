@@ -4,6 +4,7 @@ import Router from 'vue-router';
 import Index from './components/Index.vue';
 import Weapons from './components/Weapons.vue';
 import PlayerSummary from './components/PlayerSummary.vue';
+import XRankings from './components/XRankings.vue';
 
 Vue.use(Router);
 
@@ -16,6 +17,10 @@ export default new Router({
     {
       path: '/weapons',
       component: Weapons,
+    },
+    {
+      path: '/rankings/:rankingType(x|league)',
+      component: XRankings,
     },
     {
       path: '/players/:defaultPlayerId?',

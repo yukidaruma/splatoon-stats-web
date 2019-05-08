@@ -2,7 +2,7 @@
   <div id="app">
     <router-link to="/">Index</router-link> |
     <router-link to="/weapons">Weapon popularity</router-link> |
-    X Rankings |
+    <router-link to="/rankings/x">X Rankings</router-link> |
     League Rankings |
     <router-link to="/players">Players</router-link>
     <router-view></router-view>

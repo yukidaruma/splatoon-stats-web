@@ -1,0 +1,76 @@
+<template>
+  <div>
+    <div>
+      Date: <date-picker rankingType="x"
+        :defaultYear="year" :defaultMonth="month" @year-change="onYearChange" @month-change="onMonthChange" />
+    </div>
+    <div>
+      Rule: <ranked-rule-picker :defaultRule="rankedRule" noAllRules="true" @rule-change="onRuleChange" />
+    </div>
+    <table>
+      <tr v-for="rankingEntry in ranking" :key="rankingEntry.rank">
+        <td>#{{ rankingEntry.rank }}</td>
+        <td>
+          <div class="weapon-name-container">
+            <img class="weapon-icon" :src="rankingEntry.icon">
+            <router-link :to="`/players/${rankingEntry.player_id}`">{{ rankingEntry.player_id }}</router-link>
+          </div>
+        </td>
+        <td>{{ rankingEntry.rating }}</td>
+      </tr>
+    </table>
+  </div>
+</template>
+
+<script>
+import apiClient from '../api-client';
+import DatePicker from './DatePicker.vue';
+import RankedRulePicker from './RankedRulePicker.vue';
+import { findRuleKey, formatRankingEntry } from '../helper';
+
+const now = new Date();
+const currentYear = now.getFullYear();
+const currentMonth = now.getMonth() + 1;
+
+export default {
+  name: 'XRankings',
+  components: { DatePicker, RankedRulePicker },
+  data() {
+    return {
+      ranking: [],
+      year: currentYear,
+      month: currentMonth - 1,
+      rankedRule: findRuleKey(1),
+    };
+  },
+  methods: {
+    fetchRanking() {
+      apiClient.get(`/rankings/x/${this.year}/${this.month}/${this.rankedRule}`)
+        .then((res) => {
+          this.ranking = res.data.map(weapon => formatRankingEntry(weapon, 'weapons'));
+        })
+        .finally(() => {
+          this.$router.push(`/rankings/x/`);
+        });
+    },
+    onYearChange(year) {
+      this.year = year;
+    },
+    onMonthChange(month) {
+      this.month = month;
+    },
+    onRuleChange(rule) {
+      this.rankedRule = rule;
+    },
+  },
+  created() {
+    this.fetchRanking();
+    this.$watch(
+      () => [this.$data.rankedRule, this.$data.year, this.$data.month],
+      () => {
+        this.fetchRanking();
+      },
+    );
+  },
+};
+</script>
