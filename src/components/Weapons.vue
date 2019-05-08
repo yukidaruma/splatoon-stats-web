@@ -32,8 +32,8 @@
       Filter by power
     </div>
     -->
-    <h2>{{ rankingType | capitalizeFirstLetter }} Ranking for {{ weaponTypeTitleName }} {{ year }}-{{ month }}</h2>
     <date-picker :rankingType="rankingType" :defaultYear="year" :defaultMonth="month" @year-change="onYearChange" @month-change="onMonthChange"></date-picker>
+    <h2>Most used {{ weaponTypeTitleName }} for {{ rankingType === 'x' ? 'X Ranked' : rankingType | capitalizeFirstLetter }} Battles in {{ year }}-{{ month }}</h2>
     <div v-if="loading">
       Loading...
     </div>
