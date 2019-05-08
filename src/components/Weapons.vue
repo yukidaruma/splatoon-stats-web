@@ -32,8 +32,8 @@
       Filter by power
     </div>
     -->
-    <league-date-picker :rankingType="rankingType" :defaultYear="year" :defaultMonth="month" @year-change="onYearChange" @month-change="onMonthChange"></league-date-picker>
     <h2>{{ rankingType | capitalizeFirstLetter }} Ranking for {{ weaponTypeTitleName }} {{ year }}-{{ month }}</h2>
+    <date-picker :rankingType="rankingType" :defaultYear="year" :defaultMonth="month" @year-change="onYearChange" @month-change="onMonthChange"></date-picker>
     <div v-if="loading">
       Loading...
     </div>
@@ -60,7 +60,7 @@
 import apiClient from '../api-client';
 import { weaponIcon } from '../helper.js';
 
-import LeagueDatePicker from './LeagueDatePicker.vue';
+import DatePicker from './DatePicker.vue';
 
 const date = new Date();
 const year = date.getFullYear();
@@ -81,7 +81,7 @@ export default {
     };
   },
   components: {
-    LeagueDatePicker,
+    DatePicker,
   },
   filters: {
     formatPercentage(percentage) {
