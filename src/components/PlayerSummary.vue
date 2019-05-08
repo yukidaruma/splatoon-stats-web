@@ -16,13 +16,13 @@
         No record found for player {{ fetchedPlayerId }}
       </div>
       <table v-else>
-        <player-ranking-entry v-for="rankingEntry in playerRankingHistory.x" :key="rankingEntry.start_time"
+        <player-ranking-entry v-for="rankingEntry in playerRankingHistory.x" :key="`${rankingEntry.start_time}_${rankingEntry.rule_id}`"
           rankingType="x" :rankingEntry="rankingEntry" />
       </table>
 
       <h2>League Battle</h2>
       <table>
-        <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league" :key="rankingEntry.start_time"
+        <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league" :key="`${rankingEntry.start_time}_${rankingEntry.group_type}`"
           rankingType="league" :rankingEntry="rankingEntry" />
       </table>
     </div>
