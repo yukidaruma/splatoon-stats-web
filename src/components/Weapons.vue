@@ -96,7 +96,7 @@ export default {
       this.loading = true;
 
       apiClient
-        .get(`/${this.rankingType}/${this.weaponType}/${this.year}/${this.month}/${rankedRule}`)
+        .get(`/${this.weaponType}/${this.rankingType}/${this.year}/${this.month}/${rankedRule}`)
         .then((res) => {
           this.weapons = res.data.map(weapon => formatRankingEntry(weapon, this.weaponType));
         })

@@ -70,7 +70,7 @@ export default {
       this.loading = true;
       this.loaded = false;
 
-      Promise.all(['x', 'league'].map(rankingType => apiClient.get(`/${rankingType}/players/${playerId}`)
+      Promise.all(['x', 'league'].map(rankingType => apiClient.get(`/players/${rankingType}/${playerId}`)
         .then((res) => {
           this.playerRankingHistory[rankingType] = res.data.map(weapon => formatRankingEntry(weapon, 'weapons'));
         })))
