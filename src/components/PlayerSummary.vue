@@ -2,7 +2,7 @@
   <div>
     <div>
       Player ID: <input v-model="playerId" maxlength="16" placeholder="1234567890abcdef">
-      <button @click="getPlayerRankingHistory" :disabled="loading">Go</button>
+      <button @click="getPlayerRankingHistory(playerId)" :disabled="loading">Go</button>
     </div>
 
     <div v-if="loading">
@@ -53,30 +53,42 @@ export default {
   },
   created() {
     if (isValidPlayerId(this.defaultPlayerId)) {
-      this.playerId = this.defaultPlayerId;
-      this.getPlayerRankingHistory();
+      this.getPlayerRankingHistory(this.defaultPlayerId);
     } else {
       this.$router.push('/players');
     }
   },
+  watch: {
+    '$route.params.defaultPlayerId': {
+      handler: function(playerId) {
+        if (playerId) {
+          this.getPlayerRankingHistory(playerId);
+        } else {
+          this.loaded = false;
+        }
+      },
+    },
+  },
   methods: {
-    getPlayerRankingHistory() {
-      const { playerId } = this;
-
+    getPlayerRankingHistory(playerId) {
       if (!isValidPlayerId(playerId)) {
         alert('Invalid player id');
         return;
-      } if (playerId === this.fetchedPlayerId) { // Skip if the ID was already fetched
+      } else if (playerId === this.fetchedPlayerId) { // Skip if the ID was already fetched
         return;
       }
 
+      this.playerId = playerId;
       this.loading = true;
       this.loaded = false;
 
-      Promise.all(['x', 'league'].map(rankingType => apiClient.get(`/players/${rankingType}/${playerId}`)
-        .then((res) => {
-          this.playerRankingHistory[rankingType] = res.data.map(weapon => formatRankingEntry(weapon, 'weapons'));
-        })))
+      Promise.all(
+        ['x', 'league'].map(rankingType =>
+          apiClient.get(`/players/${rankingType}/${playerId}`).then(res => {
+            this.playerRankingHistory[rankingType] = res.data.map(weapon => formatRankingEntry(weapon, "weapons"));
+          })
+        )
+      )
         .then(() => {
           this.loaded = true;
         })
