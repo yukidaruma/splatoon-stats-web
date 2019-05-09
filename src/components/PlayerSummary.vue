@@ -21,6 +21,9 @@
       </table>
 
       <h2>League Battle</h2>
+      <div v-if="playerRankingHistory.league.length === 0">
+        No record found for player {{ fetchedPlayerId }}
+      </div>
       <table>
         <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league" :key="`${rankingEntry.start_time}_${rankingEntry.group_type}`"
           rankingType="league" :rankingEntry="rankingEntry" />
