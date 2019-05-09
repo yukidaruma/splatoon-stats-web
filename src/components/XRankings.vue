@@ -14,7 +14,10 @@
           <div class="weapon-name-container">
             <img class="weapon-icon" :src="rankingEntry.icon">
             <router-link :to="`/players/${rankingEntry.player_id}`">
-              <span class="player-id">
+              <span class="player-name" v-if="'player_name' in rankingEntry">
+                {{ rankingEntry.player_name }}
+              </span>
+              <span class="player-id" v-else>
                 {{ rankingEntry.player_id }}
               </span>
             </router-link>

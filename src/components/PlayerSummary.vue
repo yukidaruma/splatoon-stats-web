@@ -11,6 +11,16 @@
     <div v-else-if="loaded">
       <h1>Records for player `<span class="player-id">{{ fetchedPlayerId }}</span>`</h1>
 
+      <h2>Known Names</h2>
+      <div v-if="knownNames.length === 0">
+        No known names found for player <span class="player-id">{{ fetchedPlayerId }}</span>
+      </div>
+      <ul v-else>
+        <li v-for="knownName in knownNames" :key="knownName">
+          <span class="player-name">{{ knownName.name }}</span> (<date>{{ knownName.last_used }}</date>)
+        </li>
+      </ul>
+
       <h2>X Ranked</h2>
       <div v-if="playerRankingHistory.x.length === 0">
         No record found for player {{ fetchedPlayerId }}
@@ -49,6 +59,7 @@ export default {
       loaded: false,
       loading: false,
       playerRankingHistory: {},
+      knownNames: [],
     };
   },
   created() {
@@ -82,13 +93,15 @@ export default {
       this.loading = true;
       this.loaded = false;
 
-      Promise.all(
-        ['x', 'league'].map(rankingType =>
-          apiClient.get(`/players/${rankingType}/${playerId}`).then(res => {
+      Promise.all([
+        apiClient.get(`/players/${playerId}/known_names`)
+          .then((res) => this.knownNames = res.data),
+        ...['x', 'league'].map(rankingType =>
+          apiClient.get(`/players/${playerId}/rankings/${rankingType}`).then(res => {
             this.playerRankingHistory[rankingType] = res.data.map(weapon => formatRankingEntry(weapon, "weapons"));
           })
         )
-      )
+      ])
         .then(() => {
           this.loaded = true;
         })
