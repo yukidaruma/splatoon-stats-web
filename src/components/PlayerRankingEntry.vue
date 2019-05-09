@@ -18,17 +18,23 @@
       {{ $t(`stages.${rankingEntry.stage_ids[0]}.name`) }},
       {{ $t(`stages.${rankingEntry.stage_ids[1]}.name`) }}
     </td>
+    <td v-if="rankingType === 'league'">
+      <p class="weapon-name-container" v-for="teammate in rankingEntry.teammates" :key="teammate.player_id">
+        <img class="weapon-icon" :src="weaponIcon('weapons', teammate.weapon_id)">
+        <router-link :to="`/players/${teammate.player_id}`">{{ teammate.player_id }}</router-link>
+      </p>
+    </td>
   </tr>
 </template>
 
 <script>
 import moment from 'moment';
-import { calculateEndTime, findRuleKey } from '../helper.js';
+import { calculateEndTime, weaponIcon, findRuleKey } from '../helper.js';
 
 export default {
   name: 'PlayerRankingEntry',
   props: ['rankingEntry', 'rankingType'],
-  methods: { calculateEndTime, findRuleKey },
+  methods: { calculateEndTime, findRuleKey, weaponIcon },
   filters: {
     formatDate(time, rankingType) {
       const dateFormat = { x: 'YY-MM', league: 'YY-MM-DD hh:mm' }[rankingType];
