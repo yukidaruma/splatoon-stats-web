@@ -21,7 +21,7 @@
     <td v-if="rankingType === 'league'">
       <p class="weapon-name-container" v-for="teammate in rankingEntry.teammates" :key="teammate.player_id">
         <img class="weapon-icon" :src="weaponIcon('weapons', teammate.weapon_id)">
-        <router-link :to="`/players/${teammate.player_id}`">{{ teammate.player_id }}</router-link>
+        <router-link :to="`/players/${teammate.player_id}`" class="player-id">{{ teammate.player_id }}</router-link>
       </p>
     </td>
   </tr>

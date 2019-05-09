@@ -13,7 +13,11 @@
         <td>
           <div class="weapon-name-container">
             <img class="weapon-icon" :src="rankingEntry.icon">
-            <router-link :to="`/players/${rankingEntry.player_id}`">{{ rankingEntry.player_id }}</router-link>
+            <router-link :to="`/players/${rankingEntry.player_id}`">
+              <span class="player-id">
+                {{ rankingEntry.player_id }}
+              </span>
+            </router-link>
           </div>
         </td>
         <td>{{ rankingEntry.rating }}</td>

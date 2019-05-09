@@ -9,7 +9,7 @@
       Loading...
     </div>
     <div v-else-if="loaded">
-      <h1>Records for player `{{ fetchedPlayerId }}`</h1>
+      <h1>Records for player `<span class="player-id">{{ fetchedPlayerId }}</span>`</h1>
 
       <h2>X Ranked</h2>
       <div v-if="playerRankingHistory.x.length === 0">

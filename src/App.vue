@@ -57,4 +57,7 @@ html, body {
   height: 32px;
   width: 32px;
 }
+.player-id {
+  font-style: italic;
+}
 </style>
