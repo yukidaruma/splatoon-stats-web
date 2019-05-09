@@ -29,12 +29,17 @@
       Date: <date-picker :rankingType="rankingType"
         :defaultYear="year" :defaultMonth="month" @year-change="onYearChange" @month-change="onMonthChange" />
     </div>
-    <h2>Most used {{ weaponTypeTitleName }} for {{ rankingType === 'x' ? 'X Ranked' : rankingType | capitalizeFirstLetter }} Battles in {{ year }}-{{ month }}</h2>
+    <h2>Most used
+      {{ weaponTypeTitleName | capitalizeFirstLetters }}
+      for
+      {{ rankingType === 'x' ? 'x ranked' : rankingType | capitalizeFirstLetters }}
+      {{ rankedRule ? rankedRule.split('_').join(' ') : '' | capitalizeFirstLetters }}
+      Battles in {{ year }}-{{ month }}</h2>
     <div v-if="loading">
       Loading...
     </div>
     <div v-else-if="weapons.length === 0">
-      No {{ rankingType | capitalizeFirstLetter }} Ranking found for {{ weaponTypeTitleName }} {{ year }}-{{ month }}
+      No data found.
     </div>
     <div v-else>
       <table>
@@ -85,8 +90,8 @@ export default {
     formatPercentage(percentage) {
       return (percentage / 100).toLocaleString(undefined, { style: 'percent', minimumFractionDigits: 3 });
     },
-    capitalizeFirstLetter(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
+    capitalizeFirstLetters(string) {
+      return string.split(/ +/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     },
   },
   methods: {
@@ -116,7 +121,7 @@ export default {
   },
   computed: {
     weaponTypeTitleName() {
-      return this.$options.filters.capitalizeFirstLetter(this.weaponType === 'weapons' ? 'Main weapons' : this.weaponType);
+      return this.weaponType === 'weapons' ? 'main weapons' : this.weaponType;
     },
   },
   mounted() {
