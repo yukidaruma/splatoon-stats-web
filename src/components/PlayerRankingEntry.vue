@@ -29,7 +29,7 @@
 
 <script>
 import moment from 'moment';
-import { calculateEndTime, weaponIcon, findRuleKey } from '../helper.js';
+import { calculateEndTime, weaponIcon, findRuleKey } from '../helper';
 
 export default {
   name: 'PlayerRankingEntry',

@@ -59,7 +59,7 @@
 
 <script>
 import apiClient from '../api-client';
-import { formatRankingEntry } from '../helper.js';
+import { formatRankingEntry } from '../helper';
 
 import DatePicker from './DatePicker.vue';
 import RankedRulePicker from './RankedRulePicker.vue';

@@ -37,9 +37,7 @@ export default {
     },
     updateDatePicker() {
       if (this.rankingType === 'x') {
-        this.yearOptions = [2017, 2018, 2019].map((year) => {
-          return { year, key: year };
-        });
+        this.yearOptions = [2017, 2018, 2019].map(year => ({ year, key: year }));
       } else { // league
 
       }

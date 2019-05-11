@@ -57,7 +57,7 @@ export default {
           this.ranking = res.data.map(weapon => formatRankingEntry(weapon, 'weapons'));
         })
         .finally(() => {
-          this.$router.push(`/rankings/x/`);
+          this.$router.push('/rankings/x');
         });
     },
     onYearChange(year) {

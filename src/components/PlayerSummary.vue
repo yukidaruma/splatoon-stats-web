@@ -6,40 +6,42 @@
     <div v-else-if="loaded">
       <h1>Records for player `<span class="player-id">{{ fetchedPlayerId }}</span>`</h1>
 
-      <h2>Known Names</h2>
-      <div v-if="knownNames.length === 0">
-        No known names found for player <span class="player-id">{{ fetchedPlayerId }}</span>
-      </div>
-      <ul v-else>
-        <li v-for="knownName in knownNames" :key="knownName">
-          <span class="player-name">{{ knownName.name }}</span> (<date>{{ knownName.last_used }}</date>)
-        </li>
-      </ul>
+      <div>
+        <h2>Known Names</h2>
+        <div v-if="knownNames.length === 0">
+          No known names found for player <span class="player-id">{{ fetchedPlayerId }}</span>
+        </div>
+        <ul v-else>
+          <li v-for="knownName in knownNames" :key="knownName.name">
+            <span class="player-name">{{ knownName.name }}</span> (<time>{{ knownName.last_used }}</time>)
+          </li>
+        </ul>
 
-      <h2>X Ranked</h2>
-      <div v-if="playerRankingHistory.x.length === 0">
-        No record found for player {{ fetchedPlayerId }}
-      </div>
-      <table v-else>
-        <player-ranking-entry v-for="rankingEntry in playerRankingHistory.x" :key="`${rankingEntry.start_time}_${rankingEntry.rule_id}`"
-          rankingType="x" :rankingEntry="rankingEntry" />
-      </table>
+        <h2>X Ranked</h2>
+        <div v-if="playerRankingHistory.x.length === 0">
+          No record found for player {{ fetchedPlayerId }}
+        </div>
+        <table v-else>
+          <player-ranking-entry v-for="rankingEntry in playerRankingHistory.x" :key="`${rankingEntry.start_time}_${rankingEntry.rule_id}`"
+            rankingType="x" :rankingEntry="rankingEntry" />
+        </table>
 
-      <h2>League Battle</h2>
-      <div v-if="playerRankingHistory.league.length === 0">
-        No record found for player {{ fetchedPlayerId }}
+        <h2>League Battle</h2>
+        <div v-if="playerRankingHistory.league.length === 0">
+          No record found for player {{ fetchedPlayerId }}
+        </div>
+        <table>
+          <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league" :key="`${rankingEntry.start_time}_${rankingEntry.group_type}`"
+            rankingType="league" :rankingEntry="rankingEntry" />
+        </table>
       </div>
-      <table>
-        <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league" :key="`${rankingEntry.start_time}_${rankingEntry.group_type}`"
-          rankingType="league" :rankingEntry="rankingEntry" />
-      </table>
     </div>
   </div>
 </template>
 
 <script>
 import apiClient from '../api-client';
-import { isValidPlayerId, formatRankingEntry } from '../helper.js';
+import { isValidPlayerId, formatRankingEntry } from '../helper';
 
 import PlayerRankingEntry from './PlayerRankingEntry.vue';
 
@@ -66,7 +68,7 @@ export default {
   },
   watch: {
     '$route.params.defaultPlayerId': {
-      handler: function(playerId) {
+      handler(playerId) {
         if (playerId) {
           this.getPlayerRankingHistory(playerId);
         } else {
@@ -77,10 +79,8 @@ export default {
   },
   methods: {
     getPlayerRankingHistory(playerId) {
-      if (!isValidPlayerId(playerId)) {
-        alert('Invalid player id');
-        return;
-      } else if (playerId === this.fetchedPlayerId) { // Skip if the ID was already fetched
+      if (!isValidPlayerId(playerId)
+        || playerId === this.fetchedPlayerId) { // Skip if the ID was already fetched
         return;
       }
 
@@ -90,12 +90,10 @@ export default {
 
       Promise.all([
         apiClient.get(`/players/${playerId}/known_names`)
-          .then((res) => this.knownNames = res.data),
-        ...['x', 'league'].map(rankingType =>
-          apiClient.get(`/players/${playerId}/rankings/${rankingType}`).then(res => {
-            this.playerRankingHistory[rankingType] = res.data.map(weapon => formatRankingEntry(weapon, "weapons"));
-          })
-        )
+          .then((res) => { this.knownNames = res.data; }),
+        ...['x', 'league'].map(rankingType => apiClient.get(`/players/${playerId}/rankings/${rankingType}`).then((res) => {
+          this.playerRankingHistory[rankingType] = res.data.map(weapon => formatRankingEntry(weapon, 'weapons'));
+        })),
       ])
         .then(() => {
           this.loaded = true;

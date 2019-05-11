@@ -66,7 +66,7 @@ export default {
           .then((res) => {
             this.searchResults = res.data;
           })
-          .finally(() => this.loading = false);
+          .finally(() => { this.loading = false; });
       }
     },
   },
