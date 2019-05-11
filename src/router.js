@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 import Index from './components/Index.vue';
 import Weapons from './components/Weapons.vue';
+import Search from './components/Search.vue';
 import PlayerSummary from './components/PlayerSummary.vue';
 import XRankings from './components/XRankings.vue';
 
@@ -21,6 +22,10 @@ export default new Router({
     {
       path: '/rankings/:rankingType(x|league)',
       component: XRankings,
+    },
+    {
+      path: '/search',
+      component: Search,
     },
     {
       path: '/players/:defaultPlayerId?',

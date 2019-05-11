@@ -4,7 +4,7 @@
     <router-link to="/weapons">Weapon popularity</router-link> |
     <router-link to="/rankings/x">X Rankings</router-link> |
     League Rankings |
-    <router-link to="/players">Players</router-link>
+    <router-link to="/search">Search players</router-link>
     <router-view></router-view>
 
     <global-footer></global-footer>

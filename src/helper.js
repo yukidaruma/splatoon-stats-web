@@ -10,6 +10,8 @@ const isValidPlayerId = (playerId) => {
   return validPlayerIdPattern.test(playerId);
 };
 
+const isEmptyString = str => !str || /^\s*$/.test(str);
+
 const findRuleKey = rankedRuleId => [
   { id: 1, key: 'splat_zones' },
   { id: 2, key: 'tower_control' },
@@ -45,5 +47,5 @@ const calculateEndTime = (matchmakingType, startTime) => {
 };
 
 export {
-  isValidPlayerId, weaponIcon, findRuleKey, formatRankingEntry, calculateEndTime,
+  isValidPlayerId, isEmptyString, weaponIcon, findRuleKey, formatRankingEntry, calculateEndTime,
 };

@@ -1,10 +1,5 @@
 <template>
   <div>
-    <div>
-      Player ID: <input v-model="playerId" maxlength="16" placeholder="1234567890abcdef">
-      <button @click="getPlayerRankingHistory(playerId)" :disabled="loading">Go</button>
-    </div>
-
     <div v-if="loading">
       Loading...
     </div>
