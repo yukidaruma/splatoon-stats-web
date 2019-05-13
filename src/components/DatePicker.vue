@@ -26,6 +26,8 @@
           {{ hourOption }}
         </option>
       </select>
+
+      ({{ localLeagueTime({ year, month, date, hour }) }} in your local time)
     </div>
     <!-- Todo: change depending on rankingType ({{ rankingType }}) -->
   </div>
@@ -148,6 +150,11 @@ export default {
     );
   },
   methods: {
+    localLeagueTime(time) {
+      const start = moment.utc(time).local();
+      const end = start.clone().add({ hour: 2 });
+      return `${start.format('MM-DD HH:mm')}~${end.format('HH:mm')}`;
+    },
     emitTimeChange() {
       this.$emit('time-change', moment({
         year: this.year,
