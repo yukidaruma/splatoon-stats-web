@@ -9,8 +9,8 @@
     <div>
       Group type:
       <select v-model="groupType">
-        <option value="T">T</option>
-        <option value="P">P</option>
+        <option value="T">Team</option>
+        <option value="P">Pair</option>
       </select>
 
       <button @click="fetchLeagueRanking" :disabled="loading">Go</button>
