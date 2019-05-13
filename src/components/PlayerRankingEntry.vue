@@ -1,12 +1,12 @@
 <template>
   <tr>
     <td>#{{ rankingEntry.rank }}</td>
+    <td>{{ rankingEntry.rating }}</td>
     <td>
       <div class="weapon-name-container">
         <img class="weapon-icon" :src="rankingEntry.icon">{{ $t(rankingEntry.namePath) }}
       </div>
     </td>
-    <td>{{ rankingEntry.rating }}</td>
     <td>
       {{ rankingEntry.start_time | formatDate(rankingType) }}
       <span v-if="rankingType === 'league'">
