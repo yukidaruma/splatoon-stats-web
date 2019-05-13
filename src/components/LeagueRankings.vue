@@ -16,7 +16,7 @@
       <button @click="fetchLeagueRanking">Go</button>
     </div>
 
-    <ranking rankingType="league" :ranking="ranking" />
+    <ranking rankingType="league" :ranking="ranking" :loading="loading" />
   </div>
 </template>
 
@@ -35,6 +35,7 @@ export default {
   data() {
     return {
       ranking: [],
+      loading: false,
       time: undefined,
       groupType: 'T',
     };
@@ -44,10 +45,14 @@ export default {
       const leagueId = this.time.format(`YYMMDDHH`) + this.groupType;
       const path = `/rankings/league/${leagueId}`;
 
+      this.loading = true;
       this.$router.push(path);
       apiClient.get(path)
         .then((res) => {
           this.ranking = res.data.map(weapon => formatRankingEntry(weapon, 'weapons'));
+        })
+        .finally(() => {
+          this.loading = false;
         });
     },
     onTimeChange(time) {

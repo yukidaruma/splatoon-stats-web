@@ -8,7 +8,7 @@
       Rule: <ranked-rule-picker :defaultRule="rankedRule" noAllRules="true" @rule-change="onRuleChange" />
     </div>
 
-    <ranking rankingType="x" :ranking="ranking" />
+    <ranking rankingType="x" :ranking="ranking" :loading="loading" />
   </div>
 </template>
 
@@ -28,6 +28,7 @@ export default {
   data() {
     return {
       ranking: [],
+      loading: false,
       year: undefined,
       month: undefined,
       rankedRule: undefined,
@@ -37,10 +38,14 @@ export default {
     fetchXRanking() {
       const path = `/rankings/x/${this.year}/${this.month + 1}/${this.rankedRule}`;
 
+      this.loading = true;
       this.$router.push(path);
       apiClient.get(path)
         .then((res) => {
           this.ranking = res.data.map(weapon => formatRankingEntry(weapon, 'weapons'));
+        })
+        .finally(() => {
+          this.loading = false;
         });
     },
     onTimeChange(time) {
