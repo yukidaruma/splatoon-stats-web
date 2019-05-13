@@ -6,6 +6,7 @@
     </div>
     <div>
       Rule: <ranked-rule-picker :defaultRule="rankedRule" noAllRules="true" @rule-change="onRuleChange" />
+      <button @click="fetchXRanking" :disabled="loading">Go</button>
     </div>
 
     <ranking rankingType="x" :ranking="ranking" :loading="loading" />
@@ -70,13 +71,6 @@ export default {
     }
 
     this.fetchXRanking();
-
-    this.$watch(
-      () => [this.$data.rankedRule, this.$data.year, this.$data.month],
-      () => {
-        this.fetchXRanking();
-      },
-    );
   },
 };
 </script>

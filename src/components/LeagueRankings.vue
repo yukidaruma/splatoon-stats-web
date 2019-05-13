@@ -13,7 +13,7 @@
         <option value="P">P</option>
       </select>
 
-      <button @click="fetchLeagueRanking">Go</button>
+      <button @click="fetchLeagueRanking" :disabled="loading">Go</button>
     </div>
 
     <ranking rankingType="league" :ranking="ranking" :loading="loading" />
@@ -74,8 +74,10 @@ export default {
         this.time = leagueTime;
       }
     } else {
-      this.time = moment.utc();
+      this.time = moment.utc().hour(0);
     }
+
+    this.fetchLeagueRanking();
   },
 };
 </script>

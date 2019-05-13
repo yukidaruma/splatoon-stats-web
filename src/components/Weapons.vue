@@ -28,13 +28,9 @@
     <div>
       Date: <date-picker ref="datePicker" :defaultRankingType="rankingType"
         :defaultYear="year" :defaultMonth="month" @time-change="onTimeChange" />
+      <button @click="fetchWeaponRanking"  :disabled="loading">Go</button>
     </div>
-    <h2>Most used
-      {{ weaponTypeTitleName | capitalizeFirstLetters }}
-      for
-      {{ rankingType === 'x' ? 'x ranked' : rankingType | capitalizeFirstLetters }}
-      {{ rankedRule ? rankedRule.split('_').join(' ') : '' | capitalizeFirstLetters }}
-      Battles in {{ year }}-{{ month + 1 }}</h2>
+    <h2>{{ title }}</h2>
     <div v-if="loading">
       Loading...
     </div>
@@ -72,6 +68,7 @@ export default {
   name: 'Weapons',
   data() {
     return {
+      title: '',
       loading: false,
       lastFetchedTime: 0,
       year: undefined,
@@ -91,11 +88,11 @@ export default {
     formatPercentage(percentage) {
       return (percentage / 100).toLocaleString(undefined, { style: 'percent', minimumFractionDigits: 3 });
     },
+  },
+  methods: {
     capitalizeFirstLetters(string) {
       return string.split(/ +/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     },
-  },
-  methods: {
     fetchWeaponRanking() {
       const rankedRule = this.rankedRule ? this.rankedRule : '';
       const path = `/${this.weaponType}/${this.rankingType}/${this.year}/${this.month + 1}/${rankedRule}`;
@@ -108,6 +105,10 @@ export default {
           this.weapons = res.data.map(weapon => formatRankingEntry(weapon, this.weaponType));
         })
         .finally(() => {
+          this.title = `Most used ${this.capitalizeFirstLetters(this.weaponTypeTitleName)} for
+            ${ this.capitalizeFirstLetters(this.rankingType === 'x' ? 'x ranked' : this.rankingType) }
+            ${ this.capitalizeFirstLetters(this.rankedRule ? this.rankedRule.split('_').join(' ') : '') }
+            in ${ this.year }-${ this.month + 1 }`;
           this.loading = false;
         });
     },
@@ -146,13 +147,6 @@ export default {
     }
 
     this.fetchWeaponRanking();
-
-    this.$watch(
-      () => [this.$data.rankingType, this.$data.weaponType, this.$data.rankedRule, this.$data.year, this.$data.month],
-      () => {
-        this.fetchWeaponRanking();
-      },
-    );
   },
   watch: {
     rankingType(newRankingType) {
