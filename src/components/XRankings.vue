@@ -30,14 +30,16 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 import apiClient from '../api-client';
 import DatePicker from './DatePicker.vue';
 import RankedRulePicker from './RankedRulePicker.vue';
 import { findRuleKey, formatRankingEntry } from '../helper';
 
-const now = new Date();
-const currentYear = now.getFullYear();
-const currentMonth = now.getMonth() + 1;
+const now = moment.utc();
+const currentYear = now.year();
+const currentMonth = now.month();
 
 export default {
   name: 'XRankings',
@@ -46,7 +48,7 @@ export default {
     return {
       ranking: [],
       year: currentYear,
-      month: currentMonth - 1,
+      month: currentMonth,
       rankedRule: findRuleKey(1),
     };
   },

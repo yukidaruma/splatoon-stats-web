@@ -7,9 +7,9 @@
       </option>
     </select>
     <select v-model="month" @change="emitMonthChange">
-      <option v-for="monthOption in monthOptions" :value="monthOption" :key="monthOption"
-        :selected="monthOption === month">
-        {{ monthOption }}
+      <option v-for="monthOption in monthOptions" :value="monthOption.value" :key="monthOption.value"
+        :selected="monthOption.value === month">
+        {{ monthOption.text }}
       </option>
     </select>
 
@@ -57,14 +57,14 @@ const getDatePickerOptions = (starting, ending, year, month, date, hour) => {
 
   const monthOptions = {
     [Symbol.iterator]() {
-      let monthOption = year === startingYear ? startingMonth : 0;
+      let monthOption = (year === startingYear ? startingMonth : 0) - 1;
       const iterator = {
         next() {
           monthOption += 1;
-          if (moment.utc({ year, month: monthOption - 1 }) > ending || monthOption > 12) {
+          if (moment.utc({ year, month: monthOption }) > ending || monthOption > 12) {
             return { value: undefined, done: true };
           }
-          return { value: monthOption, done: false };
+          return { value: { value: monthOption, text: monthOption + 1 }, done: false };
         },
       };
       return iterator;
@@ -73,13 +73,13 @@ const getDatePickerOptions = (starting, ending, year, month, date, hour) => {
 
   const dateOptions = {
     [Symbol.iterator]() {
-      const lastDateOfMonth = moment.utc({ year, month: month - 1 }).endOf('month').date();
-      let dateOption = year === startingYear && month === startingMonth ? startingDate - 1 : 0;
+      const lastDateOfMonth = moment.utc({ year, month }).endOf('month').date();
+      let dateOption = (year === startingYear && month === startingMonth ? startingDate : 1) - 1;
 
       const iterator = {
         next() {
           dateOption += 1;
-          if (moment.utc({ year, month: month - 1, date: dateOption }) > ending || dateOption > lastDateOfMonth) {
+          if (moment.utc({ year, month, date: dateOption }) > ending || dateOption > lastDateOfMonth) {
             return { value: undefined, done: true };
           }
           return { value: dateOption, done: false };
@@ -96,7 +96,7 @@ const getDatePickerOptions = (starting, ending, year, month, date, hour) => {
       const iterator = {
         next() {
           hourOption += 2;
-          if (moment.utc({ year, month: month - 1, date, hour: hourOption }) > ending || hourOption >= 24) {
+          if (moment.utc({ year, month, date, hour: hourOption }) > ending || hourOption >= 24) {
             return { value: undefined, done: true };
           }
           return { value: hourOption, done: false };
@@ -130,14 +130,19 @@ export default {
     };
   },
   created() {
-    let defaultDate = moment.utc({ year: this.defaultYear, month: this.defaultMonth - 1, date: this.defaultDate, hour: this.defaultHour });
+    let defaultDate = moment.utc({
+      year: this.defaultYear,
+      month: this.defaultMonth,
+      date: this.defaultDate,
+      hour: this.defaultHour,
+    });
     this.updateSelectedDate(defaultDate);
     this.updateDatePicker();
 
     this.$watch(
       // You don't have to watch hour because it won't change options.
       () => [this.$data.year, this.$data.month, this.$data.date],
-      (newYear) => {
+      () => {
         this.updateDatePicker();
       },
     );
@@ -155,7 +160,7 @@ export default {
       }
 
       this.year = newSelectedDate.year();
-      this.month = newSelectedDate.month() + 1;
+      this.month = newSelectedDate.month();
       this.date = newSelectedDate.date();
       this.hour = 0;
     },
@@ -165,17 +170,17 @@ export default {
 
       if (this.rankingType === 'x') {
         startingYear = 2018;
-        startingMonth = 5;
+        startingMonth = 4;
         ending = now.add({ month: -1 });
       } else {
         // Should be 2017/7/21
         startingYear = 2018;
-        startingMonth = 1;
+        startingMonth = 0;
         startingDate = 1;
         ending = now;
       }
 
-      const starting = moment.utc({ year: startingYear, month: startingMonth - 1, date: startingDate });
+      const starting = moment.utc({ year: startingYear, month: startingMonth, date: startingDate });
 
       const datePickerOptions = getDatePickerOptions(starting, ending, this.year, this.month, this.date);
       const { yearOptions, monthOptions, dateOptions, hourOptions } = datePickerOptions;
@@ -185,7 +190,7 @@ export default {
       this.hourOptions = hourOptions;
 
       // Update selected date to latest available date if not available
-      if (!monthOptions.includes(this.month)) {
+      if (!monthOptions.some(monthOption => monthOption.value === this.month)) {
         this.updateSelectedDate(moment.utc({
           year: this.year,
           month: monthOptions[monthOptions.length - 1],
@@ -193,13 +198,13 @@ export default {
       } else if (!dateOptions.includes(this.date)) {
         this.updateSelectedDate(moment.utc({
           year: this.year,
-          month: this.month - 1,
+          month: this.month,
           date: dateOptions[dateOptions.length - 1],
         }));
       } else if (!hourOptions.includes(this.hour)) {
         this.updateSelectedDate(moment.utc({
           year: this.year,
-          month: this.month - 1,
+          month: this.month,
           date: this.date,
         }));
       }
