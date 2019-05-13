@@ -43,22 +43,23 @@ const lastMonth = moment.utc().add({ month: -1 });
 export default {
   name: 'XRankings',
   components: { DatePicker, RankedRulePicker },
+  props: ['defaultYear', 'defaultMonth', 'defaultRankedRule'],
   data() {
     return {
       ranking: [],
-      year: lastMonth.year(),
-      month: lastMonth.month(),
-      rankedRule: findRuleKey(1),
+      year: undefined,
+      month: undefined,
+      rankedRule: undefined,
     };
   },
   methods: {
-      apiClient.get(`/rankings/x/${this.year}/${this.month + 1}/${this.rankedRule}`)
     fetchXRanking() {
+      const path = `/rankings/x/${this.year}/${this.month + 1}/${this.rankedRule}`;
+
+      this.$router.push(path);
+      apiClient.get(path)
         .then((res) => {
           this.ranking = res.data.map(weapon => formatRankingEntry(weapon, 'weapons'));
-        })
-        .finally(() => {
-          this.$router.push('/rankings/x');
         });
     },
     onTimeChange(time) {
@@ -70,6 +71,18 @@ export default {
     },
   },
   created() {
+    // You can assume year and month are valid, too, if defaultRankedRule is valid
+    if (['splat_zones', 'tower_control', 'rainmaker', 'clam_blitz'].includes(this.defaultRankedRule)) {
+      this.year = this.defaultYear;
+      this.month = this.defaultMonth - 1;
+      this.rankedRule = this.defaultRankedRule;
+    } else {
+      const lastMonth = moment.utc().add({ month: -1 });
+      this.year = lastMonth.year();
+      this.month = lastMonth.month();
+      this.rankedRule = findRuleKey(1);
+    }
+
     this.fetchXRanking();
 
     this.$watch(

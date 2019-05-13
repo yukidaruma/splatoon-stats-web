@@ -25,6 +25,11 @@ export default new Router({
       component: XRankings,
     },
     {
+      path: '/rankings/x/:defaultYear(\\d{4})/:defaultMonth([1-9]|1[0-2])/:defaultRankedRule',
+      component: XRankings,
+      props: true,
+    },
+    {
       path: '/rankings/league/:defaultLeagueId(\\d{8}[TP])?',
       component: LeagueRankings,
       props: true,
