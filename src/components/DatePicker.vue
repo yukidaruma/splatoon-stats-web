@@ -201,18 +201,22 @@ export default {
           year: this.year,
           month: monthOptions[monthOptions.length - 1].value,
         }));
-      } else if (!dateOptions.includes(this.date)) {
-        this.updateSelectedDate(moment.utc({
-          year: this.year,
-          month: this.month,
-          date: dateOptions[dateOptions.length - 1],
-        }));
-      } else if (!hourOptions.includes(this.hour)) {
-        this.updateSelectedDate(moment.utc({
-          year: this.year,
-          month: this.month,
-          date: this.date,
-        }));
+      }
+
+      if (this.rankingType === 'league') {
+        if (!dateOptions.includes(this.date)) {
+          this.updateSelectedDate(moment.utc({
+            year: this.year,
+            month: this.month,
+            date: dateOptions[dateOptions.length - 1],
+          }));
+        } else if (!hourOptions.includes(this.hour)) {
+          this.updateSelectedDate(moment.utc({
+            year: this.year,
+            month: this.month,
+            date: this.date,
+          }));
+        }
       }
     },
   },
