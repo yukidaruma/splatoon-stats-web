@@ -46,7 +46,7 @@
               <img class="weapon-icon" :src="weapon.icon">{{ $t(weapon.namePath) }}
             </div>
           </td>
-          <td>{{ weapon.percentage | formatPercentage }}</td>
+          <td>{{ weapon.percentage | formatPercentage }}<span class="bar-chart" :style="`width: ${weapon.relativePercentage}%`"></span></td>
         </tr>
       </table>
     </div>
@@ -102,7 +102,12 @@ export default {
       apiClient
         .get(path)
         .then((res) => {
-          this.weapons = res.data.map(weapon => formatRankingEntry(weapon, this.weaponType));
+          const mostUsedWeaponPercentage = res.data[0].percentage;
+          this.weapons = res.data.map((weapon) => {
+            weapon = formatRankingEntry(weapon, this.weaponType);
+            weapon.relativePercentage = weapon.percentage / mostUsedWeaponPercentage * 100;
+            return weapon;
+          });
         })
         .finally(() => {
           this.title = `Most used ${this.capitalizeFirstLetters(this.weaponTypeTitleName)} for
@@ -157,4 +162,9 @@ export default {
 </script>
 
 <style scoped>
+.bar-chart {
+    display: block;
+    height: 5px;
+    background: linear-gradient(45deg, #27ae60 0%, #2ecc71 100%);
+}
 </style>
