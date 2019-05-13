@@ -48,6 +48,7 @@ export default {
   },
   created() {
     this.playerName = this.$route.query.name;
+    this.searchPlayersByName(this.playerName);
   },
   methods: {
     searchPlayerById(playerId) {
@@ -62,6 +63,7 @@ export default {
         this.loading = true;
         this.searchedName = name;
 
+        this.$router.push(`search?name=${name}`);
         apiClient.get(`/players/search?name=${name}`)
           .then((res) => {
             this.searchResults = res.data;
