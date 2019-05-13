@@ -61,7 +61,7 @@ const getDatePickerOptions = (starting, ending, year, month, date, hour) => {
       const iterator = {
         next() {
           monthOption += 1;
-          if (moment.utc({ year, month: monthOption }) > ending || monthOption > 12) {
+          if (moment.utc({ year, month: monthOption }) > ending || monthOption > 11) {
             return { value: undefined, done: true };
           }
           return { value: { value: monthOption, text: monthOption + 1 }, done: false };
@@ -193,7 +193,7 @@ export default {
       if (!monthOptions.some(monthOption => monthOption.value === this.month)) {
         this.updateSelectedDate(moment.utc({
           year: this.year,
-          month: monthOptions[monthOptions.length - 1],
+          month: monthOptions[monthOptions.length - 1].value,
         }));
       } else if (!dateOptions.includes(this.date)) {
         this.updateSelectedDate(moment.utc({

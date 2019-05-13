@@ -1,8 +1,8 @@
 <template>
   <div>
     <div>
-      Date: <date-picker rankingType="x"
-        :defaultYear="year" :defaultMonth="month" @year-change="onYearChange" @month-change="onMonthChange" />
+      Date: <date-picker rankingType="x" :defaultYear="year" :defaultMonth="month"
+        @year-change="onYearChange" @month-change="onMonthChange" />
     </div>
     <div>
       Rule: <ranked-rule-picker :defaultRule="rankedRule" noAllRules="true" @rule-change="onRuleChange" />
@@ -37,9 +37,7 @@ import DatePicker from './DatePicker.vue';
 import RankedRulePicker from './RankedRulePicker.vue';
 import { findRuleKey, formatRankingEntry } from '../helper';
 
-const now = moment.utc();
-const currentYear = now.year();
-const currentMonth = now.month();
+const lastMonth = moment.utc().add({ month: -1 });
 
 export default {
   name: 'XRankings',
@@ -47,14 +45,14 @@ export default {
   data() {
     return {
       ranking: [],
-      year: currentYear,
-      month: currentMonth,
+      year: lastMonth.year(),
+      month: lastMonth.month(),
       rankedRule: findRuleKey(1),
     };
   },
   methods: {
     fetchRanking() {
-      apiClient.get(`/rankings/x/${this.year}/${this.month}/${this.rankedRule}`)
+      apiClient.get(`/rankings/x/${this.year}/${this.month + 1}/${this.rankedRule}`)
         .then((res) => {
           this.ranking = res.data.map(weapon => formatRankingEntry(weapon, 'weapons'));
         })
