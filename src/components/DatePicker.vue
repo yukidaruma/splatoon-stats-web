@@ -1,12 +1,12 @@
 <template>
   <div>
-    <select v-model="year" @change="emitYearChange">
+    <select v-model="year" @change="emitTimeChange">
       <option :value="yearOption" v-for="yearOption in yearOptions" :key="yearOption"
         :selected="yearOption === year">
         {{ yearOption }}
       </option>
     </select>
-    <select v-model="month" @change="emitMonthChange">
+    <select v-model="month" @change="emitTimeChange">
       <option v-for="monthOption in monthOptions" :value="monthOption.value" :key="monthOption.value"
         :selected="monthOption.value === month">
         {{ monthOption.text }}
@@ -14,13 +14,13 @@
     </select>
 
     <div v-if="rankingType === 'league'">
-      <select v-model="date" @change="emitDateChange">
+      <select v-model="date" @change="emitTimeChange">
         <option v-for="dateOption in dateOptions" :value="dateOption" :key="dateOption"
           :selected="dateOption === date">
           {{ dateOption }}
         </option>
       </select>
-      <select v-model="hour" @change="emitHourChange">
+      <select v-model="hour" @change="emitTimeChange">
         <option v-for="hourOption in hourOptions" :value="hourOption" :key="hourOption"
           :selected="hourOption === hour">
           {{ hourOption }}
@@ -148,10 +148,14 @@ export default {
     );
   },
   methods: {
-    emitYearChange() { this.$emit('year-change', this.year); },
-    emitMonthChange() { this.$emit('month-change', this.month); },
-    emitDateChange() { this.$emit('date-change', this.date); },
-    emitHourChange() { this.$emit('hour-change', this.hour); },
+    emitTimeChange() {
+      this.$emit('time-change', moment({
+        year: this.year,
+        month: this.month,
+        date: this.date,
+        hour: this.hour,
+      }));
+    },
     updateSelectedDate(newSelectedDate) {
       const now = moment.utc();
 
@@ -163,6 +167,8 @@ export default {
       this.month = newSelectedDate.month();
       this.date = newSelectedDate.date();
       this.hour = 0;
+
+      this.emitTimeChange();
     },
     updateDatePicker() {
       let startingYear, startingMonth, startingDate, ending;

@@ -2,11 +2,12 @@
   <div>
     <div>
       Date: <date-picker rankingType="x" :defaultYear="year" :defaultMonth="month"
-        @year-change="onYearChange" @month-change="onMonthChange" />
+        @time-change="onTimeChange" />
     </div>
     <div>
       Rule: <ranked-rule-picker :defaultRule="rankedRule" noAllRules="true" @rule-change="onRuleChange" />
     </div>
+
     <table>
       <tr v-for="rankingEntry in ranking" :key="rankingEntry.rank">
         <td>#{{ rankingEntry.rank }}</td>
@@ -51,8 +52,8 @@ export default {
     };
   },
   methods: {
-    fetchRanking() {
       apiClient.get(`/rankings/x/${this.year}/${this.month + 1}/${this.rankedRule}`)
+    fetchXRanking() {
         .then((res) => {
           this.ranking = res.data.map(weapon => formatRankingEntry(weapon, 'weapons'));
         })
@@ -60,22 +61,21 @@ export default {
           this.$router.push('/rankings/x');
         });
     },
-    onYearChange(year) {
-      this.year = year;
-    },
-    onMonthChange(month) {
-      this.month = month;
+    onTimeChange(time) {
+      this.year = time.year();
+      this.month = time.month();
     },
     onRuleChange(rule) {
       this.rankedRule = rule;
     },
   },
   created() {
-    this.fetchRanking();
+    this.fetchXRanking();
+
     this.$watch(
       () => [this.$data.rankedRule, this.$data.year, this.$data.month],
       () => {
-        this.fetchRanking();
+        this.fetchXRanking();
       },
     );
   },
