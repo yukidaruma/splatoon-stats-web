@@ -2,7 +2,7 @@
   <div>
     <div>
       Date:
-      <date-picker rankingType="league"
+      <date-picker defaultRankingType="league" showDate="true"
         :defaultYear="time.year()" :defaultMonth="time.month()" :defaultDate="time.date()" :defaultHour="time.hour()"
         @time-change="onTimeChange" />
     </div>

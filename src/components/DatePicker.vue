@@ -13,8 +13,8 @@
       </option>
     </select>
 
-    <div v-if="rankingType === 'league'">
       <select v-model="date" @change="emitTimeChange">
+    <div v-if="rankingType === 'league' && showDate">
         <option v-for="dateOption in dateOptions" :value="dateOption" :key="dateOption"
           :selected="dateOption === date">
           {{ dateOption }}
