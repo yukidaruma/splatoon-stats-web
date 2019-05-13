@@ -26,15 +26,15 @@
     </div>
     -->
     <div>
-      Date: <date-picker :rankingType="rankingType"
-        :defaultYear="year" :defaultMonth="month" @year-change="onYearChange" @month-change="onMonthChange" />
+      Date: <date-picker ref="datePicker" :defaultRankingType="rankingType"
+        :defaultYear="year" :defaultMonth="month" @time-change="onTimeChange" />
     </div>
     <h2>Most used
       {{ weaponTypeTitleName | capitalizeFirstLetters }}
       for
       {{ rankingType === 'x' ? 'x ranked' : rankingType | capitalizeFirstLetters }}
       {{ rankedRule ? rankedRule.split('_').join(' ') : '' | capitalizeFirstLetters }}
-      Battles in {{ year }}-{{ month }}</h2>
+      Battles in {{ year }}-{{ month + 1 }}</h2>
     <div v-if="loading">
       Loading...
     </div>
@@ -58,23 +58,24 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 import apiClient from '../api-client';
-import { formatRankingEntry } from '../helper';
+import { formatRankingEntry, rankedRules } from '../helper';
 
 import DatePicker from './DatePicker.vue';
 import RankedRulePicker from './RankedRulePicker.vue';
 
-const now = new Date();
-const currentYear = now.getFullYear();
-const currentMonth = now.getMonth() + 1;
+const getLastMonth = () => moment.utc().add({ month: -1 });
 
 export default {
   name: 'Weapons',
   data() {
     return {
       loading: false,
-      year: currentYear,
-      month: currentMonth - 1, // last month
+      lastFetchedTime: 0,
+      year: undefined,
+      month: undefined,
       rankingType: 'x',
       weaponType: 'weapons',
       rankedRule: null,
@@ -95,13 +96,14 @@ export default {
     },
   },
   methods: {
-    fetchRanking() {
+    fetchWeaponRanking() {
       const rankedRule = this.rankedRule ? this.rankedRule : '';
+      const path = `/${this.weaponType}/${this.rankingType}/${this.year}/${this.month + 1}/${rankedRule}`;
 
       this.loading = true;
-
+      this.$router.push(`/weapons${path}`);
       apiClient
-        .get(`/${this.weaponType}/${this.rankingType}/${this.year}/${this.month}/${rankedRule}`)
+        .get(path)
         .then((res) => {
           this.weapons = res.data.map(weapon => formatRankingEntry(weapon, this.weaponType));
         })
@@ -109,11 +111,9 @@ export default {
           this.loading = false;
         });
     },
-    onYearChange(year) {
-      this.year = year;
-    },
-    onMonthChange(month) {
-      this.month = month;
+    onTimeChange(time) {
+      this.year = time.year();
+      this.month = time.month();
     },
     onRuleChange(rule) {
       this.rankedRule = rule;
@@ -124,16 +124,40 @@ export default {
       return this.weaponType === 'weapons' ? 'main weapons' : this.weaponType;
     },
   },
-  mounted() {
-    this.fetchRanking();
-  },
   created() {
+    const { year, month, weaponType, rankingType, rankedRule } = this.$route.params;
+    // https://github.com/moment/moment/issues/1639
+    if (year && month && moment.utc({ year, month: month - 1 }).isValid()) {
+      this.year = Number(year);
+      this.month = Number(month) - 1;
+    } else {
+      const lastMonth = getLastMonth();
+      this.year = lastMonth.year();
+      this.month = lastMonth.month();
+    }
+    if (['weapons', 'specials', 'subs'].includes(weaponType)) {
+      this.weaponType = weaponType;
+    }
+    if (['x', 'league'].includes(rankingType)) {
+      this.rankingType = rankingType;
+    }
+    if (rankedRules.map(rule => rule.key).includes(rankedRule)) {
+      this.rankedRule = rankedRule;
+    }
+
+    this.fetchWeaponRanking();
+
     this.$watch(
       () => [this.$data.rankingType, this.$data.weaponType, this.$data.rankedRule, this.$data.year, this.$data.month],
       () => {
-        this.fetchRanking();
+        this.fetchWeaponRanking();
       },
     );
+  },
+  watch: {
+    rankingType(newRankingType) {
+      this.$refs.datePicker.updateDatePicker(newRankingType);
+    },
   },
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      Date: <date-picker rankingType="x" :defaultYear="year" :defaultMonth="month"
+      Date: <date-picker defaultRankingType="x" :defaultYear="year" :defaultMonth="month"
         @time-change="onTimeChange" />
     </div>
     <div>
@@ -58,9 +58,9 @@ export default {
   },
   created() {
     // You can assume year and month are valid, too, if defaultRankedRule is valid
-    if (['splat_zones', 'tower_control', 'rainmaker', 'clam_blitz'].includes(this.defaultRankedRule)) {
-      this.year = this.defaultYear;
-      this.month = this.defaultMonth - 1;
+    if (this.defaultRankedRule) {
+      this.year = Number(this.defaultYear);
+      this.month = Number(this.defaultMonth) - 1;
       this.rankedRule = this.defaultRankedRule;
     } else {
       const lastMonth = moment.utc().add({ month: -1 });

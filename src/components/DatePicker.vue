@@ -1,26 +1,26 @@
 <template>
   <div>
-    <select v-model="year" @change="emitTimeChange">
+    <select v-model="year" @change="updateDatePicker()">
       <option :value="yearOption" v-for="yearOption in yearOptions" :key="yearOption"
         :selected="yearOption === year">
         {{ yearOption }}
       </option>
     </select>
-    <select v-model="month" @change="emitTimeChange">
+    <select v-model="month" @change="updateDatePicker()">
       <option v-for="monthOption in monthOptions" :value="monthOption.value" :key="monthOption.value"
         :selected="monthOption.value === month">
         {{ monthOption.text }}
       </option>
     </select>
 
-      <select v-model="date" @change="emitTimeChange">
     <div v-if="rankingType === 'league' && showDate">
+      <select v-model="date" @change="updateDatePicker()">
         <option v-for="dateOption in dateOptions" :value="dateOption" :key="dateOption"
           :selected="dateOption === date">
           {{ dateOption }}
         </option>
       </select>
-      <select v-model="hour" @change="emitTimeChange">
+      <select v-model="hour" @change="emitTimeChange"><!-- Changing hour won't update options -->
         <option v-for="hourOption in hourOptions" :value="hourOption" :key="hourOption"
           :selected="hourOption === hour">
           {{ hourOption }}
@@ -118,9 +118,10 @@ const getDatePickerOptions = (starting, ending, year, month, date, hour) => {
 
 export default {
   name: 'LeagueDatePicker',
-  props: ['rankingType', 'defaultYear', 'defaultMonth', 'defaultDate', 'defaultHour'],
+  props: ['defaultRankingType', 'showDate', 'defaultYear', 'defaultMonth', 'defaultDate', 'defaultHour'],
   data() {
     return {
+      rankingType: undefined,
       year: undefined,
       month: undefined,
       date: undefined,
@@ -138,16 +139,14 @@ export default {
       date: this.defaultDate,
       hour: this.defaultHour,
     });
-    this.updateSelectedDate(defaultDate);
-    this.updateDatePicker();
 
-    this.$watch(
-      // You don't have to watch hour because it won't change options.
-      () => [this.$data.year, this.$data.month, this.$data.date],
-      () => {
-        this.updateDatePicker();
-      },
-    );
+    this.rankingType = this.defaultRankingType;
+    this.year = this.defaultYear;
+    this.month = this.defaultMonth;
+    this.date = this.defaultDate;
+    this.hour = this.defaultHour;
+
+    this.updateDatePicker();
   },
   methods: {
     localLeagueTime(time) {
@@ -174,12 +173,14 @@ export default {
       this.month = newSelectedDate.month();
       this.date = newSelectedDate.date();
       this.hour = 0;
-
-      this.emitTimeChange();
     },
-    updateDatePicker() {
+    updateDatePicker(newRankingType) {
       let startingYear, startingMonth, startingDate, ending;
       const now = moment.utc();
+
+      if (newRankingType) {
+        this.rankingType = newRankingType;
+      }
 
       if (this.rankingType === 'x') {
         startingYear = 2018;
@@ -217,7 +218,8 @@ export default {
             month: this.month,
             date: dateOptions[dateOptions.length - 1],
           }));
-        } else if (!hourOptions.includes(this.hour)) {
+        }
+        if (!hourOptions.includes(this.hour)) {
           this.updateSelectedDate(moment.utc({
             year: this.year,
             month: this.month,
@@ -225,6 +227,8 @@ export default {
           }));
         }
       }
+
+      this.emitTimeChange();
     },
   },
 };

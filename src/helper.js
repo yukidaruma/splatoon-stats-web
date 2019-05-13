@@ -12,12 +12,13 @@ const isValidPlayerId = (playerId) => {
 
 const isEmptyString = str => !str || /^\s*$/.test(str);
 
-const findRuleKey = rankedRuleId => [
+const rankedRules = [
   { id: 1, key: 'splat_zones' },
   { id: 2, key: 'tower_control' },
   { id: 3, key: 'rainmaker' },
   { id: 4, key: 'clam_blitz' },
-].find(rule => rule.id === rankedRuleId).key;
+];
+const findRuleKey = rankedRuleId => rankedRules.find(rule => rule.id === rankedRuleId).key;
 
 const formatRankingEntry = (rankingEntry, weaponType) => {
   const weaponIdKey = {
@@ -47,5 +48,5 @@ const calculateEndTime = (matchmakingType, startTime) => {
 };
 
 export {
-  isValidPlayerId, isEmptyString, weaponIcon, findRuleKey, formatRankingEntry, calculateEndTime,
+  isValidPlayerId, isEmptyString, weaponIcon, rankedRules, findRuleKey, formatRankingEntry, calculateEndTime,
 };
