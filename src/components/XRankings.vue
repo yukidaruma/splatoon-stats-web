@@ -8,25 +8,7 @@
       Rule: <ranked-rule-picker :defaultRule="rankedRule" noAllRules="true" @rule-change="onRuleChange" />
     </div>
 
-    <table>
-      <tr v-for="rankingEntry in ranking" :key="rankingEntry.rank">
-        <td>#{{ rankingEntry.rank }}</td>
-        <td>
-          <div class="weapon-name-container">
-            <img class="weapon-icon" :src="rankingEntry.icon">
-            <router-link :to="`/players/${rankingEntry.player_id}`">
-              <span class="player-name" v-if="'player_name' in rankingEntry">
-                {{ rankingEntry.player_name }}
-              </span>
-              <span class="player-id" v-else>
-                {{ rankingEntry.player_id }}
-              </span>
-            </router-link>
-          </div>
-        </td>
-        <td>{{ rankingEntry.rating }}</td>
-      </tr>
-    </table>
+    <ranking rankingType="x" :ranking="ranking" />
   </div>
 </template>
 
@@ -36,13 +18,12 @@ import moment from 'moment';
 import apiClient from '../api-client';
 import DatePicker from './DatePicker.vue';
 import RankedRulePicker from './RankedRulePicker.vue';
+import Ranking from './Ranking.vue';
 import { findRuleKey, formatRankingEntry } from '../helper';
-
-const lastMonth = moment.utc().add({ month: -1 });
 
 export default {
   name: 'XRankings',
-  components: { DatePicker, RankedRulePicker },
+  components: { DatePicker, RankedRulePicker, Ranking },
   props: ['defaultYear', 'defaultMonth', 'defaultRankedRule'],
   data() {
     return {

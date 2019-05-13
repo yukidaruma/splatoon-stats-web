@@ -16,7 +16,7 @@
       <button @click="fetchLeagueRanking">Go</button>
     </div>
 
-    {{ ranking }}
+    <ranking rankingType="league" :ranking="ranking" />
   </div>
 </template>
 
@@ -25,11 +25,12 @@ import moment from 'moment';
 
 import apiClient from '../api-client';
 import DatePicker from './DatePicker.vue';
+import Ranking from './Ranking.vue';
 import { formatRankingEntry } from '../helper';
 
 export default {
   name: 'LeagueRankings',
-  components: { DatePicker },
+  components: { DatePicker, Ranking },
   props: ['defaultLeagueId'],
   data() {
     return {
