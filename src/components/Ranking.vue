@@ -4,7 +4,8 @@
       Loading...
     </div>
     <div v-else>
-      <table>
+      <p v-if="ranking.length === 0">No data found.</p>
+      <table v-else>
         <tr v-for="rankingEntry in ranking" :key="rankingEntry.rank">
           <td>#{{ rankingEntry.rank }}</td>
           <td>{{ rankingEntry.rating }}</td>
