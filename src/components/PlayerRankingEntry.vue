@@ -8,10 +8,12 @@
       </div>
     </td>
     <td>
-      {{ rankingEntry.start_time | formatDate(rankingType) }}
-      <span v-if="rankingType === 'league'">
-        ~ {{ calculateEndTime(rankingType, rankingEntry.start_time) | formatDate(rankingType) }}
-      </span>
+      <router-link :to="rankingPath(rankingType, rankingEntry)">
+        {{ rankingEntry.start_time | formatDate(rankingType) }}
+        <span v-if="rankingType === 'league'">
+          ~ {{ calculateEndTime(rankingType, rankingEntry.start_time) | formatDate(rankingType) }}
+        </span>
+      </router-link>
     </td>
     <td>{{ $t(`rules.${findRuleKey(rankingEntry.rule_id)}.name`) }}</td>
     <td v-if="rankingType === 'league'">
@@ -34,11 +36,27 @@ import { calculateEndTime, weaponIcon, findRuleKey } from '../helper';
 export default {
   name: 'PlayerRankingEntry',
   props: ['rankingEntry', 'rankingType'],
-  methods: { calculateEndTime, findRuleKey, weaponIcon },
   filters: {
     formatDate(time, rankingType) {
       const dateFormat = { x: 'YY-MM', league: 'YY-MM-DD hh:mm' }[rankingType];
-      return moment.utc(time).format(dateFormat);
+      return moment.utc(time).local().format(dateFormat);
+    },
+  },
+  methods: {
+    calculateEndTime,
+    findRuleKey,
+    weaponIcon,
+    rankingPath(rankingType, rankingEntry) {
+      const startTime = moment.utc(rankingEntry.start_time);
+      let path = `/rankings/${rankingType}/`;
+
+      if (rankingType === 'league') {
+        path += startTime.format('YYMMDDHH') + rankingEntry.group_type;
+      } else if (rankingType === 'x') {
+        path += startTime.format('YYYY/M/') + findRuleKey(rankingEntry.rule_id);
+      }
+
+      return path;
     },
   },
 };
