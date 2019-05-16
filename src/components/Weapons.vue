@@ -102,6 +102,11 @@ export default {
       apiClient
         .get(path)
         .then((res) => {
+          if (res.data.length === 0) {
+            this.weapons = [];
+            return;
+          }
+
           const mostUsedWeaponPercentage = res.data[0].percentage;
           this.weapons = res.data.map((weapon) => {
             weapon = formatRankingEntry(weapon, this.weaponType);
