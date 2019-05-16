@@ -1,12 +1,16 @@
 <template>
   <div>
-    <div>
-      Player name: <input v-model="playerName" maxlength="10" placeholder="Yuki">
-      <button @click="searchPlayersByName(playerName)" :disabled="loading">Find</button>
-    </div>
-    <div>
-      Player ID: <input v-model="playerId" maxlength="16" placeholder="1234567890abcdef">
-      <button @click="searchPlayerById(playerId)" :disabled="loading">Go</button>
+    <div class="controls">
+      <div>
+        <span class="label">Player name</span>
+        <input v-model="playerName" maxlength="10" placeholder="Yuki">
+        <button @click="searchPlayersByName(playerName)" :disabled="loading">Find</button>
+      </div>
+      <div>
+        <span class="label">Player ID</span>
+        <input v-model="playerId" maxlength="16" placeholder="1234567890abcdef">
+        <button @click="searchPlayerById(playerId)" :disabled="loading">Go</button>
+      </div>
     </div>
 
     <div v-if="searchedName">
@@ -14,8 +18,8 @@
         Loading...
       </div>
 
-      <div v-else>
-        <h2>Search Results</h2>
+      <div class="search-result" v-else>
+        <h2 class="table-title">Search Results</h2>
         <div>
           <ul v-if="searchResults.length !== 0">
             <li v-for="player in searchResults" :key="`${player.player_id}-${player.player_name}`">
@@ -76,4 +80,24 @@ export default {
 </script>
 
 <style scoped>
+.search-result .player-name {
+  font-weight: bold;
+}
+.search-result time {
+  margin-left: .5em;
+  font-size: 80%;
+}
+
+ul {
+  display: flex;
+  flex-wrap: wrap;
+}
+li {
+  list-style: none;
+  width: 15em;
+  margin: .5em;
+}
+time {
+  display: block;
+}
 </style>

@@ -7,7 +7,7 @@
       <h1>Records for player `<span class="player-id">{{ fetchedPlayerId }}</span>`</h1>
 
       <div>
-        <h2>Known Names</h2>
+        <h2 class="table-title">Known Names</h2>
         <div v-if="knownNames.length === 0">
           No known names found for player <span class="player-id">{{ fetchedPlayerId }}</span>
         </div>
@@ -17,29 +17,29 @@
           </li>
         </ul>
 
-        <h2>X Ranked</h2>
+        <h2 class="table-title">X Ranked</h2>
         <div v-if="playerRankingHistory.x.length === 0">
-          No record found for player {{ fetchedPlayerId }}
+          No X Ranked record found for player <span class="player-id">{{ fetchedPlayerId }}</span>
         </div>
-        <table v-else>
+        <table class="ranking" v-else>
           <player-ranking-entry v-for="rankingEntry in playerRankingHistory.x" :key="`${rankingEntry.start_time}_${rankingEntry.rule_id}`"
             rankingType="x" :rankingEntry="rankingEntry" />
         </table>
 
-        <h2>League Battle</h2>
+        <h2 class="table-title">League Battle</h2>
         <div v-if="playerRankingHistory.league.length === 0">
-          No record found for player {{ fetchedPlayerId }}
+          No League Battle record found for player <span class="player-id">{{ fetchedPlayerId }}</span>
         </div>
-        <table>
+        <table class="ranking">
           <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league" :key="`${rankingEntry.start_time}_${rankingEntry.group_type}`"
-            rankingType="league" :rankingEntry="rankingEntry" />
+            rankingType="league" :rankingEntry="rankingEntry" :playerName="knownNames[0] ? knownNames[0].name : fetchedPlayerId" />
         </table>
 
-        <h2>Splatfest</h2>
+        <h2 class="table-title">Splatfest</h2>
         <div v-if="playerRankingHistory.splatfest.length === 0">
-          No record found for player {{ fetchedPlayerId }}
+          No Splatfest record found for player <span class="player-id">{{ fetchedPlayerId }}</span>
         </div>
-        <table>
+        <table class="ranking">
           <player-ranking-entry v-for="rankingEntry in playerRankingHistory.splatfest" :key="`${rankingEntry.region}-${rankingEntry.splatfest_id}`"
             rankingType="splatfest" :rankingEntry="rankingEntry" />
         </table>

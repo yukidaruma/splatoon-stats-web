@@ -5,6 +5,8 @@ const weaponIcon = (weaponType, weaponId) => {
   return `http://localhost:3000/static/images/${singularWeaponType}/${weaponId}.png`;
 };
 
+const capitalizeFirstLetters = string => string.split(/ +/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
 const isValidPlayerId = (playerId) => {
   const validPlayerIdPattern = /^[\da-fA-Z]{16}$/;
   return validPlayerIdPattern.test(playerId);
@@ -48,5 +50,12 @@ const calculateEndTime = (matchmakingType, startTime) => {
 };
 
 export {
-  isValidPlayerId, isEmptyString, weaponIcon, rankedRules, findRuleKey, formatRankingEntry, calculateEndTime,
+  weaponIcon,
+  capitalizeFirstLetters,
+  isValidPlayerId,
+  isEmptyString,
+  rankedRules,
+  findRuleKey,
+  formatRankingEntry,
+  calculateEndTime,
 };

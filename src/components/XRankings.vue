@@ -1,14 +1,22 @@
 <template>
   <div>
-    <div>
-      Date: <date-picker defaultRankingType="x" :defaultYear="year" :defaultMonth="month"
-        @time-change="onTimeChange" />
-    </div>
-    <div>
-      Rule: <ranked-rule-picker :defaultRule="rankedRule" noAllRules="true" @rule-change="onRuleChange" />
-      <button @click="fetchXRanking" :disabled="loading">Go</button>
+    <div class="controls">
+      <div>
+        <span class="label">Date</span>
+        <date-picker defaultRankingType="x" :defaultYear="year" :defaultMonth="month"
+          @time-change="onTimeChange" />
+      </div>
+      <div>
+        <span class="label">Rule</span>
+        <ranked-rule-picker :defaultRule="rankedRule" noAllRules="true" @rule-change="onRuleChange" />
+        <button @click="fetchXRanking" :disabled="loading">Go</button>
+      </div>
     </div>
 
+    <h2 class="table-title" v-if="fetchedDate">
+      Top 500 players for X Ranked {{ capitalizeFirstLetters(rankedRule.split('_').join(' ')) }}
+      in {{ fetchedDate }}
+    </h2>
     <ranking rankingType="x" :ranking="ranking" :loading="loading" />
   </div>
 </template>
@@ -20,7 +28,7 @@ import apiClient from '../api-client';
 import DatePicker from './DatePicker.vue';
 import RankedRulePicker from './RankedRulePicker.vue';
 import Ranking from './Ranking.vue';
-import { findRuleKey, formatRankingEntry } from '../helper';
+import { capitalizeFirstLetters, findRuleKey, formatRankingEntry } from '../helper';
 
 export default {
   name: 'XRankings',
@@ -33,9 +41,11 @@ export default {
       year: undefined,
       month: undefined,
       rankedRule: undefined,
+      fetchedDate: '',
     };
   },
   methods: {
+    capitalizeFirstLetters,
     fetchXRanking() {
       const path = `/rankings/x/${this.year}/${this.month + 1}/${this.rankedRule}`;
 
@@ -44,6 +54,7 @@ export default {
       apiClient.get(path)
         .then((res) => {
           this.ranking = res.data.map(rankingEntry => formatRankingEntry(rankingEntry, 'weapons'));
+          this.fetchedDate = `${this.year}-${this.month + 1}`;
         })
         .finally(() => {
           this.loading = false;

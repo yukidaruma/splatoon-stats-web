@@ -5,7 +5,7 @@
     </div>
     <div v-else>
       <p v-if="ranking.length === 0">No data found.</p>
-      <table v-else>
+      <table class="ranking" v-else>
         <tr v-for="rankingEntry in ranking" :key="rankingEntry.rank">
           <td>#{{ rankingEntry.rank }}</td>
           <td>{{ rankingEntry.rating }}</td>
@@ -23,8 +23,8 @@
                 </router-link>
               </div>
             </div>
-            <div v-if="rankingType === 'league'">
-              <div class="weapon-name-container" v-for="member in rankingEntry.group_members" :key="member.player_id">
+            <div class="league-members" v-if="rankingType === 'league'">
+              <div class="league-member weapon-name-container" v-for="member in rankingEntry.group_members" :key="member.player_id">
                 <img class="weapon-icon" :src="weaponIcon('weapons', member[1])">
                 <router-link :to="`/players/${member[0]}`">
                   <span class="player-id">

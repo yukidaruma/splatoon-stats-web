@@ -1,21 +1,24 @@
 <template>
   <div>
-    <div>
-      Date:
-      <date-picker defaultRankingType="league" showDate="true"
-        :defaultYear="time.year()" :defaultMonth="time.month()" :defaultDate="time.date()" :defaultHour="time.hour()"
-        @time-change="onTimeChange" />
-    </div>
-    <div>
-      Group type:
-      <select v-model="groupType">
-        <option value="T">Team</option>
-        <option value="P">Pair</option>
-      </select>
+    <div class="controls">
+      <div>
+        <span class="label">Date</span>
+        <date-picker defaultRankingType="league" showDate="true"
+          :defaultYear="time.year()" :defaultMonth="time.month()" :defaultDate="time.date()" :defaultHour="time.hour()"
+          @time-change="onTimeChange" />
+      </div>
+      <div>
+        <span class="label">Group type</span>
+        <select v-model="groupType">
+          <option value="T">Team</option>
+          <option value="P">Pair</option>
+        </select>
 
-      <button @click="fetchLeagueRanking" :disabled="loading">Go</button>
+        <button @click="fetchLeagueRanking" :disabled="loading">Go</button>
+      </div>
     </div>
 
+    <h2 class="table-title">{{ title }}</h2>
     <ranking rankingType="league" :ranking="ranking" :loading="loading" />
   </div>
 </template>
@@ -38,6 +41,7 @@ export default {
       loading: false,
       time: undefined,
       groupType: 'T',
+      title: '',
     };
   },
   methods: {
@@ -53,6 +57,7 @@ export default {
           this.ranking = res.data.map(rankingEntry => formatRankingEntry(rankingEntry, 'weapons'));
         })
         .finally(() => {
+          this.title = `League ranking for ${time.clone().local().format('YYYY/MM/DD HH:mm')}`;
           this.loading = false;
         });
     },
@@ -75,7 +80,7 @@ export default {
         this.time = leagueTime;
       }
     } else {
-      this.time = moment.utc().hour(0);
+      this.time = moment.utc().startOf('day');
     }
 
     this.fetchLeagueRanking();

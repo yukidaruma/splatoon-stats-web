@@ -2,11 +2,25 @@
   <tr>
     <td>#{{ rankingEntry.rank }}</td>
     <td>{{ rankingEntry.rating }}</td>
-    <td>
-      <div class="weapon-name-container">
-        <img class="weapon-icon" :src="rankingEntry.icon">{{ $t(rankingEntry.namePath) }}
+
+    <!-- Weapon image -->
+    <td v-if="rankingType === 'league'">
+      <div class="league-members">
+        <div class="league-member weapon-name-container">
+          <img class="weapon-icon" :src="rankingEntry.icon">{{ playerName }}
+        </div>
+        <div class="league-member weapon-name-container" v-for="teammate in rankingEntry.teammates" :key="teammate.player_id">
+          <img class="weapon-icon" :src="weaponIcon('weapons', teammate.weapon_id)">
+          <router-link :to="`/players/${teammate.player_id}`" class="player-id">{{ teammate.player_id }}</router-link>
+        </div>
+      </div>
+    <td v-else>
+      <div class="league-member weapon-name-container">
+        <img class="weapon-icon" :src="rankingEntry.icon">{{ $t(`weapons.${rankingEntry.weapon_id}.name`) }}
       </div>
     </td>
+
+    <!-- Time -->
     <td>
       <router-link :to="rankingPath(rankingType, rankingEntry)">
         {{ rankingEntry.start_time | formatDate(rankingType) }}
@@ -15,16 +29,12 @@
         </span>
       </router-link>
     </td>
+
     <td v-if="rankingType !== 'splatfest'">{{ $t(`rules.${findRuleKey(rankingEntry.rule_id)}.name`) }}</td>
     <td v-if="rankingType === 'league'">
-      {{ $t(`stages.${rankingEntry.stage_ids[0]}.name`) }},
-      {{ $t(`stages.${rankingEntry.stage_ids[1]}.name`) }}
+      <p>{{ $t(`stages.${rankingEntry.stage_ids[0]}.name`) }}</p>
+      <p>{{ $t(`stages.${rankingEntry.stage_ids[1]}.name`) }}</p>
     </td>
-    <td v-if="rankingType === 'league'">
-      <p class="weapon-name-container" v-for="teammate in rankingEntry.teammates" :key="teammate.player_id">
-        <img class="weapon-icon" :src="weaponIcon('weapons', teammate.weapon_id)">
-        <router-link :to="`/players/${teammate.player_id}`" class="player-id">{{ teammate.player_id }}</router-link>
-      </p>
     </td>
   </tr>
 </template>
@@ -35,7 +45,7 @@ import { calculateEndTime, weaponIcon, findRuleKey } from '../helper';
 
 export default {
   name: 'PlayerRankingEntry',
-  props: ['rankingEntry', 'rankingType'],
+  props: ['playerName', 'rankingEntry', 'rankingType'],
   filters: {
     formatDate(time, rankingType) {
       const dateFormat = { x: 'YY-MM', league: 'YY-MM-DD hh:mm' }[rankingType];

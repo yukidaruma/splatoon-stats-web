@@ -1,55 +1,57 @@
 <template>
   <div>
-    <div>
-      Data source:
-      <select v-model="rankingType">
-        <!-- Todo: splatfest -->
-        <option value="x">X Ranked</option>
-        <option value="league">Leagues</option>
-      </select>
+    <div class="controls">
+      <div>
+        <span class="label">Data source</span>
+        <select class="l" v-model="rankingType">
+          <!-- Todo: splatfest -->
+          <option value="x">X Ranked</option>
+          <option value="league">Leagues</option>
+        </select>
+      </div>
+      <div>
+        <span class="label">Weapon type</span>
+        <select class="l" v-model="weaponType">
+          <option value="weapons">Main Weapons</option>
+          <option value="subs">Subs</option>
+          <option value="specials">Specials</option>
+        </select>
+      </div>
+      <div>
+        <span class="label">Rule</span>
+        <ranked-rule-picker class="l" :defaultRule="rankedRule" @rule-change="onRuleChange" />
+      </div>
+      <!-- Todo:
+      <div>
+        Filter by power
+      </div>
+      -->
+      <div>
+        <span class="label">Date</span>
+        <date-picker ref="datePicker" :defaultRankingType="rankingType"
+          :defaultYear="year" :defaultMonth="month" @time-change="onTimeChange" />
+        <button @click="fetchWeaponRanking"  :disabled="loading">Go</button>
+      </div>
     </div>
-    <div>
-      Weapon type:
-      <select v-model="weaponType">
-        <option value="weapons">Main Weapons</option>
-        <option value="subs">Subs</option>
-        <option value="specials">Specials</option>
-      </select>
-    </div>
-    <div>
-      Rule:
-      <ranked-rule-picker :defaultRule="rankedRule" @rule-change="onRuleChange" />
-    </div>
-    <!-- Todo:
-    <div>
-      Filter by power
-    </div>
-    -->
-    <div>
-      Date: <date-picker ref="datePicker" :defaultRankingType="rankingType"
-        :defaultYear="year" :defaultMonth="month" @time-change="onTimeChange" />
-      <button @click="fetchWeaponRanking"  :disabled="loading">Go</button>
-    </div>
-    <h2>{{ title }}</h2>
+
+    <h2 class="table-title">{{ title }}</h2>
     <div v-if="loading">
       Loading...
     </div>
     <div v-else-if="weapons.length === 0">
       No data found.
     </div>
-    <div v-else>
-      <table>
-        <tr v-for="weapon in weapons" :key="weapon.key">
-          <td>{{ weapon.rank }}</td>
-          <td>
-            <div class="weapon-name-container">
-              <img class="weapon-icon" :src="weapon.icon">{{ $t(weapon.namePath) }}
-            </div>
-          </td>
-          <td>{{ weapon.percentage | formatPercentage }}<span class="bar-chart" :style="`width: ${weapon.relativePercentage}%`"></span></td>
-        </tr>
-      </table>
-    </div>
+    <table class="ranking" v-else>
+      <tr v-for="weapon in weapons" :key="weapon.key">
+        <td>{{ weapon.rank }}</td>
+        <td>
+          <div class="weapon-name-container">
+            <img class="weapon-icon" :src="weapon.icon">{{ $t(weapon.namePath) }}
+          </div>
+        </td>
+        <td>{{ weapon.percentage | formatPercentage }}<span class="bar-chart" :style="`width: ${weapon.relativePercentage}%`"></span></td>
+      </tr>
+    </table>
   </div>
 </template>
 
@@ -57,7 +59,7 @@
 import moment from 'moment';
 
 import apiClient from '../api-client';
-import { formatRankingEntry, rankedRules } from '../helper';
+import { capitalizeFirstLetters, formatRankingEntry, rankedRules } from '../helper';
 
 import DatePicker from './DatePicker.vue';
 import RankedRulePicker from './RankedRulePicker.vue';
@@ -90,9 +92,7 @@ export default {
     },
   },
   methods: {
-    capitalizeFirstLetters(string) {
-      return string.split(/ +/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    },
+    capitalizeFirstLetters,
     fetchWeaponRanking() {
       const rankedRule = this.rankedRule ? this.rankedRule : '';
       const path = `/${this.weaponType}/${this.rankingType}/${this.year}/${this.month + 1}/${rankedRule}`;
