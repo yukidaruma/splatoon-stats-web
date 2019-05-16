@@ -43,7 +43,7 @@ export default {
       this.$router.push(path);
       apiClient.get(path)
         .then((res) => {
-          this.ranking = res.data.map(weapon => formatRankingEntry(weapon, 'weapons'));
+          this.ranking = res.data.map(rankingEntry => formatRankingEntry(rankingEntry, 'weapons'));
         })
         .finally(() => {
           this.loading = false;

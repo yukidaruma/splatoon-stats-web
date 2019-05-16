@@ -34,6 +34,15 @@
           <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league" :key="`${rankingEntry.start_time}_${rankingEntry.group_type}`"
             rankingType="league" :rankingEntry="rankingEntry" />
         </table>
+
+        <h2>Splatfest</h2>
+        <div v-if="playerRankingHistory.splatfest.length === 0">
+          No record found for player {{ fetchedPlayerId }}
+        </div>
+        <table>
+          <player-ranking-entry v-for="rankingEntry in playerRankingHistory.splatfest" :key="`${rankingEntry.region}-${rankingEntry.splatfest_id}`"
+            rankingType="splatfest" :rankingEntry="rankingEntry" />
+        </table>
       </div>
     </div>
   </div>
@@ -91,8 +100,8 @@ export default {
       Promise.all([
         apiClient.get(`/players/${playerId}/known_names`)
           .then((res) => { this.knownNames = res.data; }),
-        ...['x', 'league'].map(rankingType => apiClient.get(`/players/${playerId}/rankings/${rankingType}`).then((res) => {
-          this.playerRankingHistory[rankingType] = res.data.map(weapon => formatRankingEntry(weapon, 'weapons'));
+        ...['x', 'league', 'splatfest'].map(rankingType => apiClient.get(`/players/${playerId}/rankings/${rankingType}`).then((res) => {
+          this.playerRankingHistory[rankingType] = res.data.map(rankingEntry => formatRankingEntry(rankingEntry, 'weapons'));
         })),
       ])
         .then(() => {

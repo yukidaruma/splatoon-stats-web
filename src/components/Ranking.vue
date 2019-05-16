@@ -10,7 +10,7 @@
           <td>#{{ rankingEntry.rank }}</td>
           <td>{{ rankingEntry.rating }}</td>
           <td>
-            <div v-if="rankingType === 'x'">
+            <div v-if="rankingType === 'x' || rankingType === 'splatfest'">
               <div class="weapon-name-container">
                 <img class="weapon-icon" :src="rankingEntry.icon">
                 <router-link :to="`/players/${rankingEntry.player_id}`">

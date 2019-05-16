@@ -7,6 +7,7 @@ import Search from './components/Search.vue';
 import PlayerSummary from './components/PlayerSummary.vue';
 import XRankings from './components/XRankings.vue';
 import LeagueRankings from './components/LeagueRankings.vue';
+import SplatfestRankings from './components/SplatfestRankings.vue';
 import { rankedRules } from './helper';
 
 Vue.use(Router);
@@ -40,6 +41,14 @@ export default new Router({
       path: '/rankings/league/:defaultLeagueId(\\d{8}[TP])?',
       component: LeagueRankings,
       props: true,
+    },
+    {
+      path: '/rankings/splatfest',
+      component: SplatfestRankings,
+    },
+    {
+      path: '/rankings/splatfest/:region(na|eu|jp)/:splatfestId(\\d+)',
+      component: SplatfestRankings,
     },
     {
       path: '/search',

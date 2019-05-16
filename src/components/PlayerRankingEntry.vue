@@ -15,7 +15,7 @@
         </span>
       </router-link>
     </td>
-    <td>{{ $t(`rules.${findRuleKey(rankingEntry.rule_id)}.name`) }}</td>
+    <td v-if="rankingType !== 'splatfest'">{{ $t(`rules.${findRuleKey(rankingEntry.rule_id)}.name`) }}</td>
     <td v-if="rankingType === 'league'">
       {{ $t(`stages.${rankingEntry.stage_ids[0]}.name`) }},
       {{ $t(`stages.${rankingEntry.stage_ids[1]}.name`) }}
