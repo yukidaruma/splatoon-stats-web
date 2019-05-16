@@ -155,7 +155,7 @@ export default {
       return `${start.format('MM-DD HH:mm')}~${end.format('HH:mm')}`;
     },
     emitTimeChange() {
-      this.$emit('time-change', moment({
+      this.$emit('time-change', moment.utc({
         year: this.year,
         month: this.month,
         date: this.date,

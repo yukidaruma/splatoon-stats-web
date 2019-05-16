@@ -42,7 +42,8 @@ export default {
   },
   methods: {
     fetchLeagueRanking() {
-      const leagueId = this.time.format(`YYMMDDHH`) + this.groupType;
+      const time = this.time;
+      const leagueId = time.format('YYMMDDHH') + this.groupType;
       const path = `/rankings/league/${leagueId}`;
 
       this.loading = true;
