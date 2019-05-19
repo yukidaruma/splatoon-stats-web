@@ -31,7 +31,7 @@
           No League Battle record found for player <span class="player-id">{{ fetchedPlayerId }}</span>
         </div>
         <table class="ranking">
-          <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league" :key="`${rankingEntry.start_time}_${rankingEntry.group_type}`"
+          <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league" :key="`${rankingEntry.start_time}_${rankingEntry.group_id}`"
             rankingType="league" :rankingEntry="rankingEntry" :playerName="knownNames[0] ? knownNames[0].name : fetchedPlayerId" />
         </table>
 
