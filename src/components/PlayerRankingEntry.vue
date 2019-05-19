@@ -64,6 +64,8 @@ export default {
         path += startTime.format('YYMMDDHH') + rankingEntry.group_type;
       } else if (rankingType === 'x') {
         path += startTime.format('YYYY/M/') + findRuleKey(rankingEntry.rule_id);
+      } else if (rankingType === 'splatfest') {
+        path += `${rankingEntry.region}/${rankingEntry.splatfest_id}`;
       }
 
       return path;
