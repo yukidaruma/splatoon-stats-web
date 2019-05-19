@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiBaseUrl = 'http://localhost:3000';
+const apiBaseUrl = VUE_APP_API_URL; // eslint-disable-line no-undef
 const client = axios.create({
   baseURL: apiBaseUrl,
   responseType: 'json',
