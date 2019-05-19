@@ -4,7 +4,7 @@
       <nav>
         <ul>
           <router-link tag="li" to="/" :exact="true"><a>Index</a></router-link>
-          <router-link tag="li" to="/weapons"><a>Weapon popularity</a></router-link>
+          <router-link tag="li" to="/weapons"><a>Popular Weapons</a></router-link>
           <router-link tag="li" to="/rankings/x"><a>X Rankings</a></router-link>
           <router-link tag="li" to="/rankings/league"><a>League Rankings</a></router-link>
           <router-link tag="li" to="/rankings/splatfest"><a>Splatfest Rankings</a></router-link>
