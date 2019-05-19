@@ -8,9 +8,13 @@ import apiClient from './api-client';
 
 Vue.use(VueI18n);
 
+// First language will be used as default language.
+const supportedLanguages = ['en', 'ja'];
+const defaultLanguage = supportedLanguages[0];
+
 export const i18n = new VueI18n({
-  locale: 'en', // set locale
-  fallbackLocale: 'en',
+  locale: defaultLanguage,
+  fallbackLocale: defaultLanguage,
 });
 
 const loadedLanguages = [];
@@ -23,6 +27,8 @@ function setI18nLanguage(lang) {
 }
 
 export function loadLanguageAsync(lang, forceLoad = false) {
+  lang = supportedLanguages.includes(lang) ? lang : defaultLanguage;
+
   if (forceLoad || i18n.locale !== lang) {
     if (!loadedLanguages.includes(lang)) {
       return apiClient.get(`/static/locale/${lang}.json`).then((res) => {

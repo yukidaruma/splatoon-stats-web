@@ -5,7 +5,8 @@ import { i18n, loadLanguageAsync } from './i18n-setup';
 
 Vue.config.productionTip = false;
 
-loadLanguageAsync('en', true);
+const browserLang = navigator.language.slice(0, 2);
+loadLanguageAsync(browserLang, true);
 
 new Vue({
   i18n,
