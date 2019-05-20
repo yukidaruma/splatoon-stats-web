@@ -7,16 +7,6 @@
       <h1>Records for player `<span class="player-id">{{ fetchedPlayerId }}</span>`</h1>
 
       <div>
-        <h2 class="table-title">Known Names</h2>
-        <div v-if="knownNames.length === 0">
-          No known names found for player <span class="player-id">{{ fetchedPlayerId }}</span>
-        </div>
-        <ul v-else>
-          <li v-for="knownName in knownNames" :key="knownName.name">
-            <span class="player-name">{{ knownName.name }}</span> (<time>{{ knownName.last_used }}</time>)
-          </li>
-        </ul>
-
         <div v-if="showXPowerChart">
           <h2 class="table-title">X Power</h2>
           <div class="chart-container">
@@ -50,6 +40,16 @@
           <player-ranking-entry v-for="rankingEntry in playerRankingHistory.splatfest" :key="`${rankingEntry.region}-${rankingEntry.splatfest_id}`"
             rankingType="splatfest" :rankingEntry="rankingEntry" />
         </table>
+
+        <h2 class="table-title">Known Names</h2>
+        <div v-if="knownNames.length === 0">
+          No known names found for player <span class="player-id">{{ fetchedPlayerId }}</span>
+        </div>
+        <ul v-else>
+          <li v-for="knownName in knownNames" :key="knownName.name">
+            <span class="player-name">{{ knownName.name }}</span> (<time>{{ knownName.last_used }}</time>)
+          </li>
+        </ul>
       </div>
     </div>
   </div>
