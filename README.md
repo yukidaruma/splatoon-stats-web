@@ -1,5 +1,8 @@
 # splatoon-stats-web
 
+[Splatoon Stats](https://splatoon-stats.yuki.games) is an open-source Splatoon 2 statistics website.
+This app uses data from [splatoon-stats](https://github.com/yukidaruma/splatoon-stats) API.
+
 ## Project setup
 ```
 npm install
