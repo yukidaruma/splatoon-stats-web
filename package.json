@@ -9,10 +9,12 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "chart.js": "^2.8.0",
     "core-js": "^2.6.5",
     "moment": "^2.24.0",
     "ress": "^1.2.2",
     "vue": "^2.6.10",
+    "vue-chartjs": "^3.4.2",
     "vue-i18n": "^8.11.2",
     "vue-router": "^3.0.6"
   },

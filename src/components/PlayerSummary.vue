@@ -17,6 +17,13 @@
           </li>
         </ul>
 
+        <div v-if="showXPowerChart">
+          <h2 class="table-title">X Power</h2>
+          <div class="chart-container">
+            <x-ranked-chart :height="320" :data="chartData" :options="chartOptions" />
+          </div>
+        </div>
+
         <h2 class="table-title">X Ranked</h2>
         <div v-if="playerRankingHistory.x.length === 0">
           No X Ranked record found for player <span class="player-id">{{ fetchedPlayerId }}</span>
@@ -49,15 +56,18 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 import apiClient from '../api-client';
 import { isValidPlayerId, formatRankingEntry } from '../helper';
 
 import PlayerRankingEntry from './PlayerRankingEntry.vue';
+import XRankedChart from './PlayerSummaryXRankedChart';
 
 export default {
   name: 'Players',
   props: ['defaultPlayerId'],
-  components: { PlayerRankingEntry },
+  components: { PlayerRankingEntry, XRankedChart },
   data() {
     return {
       playerId: '',
@@ -66,6 +76,20 @@ export default {
       loading: false,
       playerRankingHistory: {},
       knownNames: [],
+
+      // Properties used for chart
+      showXPowerChart: false,
+      chartData: [],
+      chartOptions: {
+        responsive: true,
+        maintainAspectRatio: false,
+        spanGaps: true,
+        elements: {
+          line: {
+            tension: 0,
+          },
+        },
+      },
     };
   },
   created() {
@@ -102,6 +126,44 @@ export default {
           .then((res) => { this.knownNames = res.data; }),
         ...['x', 'league', 'splatfest'].map(rankingType => apiClient.get(`/players/${playerId}/rankings/${rankingType}`).then((res) => {
           this.playerRankingHistory[rankingType] = res.data.map(rankingEntry => formatRankingEntry(rankingEntry, 'weapons'));
+
+          if (rankingType === 'x') {
+            if (res.data.length === 0) {
+              this.showXPowerChart = false;
+              return;
+            }
+
+            this.showXPowerChart = true;
+            const chartColors = ['#e74c3c', '#2ecc71', '#3498db', '#f1c40f'];
+            const ruleKeys = ['', 'splat_zones', 'tower_control', 'rainmaker', 'clam_blitz'];
+            const firstAppeared = moment(res.data[res.data.length - 1].start_time);
+            const lastAppeared = moment(res.data[0].start_time);
+            const months = 1 + lastAppeared.diff(firstAppeared, 'month');
+            const datasets = new Array(4).fill(null).map((_v, i) => {
+              const dataset = {};
+              const ruleId = i + 1;
+              dataset.fill = false;
+              dataset.label = this.$t(`rules.${ruleKeys[ruleId]}.name`);
+              dataset.borderColor = dataset.backgroundColor = chartColors[i];
+              if (res.data.some(row => ruleId === row.rule_id)) {
+                dataset.data = new Array(months).fill(null);
+              }
+              return dataset;
+            });
+            const xAxesLabels = [];
+            [...Array(months)].map((_, i) => {
+              xAxesLabels.push(firstAppeared.clone().add({ month: i }).format('YY-MM'));
+            });
+            this.chartData = {
+              datasets,
+              labels: xAxesLabels,
+            };
+
+            Array.from(res.data).reverse().forEach((row) => {
+              const i = moment(row.start_time).diff(firstAppeared, 'month');
+              datasets[row.rule_id - 1].data[i] = row.rating;
+            });
+          }
         })),
       ])
         .then(() => {
@@ -118,4 +180,8 @@ export default {
 </script>
 
 <style scoped>
+.chart-container {
+  height: 320px;
+  background-color: #34495e;
+}
 </style>
