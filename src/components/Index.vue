@@ -2,9 +2,9 @@
   <div>
     <h1>Splatoon Stats</h1>
     <h2>Dataset</h2>
-    <p>X Ranked Battles: <strong>{{ stats.x_rankings * 2000 }}</strong> of {{ stats.x_rankings }} months</p>
-    <p>League Battles: <strong>{{ stats.league_rankings_estimate }}</strong> <small>(estimated; smaller than actual value)</small></p>
-    <p>Splatfests: <strong>{{ stats.splatfests }}</strong></p>
+    <p>X Ranked Battles ranking records: <strong>{{ stats.x_rankings * 2000 }}</strong> of {{ stats.x_rankings }} months</p>
+    <p>League Battle ranking records: <strong>{{ stats.league_rankings_estimate }}</strong> <small>(estimated; smaller than actual value)</small></p>
+    <p>Splatfests ranking records: <strong>{{ stats.splatfests * 200 }}</strong> of {{ stats.splatfests }} Splatfests</p>
   </div>
 </template>
 
