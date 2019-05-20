@@ -3,7 +3,7 @@ import Router from 'vue-router';
 
 import Index from './components/Index.vue';
 import Weapons from './components/Weapons.vue';
-import WeaponTopPlayers from './components/WeaponTopPlayers.vue';
+import Records from './components/Records.vue';
 import Search from './components/Search.vue';
 import PlayerSummary from './components/PlayerSummary.vue';
 import XRankings from './components/XRankings.vue';
@@ -30,8 +30,8 @@ export default new Router({
       component: Weapons,
     },
     {
-      path: '/weapons/top-players',
-      component: WeaponTopPlayers,
+      path: '/records',
+      component: Records,
     },
     {
       path: '/rankings/x',

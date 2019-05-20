@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h2 class="table-title">X Ranked Weapon records</h2>
     <table>
       <thead>
         <tr>
@@ -36,7 +37,7 @@ import apiClient from '../api-client';
 import { formatRankingEntry } from '../helper';
 
 export default {
-  name: 'Weapons',
+  name: 'Records',
   data() {
     return {
       weapons: {},

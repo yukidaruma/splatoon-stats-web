@@ -9,7 +9,7 @@
           <router-link tag="li" to="/rankings/league"><a>League Rankings</a></router-link>
           <router-link tag="li" to="/rankings/splatfest"><a>Splatfest Rankings</a></router-link>
           <router-link tag="li" to="/search"><a>Search players</a></router-link>
-          <router-link tag="li" to="/weapons/top-players"><a>Top players</a></router-link>
+          <router-link tag="li" to="/records"><a>Records</a></router-link>
         </ul>
       </nav>
     </header>
