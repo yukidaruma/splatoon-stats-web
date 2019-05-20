@@ -16,6 +16,7 @@ Vue.use(Router);
 const rulesPattern = rankedRules.map(rule => rule.key).join('|');
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
