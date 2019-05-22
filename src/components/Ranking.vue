@@ -27,7 +27,10 @@
               <div class="league-member weapon-name-container" v-for="member in rankingEntry.group_members" :key="member.player_id">
                 <img class="weapon-icon" :src="weaponIcon('weapons', member[1])">
                 <router-link :to="`/players/${member[0]}`">
-                  <span class="player-id">
+                  <span class="player-name" v-if="member[2]">
+                    {{ member[2] }}
+                  </span>
+                  <span class="player-id" v-else>
                     {{ member[0] }}
                   </span>
                 </router-link>

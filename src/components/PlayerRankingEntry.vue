@@ -11,7 +11,12 @@
         </div>
         <div class="league-member weapon-name-container" v-for="teammate in rankingEntry.teammates" :key="teammate.player_id">
           <img class="weapon-icon" :src="weaponIcon('weapons', teammate.weapon_id)">
-          <router-link :to="`/players/${teammate.player_id}`" class="player-id">{{ teammate.player_id }}</router-link>
+          <router-link v-if="teammate.player_name" :to="`/players/${teammate.player_id}`" class="player-name">
+            {{ teammate.player_name }}
+          </router-link>
+          <router-link v-else :to="`/players/${teammate.player_id}`" class="player-id">
+            {{ teammate.player_id }}
+          </router-link>
         </div>
       </div>
     <td v-else>
