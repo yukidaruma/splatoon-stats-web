@@ -29,7 +29,7 @@
         </div>
         <table class="ranking">
           <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league" :key="`${rankingEntry.start_time}_${rankingEntry.group_id}`"
-            rankingType="league" :rankingEntry="rankingEntry" :playerName="knownNames[0] ? knownNames[0].name : fetchedPlayerId" />
+            rankingType="league" :rankingEntry="rankingEntry" :playerName="knownNames[0] ? knownNames[0].player_name : fetchedPlayerId" />
         </table>
 
         <h2 class="table-title">Splatfest</h2>
@@ -46,8 +46,8 @@
           No known names found for player <span class="player-id">{{ fetchedPlayerId }}</span>
         </div>
         <ul v-else>
-          <li v-for="knownName in knownNames" :key="knownName.name">
-            <span class="player-name">{{ knownName.name }}</span> (<time>{{ knownName.last_used }}</time>)
+          <li v-for="knownName in knownNames" :key="knownName.player_name">
+            <span class="player-name">{{ knownName.player_name }}</span> (<time>{{ knownName.last_used }}</time>)
           </li>
         </ul>
       </div>
