@@ -53,7 +53,7 @@ export default {
   props: ['playerName', 'rankingEntry', 'rankingType'],
   filters: {
     formatDate(time, rankingType) {
-      const dateFormat = { x: 'YY-MM', league: 'YY-MM-DD hh:mm' }[rankingType];
+      const dateFormat = { x: 'YY-MM', league: 'YY-MM-DD HH:mm' }[rankingType];
       return moment.utc(time).local().format(dateFormat);
     },
   },
