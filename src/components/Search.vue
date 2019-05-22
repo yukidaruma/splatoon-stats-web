@@ -4,17 +4,17 @@
       <div>
         <span class="label">Player name</span>
         <input v-model="playerName" maxlength="10" placeholder="Yuki">
-        <button @click="searchPlayersByName(playerName)" :disabled="loading">Find</button>
+        <button @click="searchPlayersByName(playerName)" :disabled="isLoading">Find</button>
       </div>
       <div>
         <span class="label">Player ID</span>
         <input v-model="playerId" maxlength="16" placeholder="1234567890abcdef">
-        <button @click="searchPlayerById(playerId)" :disabled="loading">Go</button>
+        <button @click="searchPlayerById(playerId)" :disabled="isLoading">Go</button>
       </div>
     </div>
 
     <div v-if="searchedName">
-      <div v-if="loading">
+      <div v-if="isLoading">
         Loading...
       </div>
 
@@ -46,7 +46,7 @@ export default {
       playerId: '',
       playerName: '',
       searchedName: '',
-      loading: false,
+      isLoading: false,
       searchResults: [],
     };
   },
@@ -64,7 +64,7 @@ export default {
     },
     searchPlayersByName(name) {
       if (!isEmptyString(name)) {
-        this.loading = true;
+        this.isLoading = true;
         this.searchedName = name;
 
         this.$router.push(`search?name=${name}`);
@@ -72,7 +72,7 @@ export default {
           .then((res) => {
             this.searchResults = res.data;
           })
-          .finally(() => { this.loading = false; });
+          .finally(() => { this.isLoading = false; });
       }
     },
   },

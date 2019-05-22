@@ -30,12 +30,12 @@
         <span class="label">Date</span>
         <date-picker ref="datePicker" :defaultRankingType="rankingType"
           :defaultYear="year" :defaultMonth="month" @time-change="onTimeChange" />
-        <button @click="fetchWeaponRanking"  :disabled="loading">Go</button>
+        <button @click="fetchWeaponRanking"  :disabled="isLoading">Go</button>
       </div>
     </div>
 
     <h2 class="table-title">{{ title }}</h2>
-    <div v-if="loading">
+    <div v-if="isLoading">
       Loading...
     </div>
     <div v-else-if="weapons.length === 0">
@@ -71,7 +71,7 @@ export default {
   data() {
     return {
       title: '',
-      loading: false,
+      isLoading: false,
       lastFetchedTime: 0,
       year: undefined,
       month: undefined,
@@ -97,7 +97,7 @@ export default {
       const rankedRule = this.rankedRule ? this.rankedRule : '';
       const path = `/${this.weaponType}/${this.rankingType}/${this.year}/${this.month + 1}/${rankedRule}`;
 
-      this.loading = true;
+      this.isLoading = true;
       this.$router.push(`/weapons${path}`);
       apiClient
         .get(path)
@@ -119,7 +119,7 @@ export default {
             ${ this.capitalizeFirstLetters(this.rankingType === 'x' ? 'x ranked' : this.rankingType) }
             ${ this.capitalizeFirstLetters(this.rankedRule ? this.rankedRule.split('_').join(' ') : '') }
             in ${ this.year }-${ this.month + 1 }`;
-          this.loading = false;
+          this.isLoading = false;
         });
     },
     onTimeChange(time) {

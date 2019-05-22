@@ -9,7 +9,7 @@
       <div>
         <span class="label">Rule</span>
         <ranked-rule-picker :defaultRule="rankedRule" noAllRules="true" @rule-change="onRuleChange" />
-        <button @click="fetchXRanking" :disabled="loading">Go</button>
+        <button @click="fetchXRanking" :disabled="isLoading">Go</button>
       </div>
     </div>
 
@@ -17,7 +17,7 @@
       Top 500 players for X Ranked {{ capitalizeFirstLetters(rankedRule.split('_').join(' ')) }}
       in {{ fetchedDate }}
     </h2>
-    <ranking rankingType="x" :ranking="ranking" :loading="loading" />
+    <ranking rankingType="x" :ranking="ranking" :isLoading="isLoading" />
   </div>
 </template>
 
@@ -37,7 +37,7 @@ export default {
   data() {
     return {
       ranking: [],
-      loading: false,
+      isLoading: false,
       year: undefined,
       month: undefined,
       rankedRule: undefined,
@@ -49,7 +49,7 @@ export default {
     fetchXRanking() {
       const path = `/rankings/x/${this.year}/${this.month + 1}/${this.rankedRule}`;
 
-      this.loading = true;
+      this.isLoading = true;
       this.$router.push(path);
       apiClient.get(path)
         .then((res) => {
@@ -57,7 +57,7 @@ export default {
           this.fetchedDate = `${this.year}-${this.month + 1}`;
         })
         .finally(() => {
-          this.loading = false;
+          this.isLoading = false;
         });
     },
     onTimeChange(time) {

@@ -48,7 +48,7 @@ export default {
       return moment.utc(time).local().format('YYYY-MM');
     },
     fetchWeaponsTopPlayers() {
-      this.loading = true;
+      this.isLoading = true;
 
       apiClient
         .get('/weapons/x/top-players')
@@ -56,7 +56,7 @@ export default {
           this.weapons = res.data.map(weapon => formatRankingEntry(weapon, 'weapons'));
         })
         .finally(() => {
-          this.loading = false;
+          this.isLoading = false;
         });
     },
   },

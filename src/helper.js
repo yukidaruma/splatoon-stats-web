@@ -41,11 +41,11 @@ const formatRankingEntry = (rankingEntry, weaponType) => {
 // Examples:
 // calculateEndTime('league', moment.utc({ ...hour: 0 })) => Date(moment.utc({ ...hour: 2 }))
 // calculateEndTime('x', moment.utc({ year: 2019, month: 3 })) => Date(moment.utc({ year: 2019, month: 4 }))
-const calculateEndTime = (matchmakingType, startTime) => {
+const calculateEndTime = (rankingType, startTime) => {
   const duration = {
     x: { month: 1, day: -1 },
     league: { hour: 2 },
-  }[matchmakingType];
+  }[rankingType];
 
   return moment.utc(startTime).add(duration).toDate();
 };

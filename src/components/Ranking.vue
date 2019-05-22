@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="loading">
+    <div v-if="isLoading">
       Loading...
     </div>
     <div v-else>
@@ -45,7 +45,7 @@ import { weaponIcon } from '../helper';
 
 export default {
   name: 'Ranking',
-  props: ['rankingType', 'ranking', 'loading'],
+  props: ['rankingType', 'ranking', 'isLoading'],
   methods: { weaponIcon },
 };
 </script>

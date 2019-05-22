@@ -14,12 +14,12 @@
           <option value="P">Pair</option>
         </select>
 
-        <button @click="fetchLeagueRanking" :disabled="loading">Go</button>
+        <button @click="fetchLeagueRanking" :disabled="isLoading">Go</button>
       </div>
     </div>
 
     <h2 class="table-title">{{ title }}</h2>
-    <ranking rankingType="league" :ranking="ranking" :loading="loading" />
+    <ranking rankingType="league" :ranking="ranking" :isLoading="isLoading" />
   </div>
 </template>
 
@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       ranking: [],
-      loading: false,
+      isLoading: false,
       time: undefined,
       groupType: 'T',
       title: '',
@@ -50,7 +50,7 @@ export default {
       const leagueId = time.format('YYMMDDHH') + this.groupType;
       const path = `/rankings/league/${leagueId}`;
 
-      this.loading = true;
+      this.isLoading = true;
       this.$router.push(path);
       apiClient.get(path)
         .then((res) => {
@@ -58,7 +58,7 @@ export default {
         })
         .finally(() => {
           this.title = `League ranking for ${time.clone().local().format('YYYY/MM/DD HH:mm')}`;
-          this.loading = false;
+          this.isLoading = false;
         });
     },
     onTimeChange(time) {

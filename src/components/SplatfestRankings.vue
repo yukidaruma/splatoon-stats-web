@@ -17,7 +17,7 @@
     <div class="rankings" v-if="hasFetchedOnce">
       <div v-for="i in [0, 1]" :key="i"><!-- iterate over team_id -->
         <h2 class="table-title" :style="`color: ${lastFetchedSplatfest.colors[i]}`">{{ lastFetchedSplatfest.team_names[i] }}</h2>
-        <ranking rankingType="splatfest" :ranking="rankings[i]" :loading="loading" />
+        <ranking rankingType="splatfest" :ranking="rankings[i]" :isLoading="isLoading" />
       </div>
     </div>
   </div>
@@ -38,7 +38,7 @@ export default {
       rankings: [[], []],
       lastFetchedSplatfest: null,
       currentRankingKey: '',
-      loading: false,
+      isLoading: false,
     };
   },
   computed: {
@@ -63,7 +63,7 @@ export default {
   methods: {
     fetchSplatfestRanking(region, splatfestId) {
       const path = `/rankings/splatfest/${region}/${splatfestId}`;
-      this.loading = true;
+      this.isLoading = true;
       this.$router.push(path);
 
       apiClient.get(path)
@@ -80,7 +80,7 @@ export default {
           this.lastFetchedSplatfest = this.selectedSplatfest;
         })
         .finally(() => {
-          this.loading = false;
+          this.isLoading = false;
         });
     },
   },

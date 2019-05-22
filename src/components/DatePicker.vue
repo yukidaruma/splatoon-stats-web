@@ -29,7 +29,6 @@
 
       ({{ localLeagueTime({ year, month, date, hour }) }} in your local time)
     </div>
-    <!-- Todo: change depending on rankingType ({{ rankingType }}) -->
   </div>
 </template>
 

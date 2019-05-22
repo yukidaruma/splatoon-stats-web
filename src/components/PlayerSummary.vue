@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div v-if="loading">
+    <div v-if="isLoading">
       Loading...
     </div>
-    <div v-else-if="loaded">
+    <div v-else-if="hasLoaded">
       <h1>Records for player `<span class="player-id">{{ fetchedPlayerId }}</span>`</h1>
 
       <div>
@@ -72,8 +72,8 @@ export default {
     return {
       playerId: '',
       fetchedPlayerId: '',
-      loaded: false,
-      loading: false,
+      hasLoaded: false,
+      isLoading: false,
       playerRankingHistory: {},
       knownNames: [],
 
@@ -105,7 +105,7 @@ export default {
         if (playerId) {
           this.getPlayerRankingHistory(playerId);
         } else {
-          this.loaded = false;
+          this.hasLoaded = false;
         }
       },
     },
@@ -118,8 +118,8 @@ export default {
       }
 
       this.playerId = playerId;
-      this.loading = true;
-      this.loaded = false;
+      this.isLoading = true;
+      this.hasLoaded = false;
 
       Promise.all([
         apiClient.get(`/players/${playerId}/known_names`)
@@ -167,12 +167,12 @@ export default {
         })),
       ])
         .then(() => {
-          this.loaded = true;
+          this.hasLoaded = true;
         })
         .finally(() => {
           this.$router.push(`/players/${playerId}`);
           this.fetchedPlayerId = this.playerId;
-          this.loading = false;
+          this.isLoading = false;
         });
     },
   },
