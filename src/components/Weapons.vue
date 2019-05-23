@@ -46,7 +46,8 @@
         <td>{{ weapon.rank }}</td>
         <td>
           <div class="weapon-name-container">
-            <img class="weapon-icon" :src="weapon.icon">{{ $t(weapon.namePath) }}
+            <img class="weapon-icon" :src="weapon.icon">
+            {{ $t(weapon.localizationKey) }}
           </div>
         </td>
         <td>{{ weapon.percentage | formatPercentage }}<span class="bar-chart" :style="`width: ${weapon.relativePercentage}%`"></span></td>

@@ -15,7 +15,7 @@
         <tr v-for="weapon in weapons" :key="weapon.weapon_id">
           <td>
             <div class="weapon-name-container">
-              <img class="weapon-icon" :src="weapon.icon">{{ $t(weapon.namePath) }}
+              <img class="weapon-icon" :src="weapon.icon">{{ $t(weapon.localizationKey) }}
             </div>
           </td>
           <td v-for="(player, ruleId) in weapon.top_players" :key="`${weapon.weapon_id}-${ruleId}`">

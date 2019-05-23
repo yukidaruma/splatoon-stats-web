@@ -32,7 +32,7 @@ const formatRankingEntry = (rankingEntry, weaponType) => {
   const weaponId = rankingEntry[weaponIdKey];
   const weaponTypeLocaleKey = weaponType === 'weapons' ? 'weapons' : `weapon_${weaponType}`;
 
-  rankingEntry.namePath = `${weaponTypeLocaleKey}.${weaponId}.name`;
+  rankingEntry.localizationKey = `${weaponTypeLocaleKey}.${weaponId}.name`;
   rankingEntry.icon = weaponIcon(weaponType, weaponId);
 
   return rankingEntry;
