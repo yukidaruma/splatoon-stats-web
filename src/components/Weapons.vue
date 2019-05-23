@@ -46,7 +46,7 @@
         <td>{{ weapon.rank }}</td>
         <td>
           <div class="weapon-name-container">
-            <img class="weapon-icon" :src="weapon.icon">
+            <img class="weapon-icon" :src="weapon.icon" v-if="!weapon.hasNoIcon">
             {{ $t(weapon.localizationKey) }}
           </div>
         </td>
@@ -106,6 +106,21 @@ export default {
           if (res.data.length === 0) {
             this.weapons = [];
             return;
+          }
+
+          // Add "Bomb Launchers combined" row
+          if (this.weaponType === 'specials') {
+            const combinedBombLauncherPercentage = res.data
+              .filter(specialWeapon => 2 <= specialWeapon.special_weapon_id && specialWeapon.special_weapon_id <= 6)
+              .reduce((sum, specialWeapon) => { return sum + specialWeapon.percentage }, 0);
+            const indexToInsert = res.data.findIndex(specialWeapon => specialWeapon.percentage < combinedBombLauncherPercentage);
+
+            res.data.splice(indexToInsert, 0, {
+              hasNoIcon: true,
+              rank: '-',
+              localizationKey: 'ui.bomb_launchers_combined',
+              percentage: combinedBombLauncherPercentage,
+            })
           }
 
           const mostUsedWeaponPercentage = res.data[0].percentage;
