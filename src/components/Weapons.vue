@@ -12,7 +12,8 @@
       <div>
         <span class="label">Weapon type</span>
         <select class="l" v-model="weaponType">
-          <option value="weapons">Main Weapons</option>
+          <option value="weapons">Weapons</option>
+          <option value="mains">Mains</option>
           <option value="subs">Subs</option>
           <option value="specials">Specials</option>
         </select>
@@ -96,10 +97,10 @@ export default {
     capitalizeFirstLetters,
     fetchWeaponRanking() {
       const rankedRule = this.rankedRule ? this.rankedRule : '';
-      const path = `/${this.weaponType}/${this.rankingType}/${this.year}/${this.month + 1}/${rankedRule}`;
+      const path = `/weapons/${this.weaponType}/${this.rankingType}/${this.year}/${this.month + 1}/${rankedRule}`;
 
       this.isLoading = true;
-      this.$router.push(`/weapons${path}`);
+      this.$router.push(path);
       apiClient
         .get(path)
         .then((res) => {
@@ -148,7 +149,7 @@ export default {
   },
   computed: {
     weaponTypeTitleName() {
-      return this.weaponType === 'weapons' ? 'main weapons' : this.weaponType;
+      return this.weaponType.substr(0, this.weaponType.length - 1) + (this.weaponType !== 'weapons' ? ' weapons' : '');
     },
   },
   created() {
@@ -162,7 +163,7 @@ export default {
       this.year = lastMonth.year();
       this.month = lastMonth.month();
     }
-    if (['weapons', 'specials', 'subs'].includes(weaponType)) {
+    if (['weapons', 'mains', 'specials', 'subs'].includes(weaponType)) {
       this.weaponType = weaponType;
     }
     if (['x', 'league'].includes(rankingType)) {

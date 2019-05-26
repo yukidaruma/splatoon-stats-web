@@ -24,6 +24,10 @@ const rankedRules = [
 const findRuleKey = rankedRuleId => rankedRules.find(rule => rule.id === rankedRuleId).key;
 
 const formatRankingEntry = (rankingEntry, weaponType) => {
+  if (weaponType === 'mains') {
+    weaponType = 'weapons';
+  }
+
   const weaponIdKey = {
     weapons: 'weapon_id',
     subs: 'sub_weapon_id',
