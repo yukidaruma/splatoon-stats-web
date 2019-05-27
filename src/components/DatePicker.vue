@@ -35,7 +35,7 @@
 <script>
 import moment from 'moment';
 
-const getDatePickerOptions = (starting, ending, year, month, date, hour) => {
+const getDatePickerOptions = (starting, ending, year, month, date) => {
   const startingYear = starting.year();
   const startingMonth = starting.month();
   const startingDate = starting.date();
@@ -46,7 +46,7 @@ const getDatePickerOptions = (starting, ending, year, month, date, hour) => {
       const iterator = {
         next() {
           yearOption += 1;
-          if (moment({ year: yearOption}) > ending) {
+          if (moment({ year: yearOption }) > ending) {
             return { value: undefined, done: true };
           }
           return { value: yearOption, done: false };
@@ -132,13 +132,6 @@ export default {
     };
   },
   created() {
-    let defaultDate = moment.utc({
-      year: this.defaultYear,
-      month: this.defaultMonth,
-      date: this.defaultDate,
-      hour: this.defaultHour,
-    });
-
     this.rankingType = this.defaultRankingType;
     this.year = this.defaultYear;
     this.month = this.defaultMonth;

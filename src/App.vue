@@ -37,7 +37,7 @@ export default {
  * Noto Sans Japanese (japanese) https://fonts.googleapis.com/earlyaccess/notosansjapanese.css
  */
 @font-face {
-   font-display: swap;
+  font-display: swap;
   font-family: 'Noto Sans Japanese';
   font-style: normal;
   font-weight: 100;
@@ -110,7 +110,7 @@ body {
   color: #bdc3c7;
 }
 a:link, a:visited, a:hover, a:active {
-	color: #16a085;
+  color: #16a085;
 }
 h1, h2, h3, h4, h5, h6 {
   color: #ecf0f1;

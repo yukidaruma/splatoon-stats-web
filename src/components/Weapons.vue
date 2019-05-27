@@ -73,7 +73,7 @@
 import moment from 'moment';
 
 import apiClient from '../api-client';
-import { capitalizeFirstLetters, formatRankingEntry, rankedRules, titleizeSplatfest } from '../helper';
+import { capitalizeFirstLetters, formatRankingEntry, titleizeSplatfest } from '../helper';
 
 import DatePicker from './DatePicker.vue';
 import RankedRulePicker from './RankedRulePicker.vue';
@@ -147,7 +147,7 @@ export default {
           if (this.weaponType === 'specials') {
             const combinedBombLauncherPercentage = res.data
               .filter(specialWeapon => 2 <= specialWeapon.special_weapon_id && specialWeapon.special_weapon_id <= 6)
-              .reduce((sum, specialWeapon) => { return sum + specialWeapon.percentage }, 0);
+              .reduce((sum, specialWeapon) => sum + specialWeapon.percentage, 0);
             const indexToInsert = res.data.findIndex(specialWeapon => specialWeapon.percentage < combinedBombLauncherPercentage);
 
             res.data.splice(indexToInsert, 0, {
@@ -155,7 +155,7 @@ export default {
               rank: '-',
               localizationKey: 'ui.bomb_launchers_combined',
               percentage: combinedBombLauncherPercentage,
-            })
+            });
           }
 
           const mostUsedWeaponPercentage = res.data[0].percentage;
