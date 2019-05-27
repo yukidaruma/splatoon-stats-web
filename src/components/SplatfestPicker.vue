@@ -2,7 +2,7 @@
   <select @change="emitSplatfestChange()" v-model="selectedSplatfest">
     <option :value="null">-</option>
     <option v-for="f in splatfests" :key="f.key" :value="f">
-      [{{ f.region | capitalize }}] {{ f.team_names.join(' VS ') }}
+      {{ titlizeSplatfest(f) }}
     </option>
   </select>
 </template>
@@ -10,6 +10,7 @@
 <script>
 import moment from 'moment';
 import apiClient from '../api-client';
+import { titlizeSplatfest } from '../helper';
 
 export default {
   name: 'SplatfestPicker',
@@ -38,12 +39,10 @@ export default {
       });
   },
   methods: {
+    titlizeSplatfest,
     emitSplatfestChange(updateRanking = false) {
       this.$emit('splatfest-change', this.selectedSplatfest, updateRanking);
     },
-  },
-  filters: {
-    capitalize: str => str.toUpperCase(),
   },
 };
 </script>

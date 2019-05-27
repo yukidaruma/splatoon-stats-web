@@ -73,7 +73,7 @@
 import moment from 'moment';
 
 import apiClient from '../api-client';
-import { capitalizeFirstLetters, formatRankingEntry, rankedRules } from '../helper';
+import { capitalizeFirstLetters, formatRankingEntry, rankedRules, titlizeSplatfest } from '../helper';
 
 import DatePicker from './DatePicker.vue';
 import RankedRulePicker from './RankedRulePicker.vue';
@@ -167,9 +167,13 @@ export default {
         })
         .finally(() => {
           this.title = `Most used ${this.capitalizeFirstLetters(this.weaponTypeTitleName)} for
-            ${ this.capitalizeFirstLetters(this.rankingType === 'x' ? 'x ranked' : this.rankingType) }
-            ${ this.capitalizeFirstLetters(this.rankedRule ? this.rankedRule.split('_').join(' ') : '') }
-            in ${ this.year }-${ this.month + 1 }`;
+            ${this.capitalizeFirstLetters(this.rankingType === 'x' ? 'x ranked' : this.rankingType)}
+            ${this.capitalizeFirstLetters(this.rankedRule ? this.rankedRule.split('_').join(' ') : '')}`;
+          if (this.rankingType === 'splatfest') {
+            this.title += `in ${titlizeSplatfest(this.selectedSplatfest)}`;
+          } else {
+            this.title += `in ${this.year}-${this.month + 1}`;
+          }
           this.isLoading = false;
         });
     },
