@@ -75,7 +75,7 @@ export default {
       const groupType = leagueId.substr(leagueId.length - 1, 1);
       const leagueTime = moment.utc(leagueId.substr(0, leagueId.length - 1), 'YYMMDDHH', true);
 
-      this.groupType = this.groupType;
+      this.groupType = groupType;
       if (leagueTime.isValid()) {
         this.time = leagueTime;
       }
