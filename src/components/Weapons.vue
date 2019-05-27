@@ -7,6 +7,7 @@
           <!-- Todo: splatfest -->
           <option value="x">X Ranked</option>
           <option value="league">Leagues</option>
+          <option value="splatfest">Splatfests</option>
         </select>
       </div>
       <div>
@@ -28,9 +29,15 @@
       </div>
       -->
       <div>
-        <span class="label">Date</span>
-        <date-picker ref="datePicker" :defaultRankingType="rankingType"
-          :defaultYear="year" :defaultMonth="month" @time-change="onTimeChange" />
+        <div style="display: inline;" v-if="rankingType === 'splatfest'">
+          <span class="label">Splatfest</span>
+          <splatfest-picker @splatfest-change="onSplatfestChange" />
+        </div>
+        <div style="display: inline;" v-else>
+          <span class="label">Date</span>
+          <date-picker ref="datePicker" :defaultRankingType="rankingType"
+            :defaultYear="year" :defaultMonth="month" @time-change="onTimeChange" />
+        </div>
         <button @click="fetchWeaponRanking"  :disabled="isLoading">Go</button>
       </div>
     </div>
@@ -65,6 +72,7 @@ import { capitalizeFirstLetters, formatRankingEntry, rankedRules } from '../help
 
 import DatePicker from './DatePicker.vue';
 import RankedRulePicker from './RankedRulePicker.vue';
+import SplatfestPicker from './SplatfestPicker.vue';
 
 const getLastMonth = () => moment.utc().add({ month: -1 });
 
@@ -75,6 +83,7 @@ export default {
       title: '',
       isLoading: false,
       lastFetchedTime: 0,
+      selectedSplatfest: null,
       year: undefined,
       month: undefined,
       rankingType: 'x',
@@ -87,6 +96,7 @@ export default {
   components: {
     DatePicker,
     RankedRulePicker,
+    SplatfestPicker,
   },
   filters: {
     formatPercentage(percentage) {
@@ -95,9 +105,28 @@ export default {
   },
   methods: {
     capitalizeFirstLetters,
+    onSplatfestChange(splatfest, updateRanking) {
+      this.selectedSplatfest = splatfest;
+      if (updateRanking) {
+        this.fetchWeaponRanking();
+      }
+    },
+    onTimeChange(time) {
+      this.year = time.year();
+      this.month = time.month();
+    },
+    onRuleChange(rule) {
+      this.rankedRule = rule;
+    },
     fetchWeaponRanking() {
       const rankedRule = this.rankedRule ? this.rankedRule : '';
-      const path = `/weapons/${this.weaponType}/${this.rankingType}/${this.year}/${this.month + 1}/${rankedRule}`;
+      let path = `/weapons/${this.weaponType}/${this.rankingType}`;
+
+      if (this.rankingType === 'splatfest') {
+        path += `/${this.selectedSplatfest.region}/${this.selectedSplatfest.splatfest_id}`;
+      } else {
+        path += `/${this.year}/${this.month + 1}/${rankedRule}`;
+      }
 
       this.isLoading = true;
       this.$router.push(path);
@@ -139,13 +168,6 @@ export default {
           this.isLoading = false;
         });
     },
-    onTimeChange(time) {
-      this.year = time.year();
-      this.month = time.month();
-    },
-    onRuleChange(rule) {
-      this.rankedRule = rule;
-    },
   },
   computed: {
     weaponTypeTitleName() {
@@ -163,21 +185,27 @@ export default {
       this.year = lastMonth.year();
       this.month = lastMonth.month();
     }
-    if (['weapons', 'mains', 'specials', 'subs'].includes(weaponType)) {
+
+    if (weaponType) {
       this.weaponType = weaponType;
     }
-    if (['x', 'league'].includes(rankingType)) {
+    if (rankingType) {
       this.rankingType = rankingType;
     }
-    if (rankedRules.map(rule => rule.key).includes(rankedRule)) {
+    if (rankedRule) {
       this.rankedRule = rankedRule;
     }
 
-    this.fetchWeaponRanking();
+    // For splatfest, initial fetchWeaponRanking will be called in onSplatfestChange
+    if (rankingType !== 'splatfest') {
+      this.fetchWeaponRanking();
+    }
   },
   watch: {
     rankingType(newRankingType) {
-      this.$refs.datePicker.updateDatePicker(newRankingType);
+      if (newRankingType !== 'splatfest') {
+        this.$refs.datePicker.updateDatePicker(newRankingType);
+      }
     },
   },
 };

@@ -13,7 +13,8 @@ import { rankedRules } from './helper';
 
 Vue.use(Router);
 
-const rulesPattern = rankedRules.map(rule => rule.key).join('|');
+const weaponTypePattern = ['weapons', 'mains', 'specials', 'subs'].join('|');
+const rulePattern = rankedRules.map(rule => rule.key).join('|');
 
 export default new Router({
   mode: 'history',
@@ -27,7 +28,11 @@ export default new Router({
       component: Weapons,
     },
     {
-      path: `/weapons/:weaponType/:rankingType/:year/:month/:rankedRule(${rulesPattern})?`,
+      path: `/weapons/:weaponType(${weaponTypePattern})/:rankingType(x|league)/:year/:month/:rankedRule(${rulePattern})?`,
+      component: Weapons,
+    },
+    {
+      path: `/weapons/:weaponType(${weaponTypePattern})/:rankingType(splatfest)/:region/:splatfestId`,
       component: Weapons,
     },
     {
@@ -39,7 +44,7 @@ export default new Router({
       component: XRankings,
     },
     {
-      path: `/rankings/x/:defaultYear(\\d{4})/:defaultMonth([1-9]|1[0-2])/:defaultRankedRule(${rulesPattern})`,
+      path: `/rankings/x/:defaultYear(\\d{4})/:defaultMonth([1-9]|1[0-2])/:defaultRankedRule(${rulePattern})`,
       component: XRankings,
       props: true,
     },
@@ -64,6 +69,11 @@ export default new Router({
       path: '/players/:defaultPlayerId?',
       component: PlayerSummary,
       props: true,
+    },
+    { // Falback route
+      path: '*',
+      component: Index,
+      redirect: '/',
     },
   ],
 });
