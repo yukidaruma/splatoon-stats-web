@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import apiClient from '../api-client';
 
 export default {
@@ -21,10 +22,12 @@ export default {
   mounted() {
     apiClient.get('/splatfests')
       .then((res) => {
-        this.splatfests = res.data.map((splatfest) => {
-          splatfest.key = `${splatfest.region}-${splatfest.splatfest_id}`;
-          return splatfest;
-        });
+        this.splatfests = res.data
+          .filter(splatfest => splatfest.end_time < moment.utc().format('YYYY-MM-DD HH:mm:ss'))
+          .map((splatfest) => {
+            splatfest.key = `${splatfest.region}-${splatfest.splatfest_id}`;
+            return splatfest;
+          });
       })
       .then(() => {
         const { region, splatfestId } = this.$route.params;
