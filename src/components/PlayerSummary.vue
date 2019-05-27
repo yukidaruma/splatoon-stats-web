@@ -59,7 +59,7 @@
 import moment from 'moment';
 
 import apiClient from '../api-client';
-import { isValidPlayerId, formatRankingEntry } from '../helper';
+import { isValidPlayerId, formatRankingEntry, findRuleKey } from '../helper';
 
 import PlayerRankingEntry from './PlayerRankingEntry.vue';
 import XRankedChart from './PlayerSummaryXRankedChart';
@@ -135,7 +135,6 @@ export default {
 
             this.showXPowerChart = true;
             const chartColors = ['#e74c3c', '#2ecc71', '#3498db', '#f1c40f'];
-            const ruleKeys = ['', 'splat_zones', 'tower_control', 'rainmaker', 'clam_blitz'];
             const firstAppeared = moment(res.data[res.data.length - 1].start_time);
             const lastAppeared = moment(res.data[0].start_time);
             const months = 1 + lastAppeared.diff(firstAppeared, 'month');
@@ -143,7 +142,7 @@ export default {
               const dataset = {};
               const ruleId = i + 1;
               dataset.fill = false;
-              dataset.label = this.$t(`rules.${ruleKeys[ruleId]}.name`);
+              dataset.label = this.$t(`rules.${findRuleKey(ruleId)}.name`);
               dataset.borderColor = dataset.backgroundColor = chartColors[i];
               if (res.data.some(row => ruleId === row.rule_id)) {
                 dataset.data = new Array(months).fill(null);

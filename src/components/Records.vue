@@ -5,10 +5,10 @@
       <thead>
         <tr>
           <th>Weapon</th>
-          <th>Splat Zones</th>
-          <th>Tower Control</th>
-          <th>Rainmaker</th>
-          <th>Clam Blitz</th>
+          <th>{{ $t('rules.splat_zones.name') }}</th>
+          <th>{{ $t('rules.tower_control.name') }}</th>
+          <th>{{ $t('rules.rainmaker.name') }}</th>
+          <th>{{ $t('rules.clam_blitz.name') }}</th>
         </tr>
       </thead>
       <tbody>

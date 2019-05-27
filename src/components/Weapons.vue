@@ -22,7 +22,7 @@
       <div>
         <span class="label">Rule</span>
         <div v-if="rankingType === 'splatfest'">
-          <select class="l" disabled><option>Turf War</option></select>
+          <select class="l" disabled><option>{{ $t('rules.turf_war.name') }}</option></select>
         </div>
         <div v-else>
           <ranked-rule-picker class="l" :defaultRule="rankedRule" @rule-change="onRuleChange" />
