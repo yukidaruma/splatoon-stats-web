@@ -1,17 +1,9 @@
 <template>
   <div>
     <div class="controls">
-      <div>
-        <span class="label">Splatfest</span>
-        <select v-model="selectedSplatfest">
-          <option :value="null">-</option>
-          <option v-for="f in splatfests" :key="f.key" :value="f"
-            :class="f.key === currentRankingKey ? 'active' : ''">
-              [{{ f.region | capitalize }}] {{ f.team_names.join(' VS ') }}
-          </option>
-        </select>
-        <button @click="selectedSplatfest && fetchSplatfestRanking(selectedSplatfest.region, selectedSplatfest.splatfest_id)">Go</button>
-      </div>
+      <span class="label">Splatfest</span>
+      <splatfest-picker @splatfest-change="onSplatfestChange" />
+      <button @click="selectedSplatfest && fetchSplatfestRanking(selectedSplatfest.region, selectedSplatfest.splatfest_id)">Go</button>
     </div>
 
     <div class="rankings" v-if="hasFetchedOnce">
@@ -27,14 +19,14 @@
 import apiClient from '../api-client';
 import Ranking from './Ranking.vue';
 import { formatRankingEntry } from '../helper';
+import SplatfestPicker from './SplatfestPicker.vue';
 
 export default {
   name: 'SplatfestRankings',
-  components: { Ranking },
+  components: { Ranking, SplatfestPicker },
   data() {
     return {
       selectedSplatfest: null,
-      splatfests: [],
       rankings: [[], []],
       lastFetchedSplatfest: null,
       currentRankingKey: '',
@@ -44,23 +36,13 @@ export default {
   computed: {
     hasFetchedOnce() { return !!this.lastFetchedSplatfest; },
   },
-  created() {
-    apiClient.get('/splatfests')
-      .then((res) => {
-        this.splatfests = res.data.map((splatfest) => {
-          splatfest.key = `${splatfest.region}-${splatfest.splatfest_id}`;
-          return splatfest;
-        });
-      })
-      .then(() => {
-        const { region, splatfestId } = this.$route.params;
-        if (region) {
-          this.selectedSplatfest = this.splatfests.find(f => f.splatfest_id === Number(splatfestId) && f.region === region);
-          this.fetchSplatfestRanking(this.selectedSplatfest.region, this.selectedSplatfest.splatfest_id);
-        }
-      });
-  },
   methods: {
+    onSplatfestChange(splatfest, updateRanking) {
+      this.selectedSplatfest = splatfest;
+      if (updateRanking) {
+        this.fetchSplatfestRanking(splatfest.region, splatfest.splatfest_id);
+      }
+    },
     fetchSplatfestRanking(region, splatfestId) {
       const path = `/rankings/splatfest/${region}/${splatfestId}`;
       this.isLoading = true;
@@ -83,9 +65,6 @@ export default {
           this.isLoading = false;
         });
     },
-  },
-  filters: {
-    capitalize: str => str.toUpperCase(),
   },
 };
 </script>
