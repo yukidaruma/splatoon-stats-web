@@ -56,7 +56,7 @@ const calculateEndTime = (rankingType, startTime) => {
   return moment.utc(startTime).add(duration).toDate();
 };
 
-const titlizeSplatfest = splatfest => `[${splatfest.region.toUpperCase()}] ${splatfest.team_names.join(' VS ')}`;
+const titleizeSplatfest = splatfest => `[${splatfest.region.toUpperCase()}] ${splatfest.team_names.join(' VS ')}`;
 
 export {
   weaponIcon,
@@ -67,5 +67,5 @@ export {
   findRuleKey,
   formatRankingEntry,
   calculateEndTime,
-  titlizeSplatfest,
+  titleizeSplatfest,
 };

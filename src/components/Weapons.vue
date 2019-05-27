@@ -73,7 +73,7 @@
 import moment from 'moment';
 
 import apiClient from '../api-client';
-import { capitalizeFirstLetters, formatRankingEntry, rankedRules, titlizeSplatfest } from '../helper';
+import { capitalizeFirstLetters, formatRankingEntry, rankedRules, titleizeSplatfest } from '../helper';
 
 import DatePicker from './DatePicker.vue';
 import RankedRulePicker from './RankedRulePicker.vue';
@@ -170,7 +170,7 @@ export default {
             ${this.capitalizeFirstLetters(this.rankingType === 'x' ? 'x ranked' : this.rankingType)}
             ${this.capitalizeFirstLetters(this.rankedRule ? this.rankedRule.split('_').join(' ') : '')}`;
           if (this.rankingType === 'splatfest') {
-            this.title += `in ${titlizeSplatfest(this.selectedSplatfest)}`;
+            this.title += `in ${titleizeSplatfest(this.selectedSplatfest)}`;
           } else {
             this.title += `in ${this.year}-${this.month + 1}`;
           }
