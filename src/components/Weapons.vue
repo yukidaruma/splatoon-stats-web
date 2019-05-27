@@ -21,7 +21,12 @@
       </div>
       <div>
         <span class="label">Rule</span>
-        <ranked-rule-picker class="l" :defaultRule="rankedRule" @rule-change="onRuleChange" />
+        <div v-if="rankingType === 'splatfest'">
+          <select class="l" disabled><option>Turf War</option></select>
+        </div>
+        <div v-else>
+          <ranked-rule-picker class="l" :defaultRule="rankedRule" @rule-change="onRuleChange" />
+        </div>
       </div>
       <!-- Todo:
       <div>

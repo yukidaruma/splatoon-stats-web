@@ -135,6 +135,9 @@ input, select {
   border: 1px solid #7f8c8d;
   background-color: #34495e;
 }
+input:disabled, select:disabled {
+  color: #77939b;
+}
 input::placeholder {
   color: #95a5a6;
 }
