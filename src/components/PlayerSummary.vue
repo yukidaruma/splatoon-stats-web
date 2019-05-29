@@ -14,7 +14,7 @@
           </div>
         </div>
 
-        <h2 class="table-title">X Ranked</h2>
+        <h2 class="table-title">X Ranked ({{ playerRankingHistory.x.length }})</h2>
         <div v-if="playerRankingHistory.x.length === 0">
           No X Ranked record found for player <span class="player-id">{{ fetchedPlayerId }}</span>
         </div>
@@ -23,7 +23,7 @@
             rankingType="x" :rankingEntry="rankingEntry" />
         </table>
 
-        <h2 class="table-title">League Battle</h2>
+        <h2 class="table-title">League Battle ({{ playerRankingHistory.league.length }})</h2>
         <div v-if="playerRankingHistory.league.length === 0">
           No League Battle record found for player <span class="player-id">{{ fetchedPlayerId }}</span>
         </div>
@@ -32,7 +32,7 @@
             rankingType="league" :rankingEntry="rankingEntry" :playerName="knownNames[0] ? knownNames[0].player_name : fetchedPlayerId" />
         </table>
 
-        <h2 class="table-title">Splatfest</h2>
+        <h2 class="table-title">Splatfest ({{ playerRankingHistory.splatfest.length }})</h2>
         <div v-if="playerRankingHistory.splatfest.length === 0">
           No Splatfest record found for player <span class="player-id">{{ fetchedPlayerId }}</span>
         </div>
