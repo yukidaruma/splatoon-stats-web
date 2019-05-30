@@ -14,7 +14,8 @@ module.exports = {
     } else {
       plugins = [
         new webpack.DefinePlugin({
-          VUE_APP_API_URL: JSON.stringify('http://localhost:3000'),
+          // eslint-disable-next-line no-template-curly-in-string
+          VUE_APP_API_URL: "'http://' + location.hostname + ':3000'",
         }),
       ];
     }
