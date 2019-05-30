@@ -72,9 +72,10 @@ export default {
 <style scoped>
 .rankings {
   display: flex;
+  flex-wrap: wrap;
 }
 .rankings > div {
-  width: 50%;
+  flex: 1;
   margin-right: 2em;
 }
 </style>
