@@ -80,4 +80,7 @@ export default {
 </script>
 
 <style scoped>
+.league-member {
+  min-width: 12em;
+}
 </style>

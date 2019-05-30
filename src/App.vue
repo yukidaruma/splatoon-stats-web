@@ -260,6 +260,6 @@ table.ranking {
   flex-wrap: wrap;
 }
 .league-members .league-member {
-  flex: 0 50%;
+  flex: 1 50%;
 }
 </style>
