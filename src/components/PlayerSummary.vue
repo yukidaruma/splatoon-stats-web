@@ -4,7 +4,7 @@
       Loading...
     </div>
     <div v-else-if="hasLoaded">
-      <h1>Records for player `<span class="player-id">{{ fetchedPlayerId }}</span>`</h1>
+      <h1>Records for player <span class="player-id">{{ fetchedPlayerId }}</span></h1>
 
       <div>
         <div v-if="showXPowerChart">
