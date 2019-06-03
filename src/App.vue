@@ -119,6 +119,9 @@ table {
   border-collapse: collapse;
   background-color: #34495e;
 }
+table a {
+  font-weight: 300;
+}
 th, td {
   padding: .25em;
   border: 1px solid #46627f
