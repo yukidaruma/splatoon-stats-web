@@ -110,7 +110,7 @@ body {
   color: #bdc3c7;
 }
 a:link, a:visited, a:hover, a:active {
-  color: #16a085;
+  color: #2fe3be;
 }
 h1, h2, h3, h4, h5, h6 {
   color: #ecf0f1;
