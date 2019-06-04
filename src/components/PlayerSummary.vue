@@ -4,7 +4,10 @@
       Loading...
     </div>
     <div v-else-if="hasLoaded">
-      <h1>Records for player <span class="player-id">{{ fetchedPlayerId }}</span></h1>
+      <h1>
+        <span class="player-name" v-if="latestName">{{ latestName }}</span>
+        <span v-else>ID: <span class="player-id">{{ fetchedPlayerId }}</span></span>
+      </h1>
 
       <div v-if="showXPowerChart">
         <h2 class="table-title">X Power</h2>
@@ -55,7 +58,7 @@
             rankingType="league"
             :key="`${rankingEntry.start_time}_${rankingEntry.group_id}`"
             :rankingEntry="rankingEntry"
-            :playerName="knownNames[0] ? knownNames[0].player_name : fetchedPlayerId" />
+            :playerName="latestName ? latestName : fetchedPlayerId" />
         </tbody>
       </table>
 
@@ -125,6 +128,11 @@ export default {
           this.hasLoaded = false;
         }
       },
+    },
+  },
+  computed: {
+    latestName() {
+      return this.knownNames[0] && this.knownNames[0].player_name;
     },
   },
   methods: {
