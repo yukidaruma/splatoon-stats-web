@@ -169,7 +169,7 @@ export default {
           });
         })
         .finally(() => {
-          this.title = `Most used ${this.capitalizeFirstLetters(this.weaponTypeTitleName)} for
+          this.title = `Most used ${this.capitalizeFirstLetters(this.weaponTypeTitleName)} in
             ${this.capitalizeFirstLetters(this.rankingType === 'x' ? 'x ranked' : this.rankingType)}
             ${this.capitalizeFirstLetters(this.rankedRule ? this.rankedRule.split('_').join(' ') : '')}`;
           if (this.rankingType === 'splatfest') {
