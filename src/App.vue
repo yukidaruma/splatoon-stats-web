@@ -1,16 +1,34 @@
 <template>
-  <div id="app">
+  <div id="app" class="container">
     <header>
-      <nav>
-        <ul>
-          <router-link tag="li" to="/" :exact="true"><a>Index</a></router-link>
-          <router-link tag="li" to="/weapons"><a>Popular Weapons</a></router-link>
-          <router-link tag="li" to="/rankings/x"><a>X Rankings</a></router-link>
-          <router-link tag="li" to="/rankings/league"><a>League Rankings</a></router-link>
-          <router-link tag="li" to="/rankings/splatfest"><a>Splatfest Rankings</a></router-link>
-          <router-link tag="li" to="/search"><a>Search players</a></router-link>
-          <router-link tag="li" to="/records"><a>Records</a></router-link>
-        </ul>
+      <nav class="navbar" aria-label="main navigation">
+        <div class="navbar-brand">
+          <router-link class="navbar-item" to="/" active-class="" exact>Splatoon Stats</router-link>
+
+          <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+            data-target="globalNav" @click="toggleBurgerMenu" :class="isBurgerMenuOpen ? 'is-active' : ''">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+
+        <div id="globalNav" class="navbar-menu" :class="isBurgerMenuOpen ? 'is-active' : ''">
+          <div class="navbar-start">
+            <router-link class="navbar-item" to="/weapons">Popular Weapons</router-link>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <!-- See: https://github.com/vuejs/vue-router/issues/916#issuecomment-297424249 -->
+              <router-link to="/rankings" tag="span" class="navbar-link" :event="''">Rankings</router-link>
+              <div class="navbar-dropdown">
+                <router-link class="navbar-item" to="/rankings/x">X Rankings</router-link>
+                <router-link class="navbar-item" to="/rankings/league">League Rankings</router-link>
+                <router-link class="navbar-item" to="/rankings/splatfest">Splatfest Rankings</router-link>
+              </div>
+            </div>
+            <router-link class="navbar-item" to="/search">Search players</router-link>
+            <router-link class="navbar-item" to="/records">Records</router-link>
+          </div>
+        </div>
       </nav>
     </header>
 
@@ -23,111 +41,28 @@
 </template>
 
 <script>
-import 'ress';
+import './assets/bulma.scss';
 import GlobalFooter from './components/GlobalFooter.vue';
 
 export default {
   name: 'app',
   components: { GlobalFooter },
+  data() {
+    return {
+      isBurgerMenuOpen: false,
+    };
+  },
+  methods: {
+    toggleBurgerMenu() {
+      this.isBurgerMenuOpen = !this.isBurgerMenuOpen;
+    },
+  }
 };
 </script>
 
 <style>
-/*
- * Noto Sans Japanese (japanese) https://fonts.googleapis.com/earlyaccess/notosansjapanese.css
- */
-@font-face {
-  font-display: swap;
-  font-family: 'Noto Sans Japanese';
-  font-style: normal;
-  font-weight: 100;
-  src: url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Thin.woff2) format('woff2'),
-       url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Thin.woff) format('woff'),
-       url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Thin.otf) format('opentype');
-}
-@font-face {
-   font-display: swap;
-  font-family: 'Noto Sans Japanese';
-  font-style: normal;
-  font-weight: 200;
-  src: url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Light.woff2) format('woff2'),
-       url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Light.woff) format('woff'),
-       url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Light.otf) format('opentype');
-}
-@font-face {
-   font-display: swap;
-   font-family: 'Noto Sans Japanese';
-   font-style: normal;
-   font-weight: 300;
-   src: url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-DemiLight.woff2) format('woff2'),
-        url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-DemiLight.woff) format('woff'),
-        url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-DemiLight.otf) format('opentype');
-}
-@font-face {
-   font-display: swap;
-   font-family: 'Noto Sans Japanese';
-   font-style: normal;
-   font-weight: 400;
-   src: url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Regular.woff2) format('woff2'),
-        url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Regular.woff) format('woff'),
-        url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Regular.otf) format('opentype');
- }
-@font-face {
-   font-display: swap;
-   font-family: 'Noto Sans Japanese';
-   font-style: normal;
-   font-weight: 500;
-   src: url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Medium.woff2) format('woff2'),
-        url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Medium.woff) format('woff'),
-        url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Medium.otf) format('opentype');
- }
-@font-face {
-   font-display: swap;
-   font-family: 'Noto Sans Japanese';
-   font-style: normal;
-   font-weight: 700;
-   src: url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Bold.woff2) format('woff2'),
-        url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Bold.woff) format('woff'),
-        url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Bold.otf) format('opentype');
- }
-@font-face {
-   font-display: swap;
-   font-family: 'Noto Sans Japanese';
-   font-style: normal;
-   font-weight: 900;
-   src: url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Black.woff2) format('woff2'),
-        url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Black.woff) format('woff'),
-        url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Black.otf) format('opentype');
-}
-</style>
-
-<style>
-body, input, option, button {
-  font-family: 'Noto Sans Japanese', sans-serif;
-}
-body {
-  background-color: #1c2732;
-  color: #bdc3c7;
-}
-a:link, a:visited, a:hover, a:active {
-  color: #2fe3be;
-}
-h1, h2, h3, h4, h5, h6 {
-  color: #ecf0f1;
-}
-table {
-  border-collapse: collapse;
-  background-color: #34495e;
-}
 table a {
   font-weight: 300;
-}
-th, td {
-  padding: .25em;
-  border: 1px solid #46627f
-}
-tr:hover {
-  background-color: #587ca0;
 }
 input, select, option, button {
   height: 2.5em;
@@ -160,47 +95,15 @@ button:active {
 }
 
 #app {
-  position: relative;
   min-height: 100vh;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1.5em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding-left: .5em;
+  padding-right: .5em;
   padding-bottom: 5em; /* footer height */
-  box-sizing: border-box;
 }
 #app > header {
   margin-bottom: 1em;
-}
-#app > header nav ul {
-  display: flex;
-  list-style-type: none;
-  font-weight: bold;
-  height: 3em;
-}
-#app > header nav ul li {
-  display: table;
-  flex: 1;
-  height: 100%;
-}
-#app > header nav ul li + li {
-  border-left: 1px solid #46627f;
-}
-#app > header nav ul li:hover, #app > header nav ul li.router-link-active:hover {
-  background-color: #587ca0;
-}
-#app > header nav ul li.router-link-active {
-  background-color: #46627f;
-}
-#app > header nav ul li a {
-  display: table-cell;
-  text-align: center;
-  vertical-align: middle;
-  padding: 0 .5em;
-  height: 100%;
-  width: 100%;
-  text-decoration: none;
 }
 #app > footer {
   display: flex;
@@ -237,9 +140,6 @@ button:active {
   width: 8em;
 }
 
-table.ranking {
-  width: 100%;
-}
 .table-title {
   margin: .5em 0;
 }
@@ -258,11 +158,14 @@ table.ranking {
   font-style: italic;
 }
 
-.league-members {
+.league-members, .stage-names {
   display: flex;
   flex-wrap: wrap;
+  max-width: 24em;
 }
-.league-members .league-member {
+.league-members .league-member,
+.stage-names .stage-name {
   flex: 1 50%;
+  min-width: 12em;
 }
 </style>

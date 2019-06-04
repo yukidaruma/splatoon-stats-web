@@ -17,6 +17,7 @@ const weaponTypePattern = ['weapons', 'mains', 'specials', 'subs'].join('|');
 const rulePattern = rankedRules.map(rule => rule.key).join('|');
 
 export default new Router({
+  linkActiveClass: 'is-active',
   mode: 'history',
   routes: [
     {

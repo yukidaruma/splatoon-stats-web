@@ -44,24 +44,26 @@
       </div>
     </div>
 
-    <h2 class="table-title">{{ title }}</h2>
+    <h1 class="table-title">{{ title }}</h1>
     <div v-if="isLoading">
       Loading...
     </div>
     <div v-else-if="weapons.length === 0">
       No data found.
     </div>
-    <table class="ranking" v-else>
-      <tr v-for="weapon in weapons" :key="weapon.key">
-        <td>{{ weapon.rank }}</td>
-        <td>
-          <div class="weapon-name-container">
-            <img class="weapon-icon" :src="weapon.icon" v-if="!weapon.hasNoIcon">
-            {{ $t(weapon.localizationKey) }}
-          </div>
-        </td>
-        <td>{{ weapon.percentage | formatPercentage }}<span class="bar-chart" :style="`width: ${weapon.relativePercentage}%`"></span></td>
-      </tr>
+    <table class="table is-hoverable is-fullwidth" v-else>
+      <tbody>
+        <tr v-for="weapon in weapons" :key="weapon.key">
+          <td>{{ weapon.rank }}</td>
+          <td>
+            <div class="weapon-name-container">
+              <img class="weapon-icon" :src="weapon.icon" v-if="!weapon.hasNoIcon">
+              {{ $t(weapon.localizationKey) }}
+            </div>
+          </td>
+          <td>{{ weapon.percentage | formatPercentage }}<span class="bar-chart" :style="`width: ${weapon.relativePercentage}%`"></span></td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </template>
@@ -223,8 +225,8 @@ export default {
 
 <style scoped>
 .bar-chart {
-    display: block;
-    height: 5px;
-    background: linear-gradient(45deg, #27ae60 0%, #2ecc71 100%);
+  display: block;
+  height: 5px;
+  background: linear-gradient(45deg, #27ae60 0%, #2ecc71 100%);
 }
 </style>

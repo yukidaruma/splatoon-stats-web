@@ -20,8 +20,9 @@
         </div>
       </div>
     <td v-else>
-      <div class="league-member weapon-name-container">
-        <img class="weapon-icon" :src="rankingEntry.icon">{{ $t(`weapons.${rankingEntry.weapon_id}.name`) }}
+      <div class="weapon-name-container">
+        <img class="weapon-icon" :src="rankingEntry.icon">
+        <span class="is-hidden-touch">{{ $t(`weapons.${rankingEntry.weapon_id}.name`) }}</span>
       </div>
     </td>
 
@@ -29,16 +30,19 @@
     <td>
       <router-link :to="rankingPath(rankingType, rankingEntry)">
         {{ rankingEntry.start_time | formatDate(rankingType) }}
-        <span v-if="rankingType === 'league'">
+        <span v-if="rankingType === 'league'" class="is-hidden-touch">
           ~ {{ calculateEndTime(rankingType, rankingEntry.start_time) | formatDate('league_end') }}
         </span>
+        <span v-if="rankingType === 'x'">{{ $t(`ui.rule_shortnames.${findRuleKey(rankingEntry.rule_id)}`) }}</span>
       </router-link>
     </td>
 
-    <td v-if="rankingType !== 'splatfest'">{{ $t(`rules.${findRuleKey(rankingEntry.rule_id)}.name`) }}</td>
+    <td v-if="rankingType === 'league'">{{ $t(`ui.rule_shortnames.${findRuleKey(rankingEntry.rule_id)}`) }}</td>
     <td v-if="rankingType === 'league'">
-      <p>{{ $t(`stages.${rankingEntry.stage_ids[0]}.name`) }}</p>
-      <p>{{ $t(`stages.${rankingEntry.stage_ids[1]}.name`) }}</p>
+      <div class="stage-names">
+        <p class="stage-name">{{ $t(`stages.${rankingEntry.stage_ids[0]}.name`) }}</p>
+        <p class="stage-name">{{ $t(`stages.${rankingEntry.stage_ids[1]}.name`) }}</p>
+      </div>
     </td>
     </td>
   </tr>
@@ -83,9 +87,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.league-member {
-  min-width: 12em;
-}
-</style>

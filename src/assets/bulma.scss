@@ -1,0 +1,148 @@
+@charset "utf-8";
+
+/*
+ * Import a font from Google Fonts
+ */
+// Noto Sans Japanese (japanese) https://fonts.googleapis.com/earlyaccess/notosansjapanese.css
+@font-face {
+  font-display: swap;
+  font-family: 'Noto Sans Japanese';
+  font-style: normal;
+  font-weight: 100;
+  src: url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Thin.woff2) format('woff2'),
+      url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Thin.woff) format('woff'),
+      url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Thin.otf) format('opentype');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Noto Sans Japanese';
+  font-style: normal;
+  font-weight: 200;
+  src: url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Light.woff2) format('woff2'),
+      url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Light.woff) format('woff'),
+      url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Light.otf) format('opentype');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Noto Sans Japanese';
+  font-style: normal;
+  font-weight: 300;
+  src: url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-DemiLight.woff2) format('woff2'),
+      url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-DemiLight.woff) format('woff'),
+      url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-DemiLight.otf) format('opentype');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Noto Sans Japanese';
+  font-style: normal;
+  font-weight: 400;
+  src: url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Regular.woff2) format('woff2'),
+      url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Regular.woff) format('woff'),
+      url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Regular.otf) format('opentype');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Noto Sans Japanese';
+  font-style: normal;
+  font-weight: 500;
+  src: url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Medium.woff2) format('woff2'),
+      url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Medium.woff) format('woff'),
+      url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Medium.otf) format('opentype');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Noto Sans Japanese';
+  font-style: normal;
+  font-weight: 700;
+  src: url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Bold.woff2) format('woff2'),
+      url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Bold.woff) format('woff'),
+      url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Bold.otf) format('opentype');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Noto Sans Japanese';
+  font-style: normal;
+  font-weight: 900;
+  src: url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Black.woff2) format('woff2'),
+      url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Black.woff) format('woff'),
+      url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Black.otf) format('opentype');
+}
+
+// Update Bulma's global variables
+$fullhd-enabled: false;
+$body-color: #c8cdd0;
+$background: #34495e;
+$body-background-color: #1c2732;
+$border: #46627f;
+$text-strong: $body-color;
+$family-sans-serif: 'Noto Sans Japanese', sans-serif;
+$link: #2fe3be;
+$link-hover: $link;
+
+/*
+ * Update Bulma's component variables
+ */
+@import "../../node_modules/bulma/sass/utilities/_all.sass";
+@import "../../node_modules/bulma/sass/base/_all.sass";
+.container {
+  // Due to bulma's bug, we need overflow-x: hidden; on container. Remove if it's fixed.
+  // https://github.com/jgthms/bulma/issues/1540
+  overflow-x: hidden;
+}
+
+@import "../../node_modules/bulma/sass/grid/columns.sass";
+@import "../../node_modules/bulma/sass/elements/container.sass";
+
+// Global navigation (components/navbar)
+$navbar-height: 2.5rem;
+$navbar-background-color: $body-background-color; // lighten($background, 5%);
+$navbar-item-color: darken($link, 5%);
+$navbar-item-hover-color: darken($white, 15%);
+$navbar-item-hover-background-color: lighten($navbar-background-color, 10%);
+$navbar-item-active-color: $white;
+$navbar-item-active-background-color: $navbar-item-hover-background-color; // lighten($navbar-background-color, 5%);
+
+$navbar-dropdown-radius: 0;
+$navbar-dropdown-background-color: lighten($navbar-background-color, 5%);
+$navbar-dropdown-item-hover-color: $navbar-item-hover-color;
+$navbar-dropdown-item-hover-background-color: lighten($navbar-dropdown-background-color, 10%);
+$navbar-dropdown-item-active-color: $navbar-item-active-color;
+$navbar-dropdown-item-active-background-color: $navbar-dropdown-item-hover-background-color;
+@import "../../node_modules/bulma/sass/components/navbar.sass";
+.navbar-brand a {
+  color: $white !important;
+}
+.navbar-brand a.navbar-item:hover {
+  background-color: $navbar-item-hover-background-color;
+}
+
+// Table
+$table-color: $body-color;
+$table-background-color: $background;
+$table-row-hover-background-color: lighten($background, 10%);
+$table-head-cell-color: lighten($table-color, 10%);
+$table-cell-padding: .25em;
+$table-cell-border: 1px solid $border;
+@import "../../node_modules/bulma/sass/elements/table.sass";
+
+// Title (<hN>)
+// We are not using Bulma's title element.
+// @import "../../node_modules/bulma/sass/elements/title.sass";
+$title-color: $white;
+$subtitle-color: $title-color;
+h1, h2, h3, h4, h5, h6 {
+  color: $title-color;
+}
+h1 {
+  font-size: $size-4;
+}
+h2 {
+  font-size: $size-6;
+}
+
+/*
+@import "../../node_modules/bulma/sass/elements/button.sass";
+@import "../../node_modules/bulma/sass/form/_all.sass";
+@import "../../node_modules/bulma/sass/layout/hero.sass";
+@import "../../node_modules/bulma/sass/layout/section.sass";
+*/

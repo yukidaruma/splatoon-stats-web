@@ -20,15 +20,17 @@
 
       <div class="search-result" v-else>
         <h2 class="table-title">Search Results</h2>
-        <div>
-          <ul v-if="searchResults.length !== 0">
-            <li v-for="player in searchResults" :key="`${player.player_id}-${player.player_name}`">
-              <router-link class="player-name" :to="`/players/${player.player_id}`">{{ player.player_name }}</router-link>
-              <time>({{ player.last_used }})</time>
-            </li>
-          </ul>
-          <p v-else>No players were found.</p>
+        <!--
+          .is-mobile should not be necessary https://github.com/jgthms/bulma/issues/1807.
+          Remove when it's fixed.
+        -->
+        <div class="columns is-mobile is-multiline" v-if="searchResults.length !== 0">
+          <div class="column is-half-mobile is-one-quarter-tablet" v-for="player in searchResults" :key="`${player.player_id}-${player.player_name}`">
+            <router-link class="player-name" :to="`/players/${player.player_id}`">{{ player.player_name }}</router-link>
+            <time>({{ player.last_used }})</time>
+          </div>
         </div>
+        <div v-else>No players were found.</div>
       </div>
     </div>
   </div>
@@ -88,15 +90,6 @@ export default {
   font-size: 80%;
 }
 
-ul {
-  display: flex;
-  flex-wrap: wrap;
-}
-li {
-  list-style: none;
-  width: 15em;
-  margin: .5em;
-}
 time {
   display: block;
 }

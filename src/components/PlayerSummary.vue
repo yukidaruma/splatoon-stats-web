@@ -6,57 +6,68 @@
     <div v-else-if="hasLoaded">
       <h1>Records for player <span class="player-id">{{ fetchedPlayerId }}</span></h1>
 
-      <div>
-        <div v-if="showXPowerChart">
-          <h2 class="table-title">X Power</h2>
-          <div class="chart-container">
-            <x-ranked-chart :height="320" :data="chartData" :options="chartOptions" />
-          </div>
+      <div v-if="showXPowerChart">
+        <h2 class="table-title">X Power</h2>
+        <div class="chart-container">
+          <x-ranked-chart :height="320" :data="chartData" :options="chartOptions" />
         </div>
-
-        <div class="ranking-history-container">
-          <div>
-            <h2 class="table-title">X Ranked ({{ playerRankingHistory.x.length }})</h2>
-            <div v-if="playerRankingHistory.x.length === 0">
-              No X Ranked record found for player <span class="player-id">{{ fetchedPlayerId }}</span>
-            </div>
-            <table class="ranking" v-else>
-              <player-ranking-entry v-for="rankingEntry in playerRankingHistory.x" :key="`${rankingEntry.start_time}_${rankingEntry.rule_id}`"
-                rankingType="x" :rankingEntry="rankingEntry" />
-            </table>
-          </div>
-
-          <div>
-            <h2 class="table-title">Splatfest ({{ playerRankingHistory.splatfest.length }})</h2>
-            <div v-if="playerRankingHistory.splatfest.length === 0">
-              No Splatfest record found for player <span class="player-id">{{ fetchedPlayerId }}</span>
-            </div>
-            <table class="ranking">
-              <player-ranking-entry v-for="rankingEntry in playerRankingHistory.splatfest" :key="`${rankingEntry.region}-${rankingEntry.splatfest_id}`"
-                rankingType="splatfest" :rankingEntry="rankingEntry" />
-            </table>
-          </div>
-        </div>
-
-        <h2 class="table-title">League Battle ({{ playerRankingHistory.league.length }})</h2>
-        <div v-if="playerRankingHistory.league.length === 0">
-          No League Battle record found for player <span class="player-id">{{ fetchedPlayerId }}</span>
-        </div>
-        <table class="ranking">
-          <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league" :key="`${rankingEntry.start_time}_${rankingEntry.group_id}`"
-            rankingType="league" :rankingEntry="rankingEntry" :playerName="knownNames[0] ? knownNames[0].player_name : fetchedPlayerId" />
-        </table>
-
-        <h2 class="table-title">Known Names</h2>
-        <div v-if="knownNames.length === 0">
-          No known names found for player <span class="player-id">{{ fetchedPlayerId }}</span>
-        </div>
-        <ul v-else>
-          <li v-for="knownName in knownNames" :key="knownName.player_name">
-            <span class="player-name">{{ knownName.player_name }}</span> (<time>{{ knownName.last_used }}</time>)
-          </li>
-        </ul>
       </div>
+
+      <div class="columns is-multiline">
+        <div class="column is-half">
+          <h2 class="table-title">X Ranked ({{ playerRankingHistory.x.length }})</h2>
+          <div v-if="playerRankingHistory.x.length === 0">
+            No X Ranked ranking record.
+          </div>
+          <table class="table is-hoverable is-fullwidth" v-else>
+            <tbody>
+              <player-ranking-entry v-for="rankingEntry in playerRankingHistory.x"
+                rankingType="x"
+                :key="`${rankingEntry.start_time}_${rankingEntry.rule_id}`"
+                :rankingEntry="rankingEntry" />
+            </tbody>
+          </table>
+        </div>
+
+        <div class="column is-half">
+          <h2 class="table-title">Splatfest ({{ playerRankingHistory.splatfest.length }})</h2>
+          <div v-if="playerRankingHistory.splatfest.length === 0">
+            No Splatfest ranking record.
+          </div>
+          <table class="table is-hoverable is-fullwidth">
+            <tbody>
+              <player-ranking-entry v-for="rankingEntry in playerRankingHistory.splatfest"
+                rankingType="splatfest"
+                :key="`${rankingEntry.region}-${rankingEntry.splatfest_id}`"
+                :rankingEntry="rankingEntry" />
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <h2 class="table-title">League Battle ({{ playerRankingHistory.league.length }})</h2>
+      <div v-if="playerRankingHistory.league.length === 0">
+        No League Battle ranking record.
+      </div>
+      <table class="table is-hoverable is-fullwidth league">
+        <tbody>
+          <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league"
+            rankingType="league"
+            :key="`${rankingEntry.start_time}_${rankingEntry.group_id}`"
+            :rankingEntry="rankingEntry"
+            :playerName="knownNames[0] ? knownNames[0].player_name : fetchedPlayerId" />
+        </tbody>
+      </table>
+
+      <h2 class="table-title">Known Names</h2>
+      <div v-if="knownNames.length === 0">
+        No known names found.
+      </div>
+      <ul v-else>
+        <li v-for="knownName in knownNames" :key="knownName.player_name">
+          <span class="player-name">{{ knownName.player_name }}</span> (<time>{{ knownName.last_used }}</time>)
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -187,7 +198,7 @@ export default {
 <style scoped>
 .chart-container {
   height: 320px;
-  background-color: #34495e;
+  background-color: #34495e; /* TODO: use $background-color */
 }
 .ranking-history-container {
   display: flex;

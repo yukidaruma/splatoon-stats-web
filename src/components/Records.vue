@@ -1,32 +1,35 @@
 <template>
   <div>
     <h2 class="table-title">X Ranked Weapon records</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Weapon</th>
-          <th>{{ $t('rules.splat_zones.name') }}</th>
-          <th>{{ $t('rules.tower_control.name') }}</th>
-          <th>{{ $t('rules.rainmaker.name') }}</th>
-          <th>{{ $t('rules.clam_blitz.name') }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="weapon in weapons" :key="weapon.weapon_id">
-          <td>
-            <div class="weapon-name-container">
-              <img class="weapon-icon" :src="weapon.icon">{{ $t(weapon.localizationKey) }}
-            </div>
-          </td>
-          <td v-for="(player, ruleId) in weapon.top_players" :key="`${weapon.weapon_id}-${ruleId}`">
-            <div class="player" v-if="player">
-              <p>{{ player.rating }}</p>
-              <p><router-link :to="`/players/${player.player_id}`">{{ player.name }}</router-link></p>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table class="table is-hoverable is-fullwidth">
+        <thead>
+          <tr>
+            <th>Weapon</th>
+            <th>{{ $t('rules.splat_zones.name') }}</th>
+            <th>{{ $t('rules.tower_control.name') }}</th>
+            <th>{{ $t('rules.rainmaker.name') }}</th>
+            <th>{{ $t('rules.clam_blitz.name') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="weapon in weapons" :key="weapon.weapon_id">
+            <td>
+              <div class="weapon-name-container">
+                <img class="weapon-icon" :src="weapon.icon">
+                <span class="is-hidden-mobile">{{ $t(weapon.localizationKey) }}</span>
+              </div>
+            </td>
+            <td v-for="(player, ruleId) in weapon.top_players" :key="`${weapon.weapon_id}-${ruleId}`">
+              <div class="player" v-if="player">
+                <p>{{ player.rating }}</p>
+                <p><router-link :to="`/players/${player.player_id}`">{{ player.name }}</router-link></p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -65,6 +68,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-</style>

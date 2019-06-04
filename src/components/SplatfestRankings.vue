@@ -6,8 +6,8 @@
       <button @click="selectedSplatfest && fetchSplatfestRanking(selectedSplatfest.region, selectedSplatfest.splatfest_id)">Go</button>
     </div>
 
-    <div class="rankings" v-if="hasFetchedOnce">
-      <div v-for="i in [0, 1]" :key="i"><!-- iterate over team_id -->
+    <div class="columns is-multiline" v-if="hasFetchedOnce">
+      <div class="column is-half" v-for="i in [0, 1]" :key="i"><!-- iterate over team_id -->
         <h2 class="table-title" :style="`color: ${lastFetchedSplatfest.colors[i]}`">{{ lastFetchedSplatfest.team_names[i] }}</h2>
         <ranking rankingType="splatfest" :ranking="rankings[i]" :isLoading="isLoading" />
       </div>
@@ -68,14 +68,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.rankings {
-  display: flex;
-  flex-wrap: wrap;
-}
-.rankings > div {
-  flex: 1;
-  margin-right: 2em;
-}
-</style>
