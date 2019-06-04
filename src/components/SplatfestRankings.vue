@@ -8,7 +8,7 @@
 
     <div class="columns is-multiline" v-if="hasFetchedOnce">
       <div class="column is-half" v-for="i in [0, 1]" :key="i"><!-- iterate over team_id -->
-        <h2 class="table-title" :style="`color: ${lastFetchedSplatfest.colors[i]}`">{{ lastFetchedSplatfest.team_names[i] }}</h2>
+        <h3 class="table-title" :style="{ 'background-color': lastFetchedSplatfest.colors[i] }">{{ lastFetchedSplatfest.team_names[i] }}</h3>
         <ranking rankingType="splatfest" :ranking="rankings[i]" :isLoading="isLoading" />
       </div>
     </div>
@@ -68,3 +68,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.table-title {
+  display: inline-block;
+  padding: .25em;
+}
+</style>
