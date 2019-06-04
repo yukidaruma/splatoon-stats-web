@@ -13,10 +13,10 @@
       </div>
     </div>
 
-    <h2 class="table-title" v-if="fetchedDate">
+    <h1 class="table-title" v-if="fetchedDate">
       Top 500 players for X Ranked {{ capitalizeFirstLetters(rankedRule.split('_').join(' ')) }}
       in {{ fetchedDate }}
-    </h2>
+    </h1>
     <ranking rankingType="x" :ranking="ranking" :isLoading="isLoading" />
   </div>
 </template>

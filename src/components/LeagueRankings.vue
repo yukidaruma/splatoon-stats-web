@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <h2 class="table-title">{{ title }}</h2>
+    <h1 class="table-title">{{ title }}</h1>
     <ranking rankingType="league" :ranking="ranking" :isLoading="isLoading" />
   </div>
 </template>
