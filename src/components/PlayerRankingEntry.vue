@@ -30,9 +30,6 @@
     <td>
       <router-link :to="rankingPath(rankingType, rankingEntry)">
         {{ rankingEntry.start_time | formatDate(rankingType) }}
-        <span v-if="rankingType === 'league'" class="is-hidden-touch">
-          ~ {{ calculateEndTime(rankingType, rankingEntry.start_time) | formatDate('league_end') }}
-        </span>
         <span v-if="rankingType === 'x'">{{ $t(`ui.rule_shortnames.${findRuleKey(rankingEntry.rule_id)}`) }}</span>
       </router-link>
     </td>
@@ -60,7 +57,6 @@ export default {
       const dateFormat = {
         x: 'YY-MM',
         league: 'YY-MM-DD HH:mm',
-        league_end: 'HH:mm',
         splatfest: 'YYYY-MM-DD',
       }[rankingType];
       return moment.utc(time).local().format(dateFormat);
