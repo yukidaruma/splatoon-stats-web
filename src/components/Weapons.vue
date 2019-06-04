@@ -214,8 +214,8 @@ export default {
     }
   },
   watch: {
-    rankingType(newRankingType) {
-      if (newRankingType !== 'splatfest') {
+    rankingType(newRankingType, oldRankingType) {
+      if (oldRankingType !== 'splatfest' && newRankingType !== 'splatfest') {
         this.$refs.datePicker.updateDatePicker(newRankingType);
       }
     },
