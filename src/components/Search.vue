@@ -61,7 +61,7 @@ export default {
       if (isValidPlayerId(playerId)) {
         this.$router.push(`/players/${playerId}`);
       } else {
-        alert('Invalid Player ID');
+        alert('Player ID must be 16-digit hexadecimal number.');
       }
     },
     searchPlayersByName(name) {
