@@ -200,13 +200,26 @@ export default {
   height: 320px;
   background-color: #34495e; /* TODO: use $background-color */
 }
-.ranking-history-container {
-  display: flex;
-  flex-wrap: wrap;
+.league, .league tbody {
+  display: block;
 }
-.ranking-history-container > div {
-  margin-right: 2em;
-  min-width: 20em;
-  flex: 1;
+.league tr {
+  display: grid;
+  width: 100%;
+}
+@media screen and (min-width: 960px) {
+  .league tr {
+    grid-template-columns: 3em 4em 1fr 7.5em 4em 12em;
+  }
+}
+@media screen and (max-width: 959px) { /* TODO: use $tablet */
+  .league tr {
+    grid-template-columns: auto auto auto;
+  }
+  .league tr >>> td:nth-child(1),
+  .league tr >>> td:nth-child(2),
+  .league tr >>> td:nth-child(3) {
+    border: 0;
+  }
 }
 </style>
