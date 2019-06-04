@@ -4,7 +4,6 @@
       <div>
         <span class="label">Data source</span>
         <select class="l" v-model="rankingType">
-          <!-- Todo: splatfest -->
           <option value="x">X Ranked</option>
           <option value="league">Leagues</option>
           <option value="splatfest">Splatfests</option>
@@ -29,9 +28,7 @@
         </div>
       </div>
       <!-- Todo:
-      <div>
         Filter by power
-      </div>
       -->
       <div>
         <div style="display: inline;" v-if="rankingType === 'splatfest'">
@@ -43,7 +40,7 @@
           <date-picker ref="datePicker" :defaultRankingType="rankingType"
             :defaultYear="year" :defaultMonth="month" @time-change="onTimeChange" />
         </div>
-        <button @click="fetchWeaponRanking"  :disabled="isLoading">Go</button>
+        <button @click="fetchWeaponRanking" :disabled="isLoading">Go</button>
       </div>
     </div>
 
@@ -208,7 +205,8 @@ export default {
       this.rankedRule = rankedRule;
     }
 
-    // For splatfest, initial fetchWeaponRanking will be called in onSplatfestChange
+    // For splatfest, initial fetchWeaponRanking will be called by onSplatfestChange
+    // as soon as splatfest schedules is fetched by splatfest-picker
     if (rankingType !== 'splatfest') {
       this.fetchWeaponRanking();
     }
