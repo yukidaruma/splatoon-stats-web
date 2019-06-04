@@ -69,7 +69,7 @@ export default {
         this.isLoading = true;
         this.searchedName = name;
 
-        this.$router.push(`search?name=${name}`);
+        this.$router.push(`/players/search?name=${name}`);
         apiClient.get(`/players/search?name=${name}`)
           .then((res) => {
             this.searchResults = res.data;

@@ -25,7 +25,7 @@
                 <router-link class="navbar-item" to="/rankings/splatfest">Splatfest Rankings</router-link>
               </div>
             </div>
-            <router-link class="navbar-item" to="/search">Search players</router-link>
+            <router-link class="navbar-item" to="/players">Players</router-link>
             <router-link class="navbar-item" to="/records">Records</router-link>
           </div>
         </div>

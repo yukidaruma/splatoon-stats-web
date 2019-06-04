@@ -63,7 +63,11 @@ export default new Router({
       component: SplatfestRankings,
     },
     {
-      path: '/search',
+      path: '/players',
+      redirect: '/players/search',
+    },
+    {
+      path: '/players/search',
       component: Search,
     },
     {
