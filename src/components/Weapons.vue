@@ -128,6 +128,9 @@ export default {
       let path = `/weapons/${this.weaponType}/${this.rankingType}`;
 
       if (this.rankingType === 'splatfest') {
+        if (!this.selectedSplatfest) {
+          return;
+        }
         path += `/${this.selectedSplatfest.region}/${this.selectedSplatfest.splatfest_id}`;
       } else {
         path += `/${this.year}/${this.month + 1}/${rankedRule}`;
