@@ -2,7 +2,7 @@
   <div>
     <span>
       GitHub (
-      <a href="https://github.com/yukidaruma/splatoon-stats">API</a>,
+      <a href="https://github.com/yukidaruma/splatoon-stats-api">API</a>,
       <a href="https://github.com/yukidaruma/splatoon-stats-web">Web</a>
       )
     </span>
