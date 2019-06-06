@@ -152,6 +152,9 @@ button:active {
   height: 32px;
   width: 32px;
 }
+table td {
+  line-height: 32px; /* This has to match with .weapon-icon height */
+}
 
 .player-name {}
 .player-id {
