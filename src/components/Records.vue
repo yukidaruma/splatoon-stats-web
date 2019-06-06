@@ -69,3 +69,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@media screen and (min-width: 769px) {
+  thead th:first-child {
+    padding-left: 32px;
+  }
+}
+</style>
