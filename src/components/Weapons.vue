@@ -61,7 +61,7 @@
               {{ $t(weapon.localizationKey) }}
             </div>
           </td>
-          <td>{{ weapon.percentage | formatPercentage }}<span class="bar-chart" :style="`width: ${weapon.relativePercentage}%`"></span></td>
+          <td class="bar-chart-container">{{ weapon.percentage | formatPercentage }}<span class="bar-chart" :style="`width: ${weapon.relativePercentage}%`"></span></td>
         </tr>
       </tbody>
     </table>

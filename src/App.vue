@@ -157,6 +157,10 @@ table th {
   line-height: 32px; /* This has to match with .weapon-icon height */
 }
 
+td.bar-chart-container {
+  line-height: initial;
+}
+
 .player-name {}
 .player-id {
   font-style: italic;
