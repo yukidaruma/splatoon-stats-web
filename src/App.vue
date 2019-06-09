@@ -152,7 +152,8 @@ button:active {
   height: 32px;
   width: 32px;
 }
-table td {
+table td,
+table th {
   line-height: 32px; /* This has to match with .weapon-icon height */
 }
 
