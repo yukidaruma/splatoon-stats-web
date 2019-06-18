@@ -12,10 +12,10 @@
       <div>
         <span class="label">Weapon type</span>
         <select class="l" v-model="weaponType">
-          <option value="weapons">Weapons</option>
-          <option value="mains">Mains</option>
-          <option value="subs">Subs</option>
-          <option value="specials">Specials</option>
+          <option value="weapons">{{ $t('ui.weapon_types.weapons') }}</option>
+          <option value="mains">{{ $t('ui.weapon_types.mains') }}</option>
+          <option value="subs">{{ $t('ui.weapon_types.subs') }}</option>
+          <option value="specials">{{ $t('ui.weapon_types.specials') }}</option>
         </select>
       </div>
       <div>
