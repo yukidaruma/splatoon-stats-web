@@ -5,7 +5,7 @@
     </div>
     <div v-else>
       <p v-if="ranking.length === 0">No data found.</p>
-      <table class="table is-fullwidth is-hoverable" v-else>
+      <table class="table is-fullwidth is-striped is-hoverable" v-else>
         <tbody>
           <tr v-for="rankingEntry in ranking" :key="rankingEntry.rank">
             <td>#{{ rankingEntry.rank }}</td>

@@ -3,7 +3,7 @@
     <h1>Records</h1>
     <h2 class="table-title">X Ranked Weapon records</h2>
     <div class="table-container">
-      <table class="table is-hoverable is-fullwidth">
+      <table class="table is-hoverable is-striped is-fullwidth">
         <thead>
           <tr>
             <th>Weapon</th>

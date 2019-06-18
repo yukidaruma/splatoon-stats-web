@@ -22,7 +22,7 @@
           <div v-if="playerRankingHistory.x.length === 0">
             No X Ranked ranking record.
           </div>
-          <table class="table is-hoverable is-fullwidth" v-else>
+          <table class="table is-hoverable is-striped is-fullwidth" v-else>
             <tbody>
               <player-ranking-entry v-for="rankingEntry in playerRankingHistory.x"
                 rankingType="x"
@@ -37,7 +37,7 @@
           <div v-if="playerRankingHistory.splatfest.length === 0">
             No Splatfest ranking record.
           </div>
-          <table class="table is-hoverable is-fullwidth">
+          <table class="table is-hoverable is-striped is-fullwidth">
             <tbody>
               <player-ranking-entry v-for="rankingEntry in playerRankingHistory.splatfest"
                 rankingType="splatfest"
@@ -52,7 +52,7 @@
       <div v-if="playerRankingHistory.league.length === 0">
         No League Battle ranking record.
       </div>
-      <table class="table is-hoverable is-fullwidth league">
+      <table class="table is-hoverable is-striped is-fullwidth league">
         <tbody>
           <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league"
             rankingType="league"

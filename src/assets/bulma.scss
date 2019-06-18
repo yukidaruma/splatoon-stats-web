@@ -71,7 +71,7 @@
 // Update Bulma's global variables
 $fullhd-enabled: false;
 $body-color: #c8cdd0;
-$background: #34495e;
+$background: #2c3e50;
 $body-background-color: #1c2732;
 $border: #46627f;
 $text-strong: $body-color;
@@ -118,8 +118,12 @@ $navbar-dropdown-item-active-background-color: $navbar-dropdown-item-hover-backg
 
 // Table
 $table-color: $body-color;
-$table-background-color: $background;
+$table-background-color: lighten($background, 5%);
+$table-head-background-color: lighten($background, 5%);
+$table-body-background-color: lighten($background, 2.5%);
+$table-striped-row-even-background-color: $background;
 $table-row-hover-background-color: lighten($background, 10%);
+$table-striped-row-even-hover-background-color: lighten($background, 10%);
 $table-head-cell-color: lighten($table-color, 10%);
 $table-cell-padding: .25em;
 $table-cell-border: 1px solid $border;

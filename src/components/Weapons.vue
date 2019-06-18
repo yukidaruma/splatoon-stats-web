@@ -51,7 +51,7 @@
     <div v-else-if="weapons.length === 0">
       No data found.
     </div>
-    <table class="table is-hoverable is-fullwidth" v-else>
+    <table class="table is-hoverable is-striped is-fullwidth" v-else>
       <tbody>
         <tr v-for="weapon in weapons" :key="weapon.key">
           <td>{{ weapon.rank }}</td>
