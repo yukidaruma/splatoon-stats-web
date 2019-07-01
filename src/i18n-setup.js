@@ -3,6 +3,7 @@
 
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
+import store from 'store';
 
 import apiClient from './api-client';
 
@@ -31,8 +32,16 @@ export function loadLanguageAsync(lang, forceLoad = false) {
 
   if (forceLoad || i18n.locale !== lang) {
     if (!loadedLanguages.includes(lang)) {
-      return apiClient.get(`/static/locale/${lang}.json`).then((res) => {
+      const cacheKey = `cache/locale/${lang}`;
+      const cachedLocale = store.get(cacheKey);
+
+      if (cachedLocale) {
+        i18n.setLocaleMessage(lang, cachedLocale);
+      }
+
+      apiClient.get(`/static/locale/${lang}.json`).then((res) => {
         i18n.setLocaleMessage(lang, res.data);
+        store.set(cacheKey, res.data);
         loadedLanguages.push(lang);
         return setI18nLanguage(lang);
       });
