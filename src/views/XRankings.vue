@@ -26,9 +26,9 @@
 import moment from 'moment';
 
 import apiClient from '../api-client';
-import DatePicker from './DatePicker.vue';
-import RankedRulePicker from './RankedRulePicker.vue';
-import Ranking from './Ranking.vue';
+import DatePicker from '../components/DatePicker.vue';
+import RankedRulePicker from '../components/RankedRulePicker.vue';
+import Ranking from '../components/Ranking.vue';
 import { capitalizeFirstLetters, findRuleKey, formatRankingEntry } from '../helper';
 
 export default {

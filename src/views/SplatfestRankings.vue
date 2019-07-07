@@ -23,9 +23,9 @@
 
 <script>
 import apiClient from '../api-client';
-import Ranking from './Ranking.vue';
 import { formatRankingEntry, titleizeSplatfest } from '../helper';
-import SplatfestPicker from './SplatfestPicker.vue';
+import Ranking from '../components/Ranking.vue';
+import SplatfestPicker from '../components/SplatfestPicker.vue';
 
 export default {
   name: 'SplatfestRankings',

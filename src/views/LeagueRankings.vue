@@ -31,8 +31,8 @@
 import moment from 'moment';
 
 import apiClient from '../api-client';
-import DatePicker from './DatePicker.vue';
-import Ranking from './Ranking.vue';
+import DatePicker from '../components/DatePicker.vue';
+import Ranking from '../components/Ranking.vue';
 import { formatRankingEntry } from '../helper';
 
 export default {

@@ -81,8 +81,8 @@ import moment from 'moment';
 import apiClient from '../api-client';
 import { isValidPlayerId, formatRankingEntry, findRuleKey } from '../helper';
 
-import PlayerRankingEntry from './PlayerRankingEntry.vue';
-import XRankedChart from './PlayerSummaryXRankedChart';
+import PlayerRankingEntry from '../components/PlayerRankingEntry.vue';
+import XRankedChart from '../components/PlayerSummaryXRankedChart';
 
 export default {
   name: 'Players',
