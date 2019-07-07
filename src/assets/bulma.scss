@@ -1,4 +1,5 @@
-@charset "utf-8";
+@charset 'utf-8';
+@import './global-variables.scss';
 
 /*
  * Import a font from Google Fonts
@@ -70,13 +71,8 @@
 
 // Update Bulma's global variables
 $fullhd-enabled: false;
-$body-color: #c8cdd0;
-$background: #2c3e50;
-$body-background-color: #1c2732;
-$border: #46627f;
 $text-strong: $body-color;
 $family-sans-serif: 'Noto Sans Japanese', sans-serif;
-$link: #2fe3be;
 $link-hover: $link;
 
 /*

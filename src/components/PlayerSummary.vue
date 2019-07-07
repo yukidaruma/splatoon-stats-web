@@ -203,10 +203,12 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '../assets/global-variables.scss';
+
 .chart-container {
   height: 320px;
-  background-color: #34495e; /* TODO: use $background-color */
+  background-color: $background;
 }
 .league, .league tbody {
   display: block;
