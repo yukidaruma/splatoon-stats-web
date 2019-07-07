@@ -1,5 +1,7 @@
 <template>
   <div>
+    <h1 class="title">League Rankings</h1>
+
     <div class="controls">
       <div>
         <span class="label">Date</span>
@@ -18,7 +20,9 @@
       </div>
     </div>
 
-    <h1 class="table-title">{{ title }}</h1>
+    <h2 class="title table-title" v-if="title">
+      League ranking for {{ title.time }}
+    </h2>
     <ranking rankingType="league" :ranking="ranking" :isLoading="isLoading" />
   </div>
 </template>
@@ -41,7 +45,7 @@ export default {
       isLoading: false,
       time: undefined,
       groupType: 'T',
-      title: '',
+      title: null,
     };
   },
   methods: {
@@ -50,14 +54,18 @@ export default {
       const leagueId = time.format('YYMMDDHH') + this.groupType;
       const path = `/rankings/league/${leagueId}`;
 
+      this.title = null;
       this.isLoading = true;
       this.$router.push(path);
+
       apiClient.get(path)
         .then((res) => {
           this.ranking = res.data.map(rankingEntry => formatRankingEntry(rankingEntry, 'weapons'));
         })
         .finally(() => {
-          this.title = `League ranking for ${time.clone().local().format('YYYY/MM/DD HH:mm')}`;
+          this.title = {
+            time: time.clone().local().format('YYYY/MM/DD HH:mm'),
+          };
           this.isLoading = false;
         });
     },

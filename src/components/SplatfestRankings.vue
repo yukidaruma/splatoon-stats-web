@@ -1,15 +1,21 @@
 <template>
   <div>
+    <h1 class="title">Splatfest Rankings</h1>
+
     <div class="controls">
       <span class="label">Splatfest</span>
       <splatfest-picker @splatfest-change="onSplatfestChange" />
       <button @click="selectedSplatfest && fetchSplatfestRanking(selectedSplatfest.region, selectedSplatfest.splatfest_id)">Go</button>
     </div>
 
-    <div class="columns is-multiline" v-if="hasFetchedOnce">
-      <div class="column is-half" v-for="i in [0, 1]" :key="i"><!-- iterate over team_id -->
-        <h3 class="table-title" :style="{ 'background-color': lastFetchedSplatfest.colors[i] }">{{ lastFetchedSplatfest.team_names[i] }}</h3>
-        <ranking rankingType="splatfest" :ranking="rankings[i]" :isLoading="isLoading" />
+    <div v-if="hasFetchedOnce">
+      <h2 class="title">Splatfest Ranking for {{ titleizeSplatfest(lastFetchedSplatfest) }}</h2>
+
+      <div class="columns is-multiline">
+        <div class="column is-half" v-for="i in [0, 1]" :key="i"><!-- iterate over team_id -->
+          <h3 class="table-title" :style="{ 'background-color': lastFetchedSplatfest.colors[i] }">{{ lastFetchedSplatfest.team_names[i] }}</h3>
+          <ranking rankingType="splatfest" :ranking="rankings[i]" :isLoading="isLoading" />
+        </div>
       </div>
     </div>
   </div>
@@ -18,7 +24,7 @@
 <script>
 import apiClient from '../api-client';
 import Ranking from './Ranking.vue';
-import { formatRankingEntry } from '../helper';
+import { formatRankingEntry, titleizeSplatfest } from '../helper';
 import SplatfestPicker from './SplatfestPicker.vue';
 
 export default {
@@ -37,6 +43,7 @@ export default {
     hasFetchedOnce() { return !!this.lastFetchedSplatfest; },
   },
   methods: {
+    titleizeSplatfest,
     onSplatfestChange(splatfest, updateRanking) {
       this.selectedSplatfest = splatfest;
       if (updateRanking) {

@@ -143,6 +143,9 @@ button:active {
 .table-title {
   margin: .5em 0;
 }
+.title {
+  margin: .75em 0;
+}
 .weapon-name-container {
   display: flex;
   flex-wrap: nowrap;

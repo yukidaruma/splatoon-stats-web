@@ -1,5 +1,7 @@
 <template>
   <div>
+    <h1 class="title">X Rankings</h1>
+
     <div class="controls">
       <div>
         <span class="label">Date</span>
@@ -13,10 +15,9 @@
       </div>
     </div>
 
-    <h1 class="table-title" v-if="fetchedDate">
-      Top 500 players for X Ranked {{ capitalizeFirstLetters(rankedRule.split('_').join(' ')) }}
-      in {{ fetchedDate }}
-    </h1>
+    <h2 class="title table-title" v-if="title">
+      X Ranking for {{ title.year }}-{{ title.month }} {{ $t(`rules.${title.rankedRule}.name`) }}
+    </h2>
     <ranking rankingType="x" :ranking="ranking" :isLoading="isLoading" />
   </div>
 </template>
@@ -41,7 +42,7 @@ export default {
       year: undefined,
       month: undefined,
       rankedRule: undefined,
-      fetchedDate: '',
+      title: null,
     };
   },
   methods: {
@@ -49,12 +50,18 @@ export default {
     fetchXRanking() {
       const path = `/rankings/x/${this.year}/${this.month + 1}/${this.rankedRule}`;
 
+      this.title = null;
       this.isLoading = true;
       this.$router.push(path);
+
       apiClient.get(path)
         .then((res) => {
           this.ranking = res.data.map(rankingEntry => formatRankingEntry(rankingEntry, 'weapons'));
-          this.fetchedDate = `${this.year}-${this.month + 1}`;
+          this.title = {
+            rankedRule: this.rankedRule,
+            year: this.year,
+            month: this.month + 1,
+          };
         })
         .finally(() => {
           this.isLoading = false;

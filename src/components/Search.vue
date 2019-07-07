@@ -1,5 +1,7 @@
 <template>
   <div>
+    <h1>Search players</h1>
+
     <div class="controls">
       <div>
         <span class="label">Player name</span>

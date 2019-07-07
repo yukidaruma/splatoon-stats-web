@@ -4,7 +4,7 @@
       Loading...
     </div>
     <div v-else-if="hasLoaded">
-      <h1>
+      <h1 class="title">
         <span class="player-name" v-if="latestName">{{ latestName }}</span>
         <span v-else>ID: <span class="player-id">{{ fetchedPlayerId }}</span></span>
       </h1>

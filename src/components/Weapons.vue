@@ -1,5 +1,7 @@
 <template>
   <div>
+    <h1 class="title">Popular Weapons</h1>
+
     <div class="controls">
       <div>
         <span class="label">Data source</span>
@@ -44,27 +46,40 @@
       </div>
     </div>
 
-    <h1 class="table-title">{{ title }}</h1>
     <div v-if="isLoading">
       Loading...
     </div>
-    <div v-else-if="weapons.length === 0">
-      No data found.
+    <div v-else>
+      <h2 v-if="title" class="title table-title">
+        Most used
+        <span v-if="title.weaponType">{{ $t(`ui.weapon_types.${title.weaponType}`) }}</span>
+        {{ ' ' }}
+        <span v-if="title.splatfestName">in Splatfest: {{ title.splatfestName }}</span>
+        <span v-else>
+          in {{ title.rankingType }}
+          <span v-if="title.rankedRule">{{ $t(`rules.${title.rankedRule}.name`) }}</span>
+          in {{ title.time }}
+        </span>
+      </h2>
+
+      <div v-if="weapons.length === 0">
+        No data found.
+      </div>
+      <table v-else class="table is-hoverable is-striped is-fullwidth">
+        <tbody>
+          <tr v-for="weapon in weapons" :key="weapon.key">
+            <td>{{ weapon.rank }}</td>
+            <td>
+              <div class="weapon-name-container">
+                <img class="weapon-icon" :src="weapon.icon" v-if="!weapon.hasNoIcon">
+                {{ $t(weapon.localizationKey) }}
+              </div>
+            </td>
+            <td class="bar-chart-container">{{ weapon.percentage | formatPercentage }}<span class="bar-chart" :style="`width: ${weapon.relativePercentage}%`"></span></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <table class="table is-hoverable is-striped is-fullwidth" v-else>
-      <tbody>
-        <tr v-for="weapon in weapons" :key="weapon.key">
-          <td>{{ weapon.rank }}</td>
-          <td>
-            <div class="weapon-name-container">
-              <img class="weapon-icon" :src="weapon.icon" v-if="!weapon.hasNoIcon">
-              {{ $t(weapon.localizationKey) }}
-            </div>
-          </td>
-          <td class="bar-chart-container">{{ weapon.percentage | formatPercentage }}<span class="bar-chart" :style="`width: ${weapon.relativePercentage}%`"></span></td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </template>
 
@@ -84,7 +99,7 @@ export default {
   name: 'Weapons',
   data() {
     return {
-      title: '',
+      title: null,
       isLoading: false,
       lastFetchedTime: 0,
       selectedSplatfest: null,
@@ -135,11 +150,23 @@ export default {
         path += `/${this.year}/${this.month + 1}/${rankedRule}`;
       }
 
+      this.title = null;
       this.isLoading = true;
       this.$router.push(path);
       apiClient
         .get(path)
         .then((res) => {
+          this.title = {
+            weaponType: this.weaponType,
+            rankedRule: this.rankedRule,
+            rankingType: { x: 'X Ranked', league: 'League Battles', splatfest: 'Splatfest' }[this.rankingType],
+          };
+          if (this.rankingType === 'splatfest') {
+            this.title.splatfestName = titleizeSplatfest(this.selectedSplatfest);
+          } else {
+            this.title.time = `${this.year}-${this.month + 1}`;
+          }
+
           if (res.data.length === 0) {
             this.weapons = [];
             return;
@@ -168,21 +195,8 @@ export default {
           });
         })
         .finally(() => {
-          this.title = `Most used ${this.capitalizeFirstLetters(this.weaponTypeTitleName)} in
-            ${this.capitalizeFirstLetters(this.rankingType === 'x' ? 'x ranked' : this.rankingType)}
-            ${this.capitalizeFirstLetters(this.rankedRule ? this.rankedRule.split('_').join(' ') : '')}`;
-          if (this.rankingType === 'splatfest') {
-            this.title += `in ${titleizeSplatfest(this.selectedSplatfest)}`;
-          } else {
-            this.title += `in ${this.year}-${this.month + 1}`;
-          }
           this.isLoading = false;
         });
-    },
-  },
-  computed: {
-    weaponTypeTitleName() {
-      return this.weaponType.substr(0, this.weaponType.length - 1) + (this.weaponType !== 'weapons' ? ' weapons' : '');
     },
   },
   created() {

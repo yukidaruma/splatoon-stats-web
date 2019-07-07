@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Splatoon Stats</h1>
+    <h1 class="title">Splatoon Stats</h1>
     <h2>Dataset</h2>
     <p>
       X Ranked ranking records:
