@@ -75,7 +75,7 @@ export default new Router({
       component: PlayerSummary,
       props: true,
     },
-    { // Falback route
+    { // Fallback route
       path: '*',
       component: Index,
       redirect: '/',
