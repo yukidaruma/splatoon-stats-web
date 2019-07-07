@@ -9,6 +9,7 @@ import PlayerSummary from './views/PlayerSummary.vue';
 import XRankings from './views/XRankings.vue';
 import LeagueRankings from './views/LeagueRankings.vue';
 import SplatfestRankings from './views/SplatfestRankings.vue';
+import Trends from './views/Trends.vue';
 import { rankedRules } from './helper';
 
 Vue.use(Router);
@@ -74,6 +75,18 @@ export default new Router({
       path: '/players/:defaultPlayerId?',
       component: PlayerSummary,
       props: true,
+    },
+    {
+      path: '/trends',
+      component: Trends,
+    },
+    {
+      path: `/trends/:weaponType(${weaponTypePattern})/:rankingType(x)/:rankedRule(${rulePattern})?`,
+      component: Trends,
+    },
+    {
+      path: `/trends/:weaponType(${weaponTypePattern})/:rankingType(x)/:rankedRule(${rulePattern})?`,
+      component: Trends,
     },
     { // Fallback route
       path: '*',
