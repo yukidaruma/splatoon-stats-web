@@ -14,7 +14,7 @@
       </div>
       <div>
         <span class="label">Rule</span>
-        <ranked-rule-picker class="l" :defaultRule="rankedRule" @rule-change="onRuleChange" />
+        <ranked-rule-picker class="l" v-model="rankedRule" />
       </div>
       <div>
         <span class="label">From</span>
@@ -25,7 +25,7 @@
         <span class="label">To</span>
         <date-picker :defaultRankingType="rankingType"
           :defaultYear="newDate.year()" :defaultMonth="newDate.month()" @time-change="onNewDateChange" />
-        <button @click="fetchTrends" :disabled="isLoading">Go</button>
+        <button @click="updateRoute()" :disabled="isLoading">Go</button>
       </div>
       <div>
         <span class="label">Show</span>
@@ -83,8 +83,8 @@ import { formatRankingEntry } from '../helper';
 import DatePicker from '../components/DatePicker.vue';
 import RankedRulePicker from '../components/RankedRulePicker.vue';
 
-const newDate = moment().utc().add({ month: -1 });
-const oldDate = moment().utc().add({ month: -2 });
+const defaultNewDate = moment().utc().add({ month: -1 });
+const defaultOldDate = moment().utc().add({ month: -2 });
 
 export default {
   name: 'Trends',
@@ -98,8 +98,8 @@ export default {
       rankingType: 'x',
       rankedRule: null,
       result: null,
-      newDate,
-      oldDate,
+      newDate: defaultNewDate,
+      oldDate: defaultOldDate,
     };
   },
   filters: {
@@ -117,22 +117,47 @@ export default {
     onOldDateChange(time) {
       this.oldDate = time;
     },
-    onRuleChange(rule) {
-      this.rankedRule = rule;
+    applyRouteParams() {
+      const { weaponType, /*rankingType,*/ rankedRule } = this.$route.params;
+      const newDate = moment.utc(this.$route.query.current_month, this.dateFormat);
+      const oldDate = moment.utc(this.$route.query.previous_month, this.dateFormat);
+
+      if (weaponType) {
+        this.weaponType = weaponType;
+      }
+      if (rankedRule) {
+        this.rankedRule = rankedRule;
+      }
+
+      if (oldDate.isValid() && newDate.isValid()) {
+        this.newDate = newDate;
+        this.oldDate = oldDate;
+      }
     },
-    fetchTrends() {
+    onRouteChange() {
+      this.fetchTrends();
+    },
+    updateRoute(isDefault = false) {
       const newDate = this.newDate.format(this.dateFormat);
       const oldDate = this.oldDate.format(this.dateFormat);
       const rankedRule = this.rankedRule ? this.rankedRule : '';
+      const path = `/trends/${this.weaponType}/${this.rankingType}/${rankedRule}?previous_month=${oldDate}&current_month=${newDate}`;
 
       if (newDate <= oldDate) {
         return alert('"To" must be later date than "From".');
       }
 
+      if (isDefault) {
+        this.$router.replace(path);
+      } else {
+        this.$router.push(path);
+      }
+    },
+    fetchTrends() {
       this.result = null;
 
       apiClient
-        .get(`/trends/${this.weaponType}/${this.rankingType}/${rankedRule}?previous_month=${oldDate}&current_month=${newDate}`)
+        .get(this.$route.fullPath)
         .then((res) => {
           const trends = res.data
             .filter((weapon) => !(weapon.current_month_count === 0 && weapon.previous_month_count === 0))
@@ -155,8 +180,19 @@ export default {
         });
     },
   },
-  mounted() {
-    this.fetchTrends();
+  watch: {
+    $route() {
+      this.applyRouteParams();
+      this.onRouteChange();
+    },
+  },
+  created() {
+    this.applyRouteParams();
+    if (this.$route.name === 'trendsDefault') {
+      this.updateRoute(true);
+    } else {
+      this.onRouteChange();
+    }
   },
 };
 </script>

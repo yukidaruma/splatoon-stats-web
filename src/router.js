@@ -79,6 +79,7 @@ export default new Router({
     {
       path: '/trends',
       component: Trends,
+      name: 'trendsDefault',
     },
     {
       path: `/trends/:weaponType(${weaponTypePattern})/:rankingType(x)/:rankedRule(${rulePattern})?`,
