@@ -16,6 +16,7 @@
         <div id="globalNav" class="navbar-menu" :class="isBurgerMenuOpen ? 'is-active' : ''">
           <div class="navbar-start">
             <router-link class="navbar-item" to="/weapons">Popular Weapons</router-link>
+            <router-link class="navbar-item" to="/trends">Trends</router-link>
             <div class="navbar-item has-dropdown is-hoverable">
               <!-- See: https://github.com/vuejs/vue-router/issues/916#issuecomment-297424249 -->
               <router-link to="/rankings" tag="span" class="navbar-link" :event="''">Rankings</router-link>
