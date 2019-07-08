@@ -13,12 +13,7 @@
       </div>
       <div>
         <span class="label">Weapon type</span>
-        <select class="l" v-model="weaponType">
-          <option value="weapons">{{ $t('ui.weapon_types.weapons') }}</option>
-          <option value="mains">{{ $t('ui.weapon_types.mains') }}</option>
-          <option value="subs">{{ $t('ui.weapon_types.subs') }}</option>
-          <option value="specials">{{ $t('ui.weapon_types.specials') }}</option>
-        </select>
+        <weapon-type-picker class="l" v-model="weaponType" />
       </div>
       <div>
         <span class="label">Rule</span>
@@ -92,6 +87,7 @@ import { capitalizeFirstLetters, formatRankingEntry, titleizeSplatfest } from '.
 import DatePicker from '../components/DatePicker.vue';
 import RankedRulePicker from '../components/RankedRulePicker.vue';
 import SplatfestPicker from '../components/SplatfestPicker.vue';
+import WeaponTypePicker from '../components/WeaponTypePicker.vue';
 
 const getLastMonth = () => moment.utc().add({ month: -1 });
 
@@ -116,6 +112,7 @@ export default {
     DatePicker,
     RankedRulePicker,
     SplatfestPicker,
+    WeaponTypePicker,
   },
   filters: {
     formatPercentage(percentage) {

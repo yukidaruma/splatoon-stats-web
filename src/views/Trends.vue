@@ -5,12 +5,7 @@
     <div class="controls">
       <div>
         <span class="label">Weapon type</span>
-        <select class="l" v-model="weaponType">
-          <option value="weapons">{{ $t('ui.weapon_types.weapons') }}</option>
-          <option value="mains">{{ $t('ui.weapon_types.mains') }}</option>
-          <option value="subs">{{ $t('ui.weapon_types.subs') }}</option>
-          <option value="specials">{{ $t('ui.weapon_types.specials') }}</option>
-        </select>
+        <weapon-type-picker class="l" v-model="weaponType" />
       </div>
       <div>
         <span class="label">Rule</span>
@@ -82,13 +77,14 @@ import apiClient from '../api-client';
 import { formatRankingEntry } from '../helper';
 import DatePicker from '../components/DatePicker.vue';
 import RankedRulePicker from '../components/RankedRulePicker.vue';
+import WeaponTypePicker from '../components/WeaponTypePicker.vue';
 
 const defaultNewDate = moment().utc().add({ month: -1 });
 const defaultOldDate = moment().utc().add({ month: -2 });
 
 export default {
   name: 'Trends',
-  components: { DatePicker, RankedRulePicker },
+  components: { DatePicker, RankedRulePicker, WeaponTypePicker },
   data() {
     return {
       isLoading: false,
