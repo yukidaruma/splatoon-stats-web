@@ -10,7 +10,7 @@
       </div>
       <div>
         <span class="label">Rule</span>
-        <ranked-rule-picker :defaultRule="rankedRule" noAllRules="true" @rule-change="onRuleChange" />
+        <ranked-rule-picker v-model="rankedRule" :value="rankedRule" noAllRules="true" />
         <button @click="fetchXRanking" :disabled="isLoading">Go</button>
       </div>
     </div>
@@ -70,9 +70,6 @@ export default {
     onTimeChange(time) {
       this.year = time.year();
       this.month = time.month();
-    },
-    onRuleChange(rule) {
-      this.rankedRule = rule;
     },
   },
   created() {

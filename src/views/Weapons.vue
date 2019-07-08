@@ -26,7 +26,7 @@
           <select class="l" disabled><option>{{ $t('rules.turf_war.name') }}</option></select>
         </div>
         <div v-else>
-          <ranked-rule-picker class="l" :defaultRule="rankedRule" @rule-change="onRuleChange" />
+          <ranked-rule-picker class="l" :value="rankedRule" v-model="rankedRule" />
         </div>
       </div>
       <!-- Todo:
@@ -133,9 +133,6 @@ export default {
     onTimeChange(time) {
       this.year = time.year();
       this.month = time.month();
-    },
-    onRuleChange(rule) {
-      this.rankedRule = rule;
     },
     fetchWeaponRanking() {
       const rankedRule = this.rankedRule ? this.rankedRule : '';
