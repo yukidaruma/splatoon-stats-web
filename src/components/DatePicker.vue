@@ -116,7 +116,7 @@ const getDatePickerOptions = (starting, ending, year, month, date) => {
 };
 
 export default {
-  name: 'LeagueDatePicker',
+  name: 'DatePicker',
   props: ['defaultRankingType', 'showDate', 'defaultYear', 'defaultMonth', 'defaultDate', 'defaultHour'],
   data() {
     return {
