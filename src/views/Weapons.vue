@@ -34,8 +34,7 @@
         </div>
         <div style="display: inline;" v-else>
           <span class="label">Date</span>
-          <date-picker ref="datePicker" :defaultRankingType="rankingType"
-            :defaultYear="year" :defaultMonth="month" @time-change="onTimeChange" />
+          <date-picker ref="datePicker" :defaultRankingType="rankingType" v-model="time" />
         </div>
         <button @click="fetchWeaponRanking" :disabled="isLoading">Go</button>
       </div>
@@ -99,8 +98,7 @@ export default {
       isLoading: false,
       lastFetchedTime: 0,
       selectedSplatfest: null,
-      year: undefined,
-      month: undefined,
+      time: null,
       rankingType: 'x',
       weaponType: 'weapons',
       rankedRule: null,
@@ -119,6 +117,14 @@ export default {
       return (percentage / 100).toLocaleString(undefined, { style: 'percent', minimumFractionDigits: 3 });
     },
   },
+  computed: {
+    year() {
+      return this.time.year();
+    },
+    month() {
+      return this.time.month();
+    }
+  },
   methods: {
     capitalizeFirstLetters,
     onSplatfestChange(splatfest, updateRanking) {
@@ -126,10 +132,6 @@ export default {
       if (updateRanking) {
         this.fetchWeaponRanking();
       }
-    },
-    onTimeChange(time) {
-      this.year = time.year();
-      this.month = time.month();
     },
     fetchWeaponRanking() {
       const rankedRule = this.rankedRule ? this.rankedRule : '';
@@ -197,12 +199,9 @@ export default {
     const { year, month, weaponType, rankingType, rankedRule } = this.$route.params;
     // https://github.com/moment/moment/issues/1639
     if (year && month && moment.utc({ year, month: month - 1 }).isValid()) {
-      this.year = Number(year);
-      this.month = Number(month) - 1;
+      this.time = moment.utc({ year, month: month - 1 });
     } else {
-      const lastMonth = getLastMonth();
-      this.year = lastMonth.year();
-      this.month = lastMonth.month();
+      this.time = getLastMonth();
     }
 
     if (weaponType) {
