@@ -21,7 +21,7 @@
           <select class="l" disabled><option>{{ $t('rules.turf_war.name') }}</option></select>
         </div>
         <div v-else>
-          <ranked-rule-picker class="l" :value="rankedRule" v-model="rankedRule" />
+          <ranked-rule-picker class="l" v-model="rankedRule" />
         </div>
       </div>
       <!-- Todo:
