@@ -5,9 +5,7 @@
     <div class="controls">
       <div>
         <span class="label">Date</span>
-        <date-picker defaultRankingType="league" showDate="true"
-          :defaultYear="time.year()" :defaultMonth="time.month()" :defaultDate="time.date()" :defaultHour="time.hour()"
-          @time-change="onTimeChange" />
+        <date-picker defaultRankingType="league" showDate="true" v-model="time" />
       </div>
       <div>
         <span class="label">Group type</span>
@@ -68,9 +66,6 @@ export default {
           };
           this.isLoading = false;
         });
-    },
-    onTimeChange(time) {
-      this.time = time;
     },
     onGroupTypeChange(groupType) {
       this.groupType = groupType;

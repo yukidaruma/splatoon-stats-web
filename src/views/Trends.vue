@@ -13,13 +13,11 @@
       </div>
       <div>
         <span class="label">From</span>
-        <date-picker :defaultRankingType="rankingType"
-          :defaultYear="oldDate.year()" :defaultMonth="oldDate.month()" @time-change="onOldDateChange" />
+        <date-picker v-model="oldDate" :defaultRankingType="rankingType" />
       </div>
       <div>
         <span class="label">To</span>
-        <date-picker :defaultRankingType="rankingType"
-          :defaultYear="newDate.year()" :defaultMonth="newDate.month()" @time-change="onNewDateChange" />
+        <date-picker v-model="newDate" :defaultRankingType="rankingType" />
         <button @click="updateRoute()" :disabled="isLoading">Go</button>
       </div>
       <div>
@@ -107,12 +105,6 @@ export default {
     },
   },
   methods: {
-    onNewDateChange(time) {
-      this.newDate = time;
-    },
-    onOldDateChange(time) {
-      this.oldDate = time;
-    },
     applyRouteParams() {
       const { weaponType, /*rankingType,*/ rankedRule } = this.$route.params;
       const newDate = moment.utc(this.$route.query.current_month, this.dateFormat);

@@ -5,8 +5,7 @@
     <div class="controls">
       <div>
         <span class="label">Date</span>
-        <date-picker defaultRankingType="x" :defaultYear="year" :defaultMonth="month"
-          @time-change="onTimeChange" />
+        <date-picker defaultRankingType="x" v-model="time" />
       </div>
       <div>
         <span class="label">Rule</span>
@@ -39,11 +38,18 @@ export default {
     return {
       ranking: [],
       isLoading: false,
-      year: undefined,
-      month: undefined,
+      time: null,
       rankedRule: undefined,
       title: null,
     };
+  },
+  computed: {
+    year() {
+      return this.time.year();
+    },
+    month() {
+      return this.time.month();
+    },
   },
   methods: {
     capitalizeFirstLetters,
@@ -67,21 +73,18 @@ export default {
           this.isLoading = false;
         });
     },
-    onTimeChange(time) {
-      this.year = time.year();
-      this.month = time.month();
-    },
   },
   created() {
     // You can assume year and month are valid, too, if defaultRankedRule is valid
     if (this.defaultRankedRule) {
-      this.year = Number(this.defaultYear);
-      this.month = Number(this.defaultMonth) - 1;
+      this.time = moment.utc({
+        year: this.defaultYear,
+        month: this.defaultMonth - 1,
+      });
       this.rankedRule = this.defaultRankedRule;
     } else {
       const lastMonth = moment.utc().add({ month: -1 });
-      this.year = lastMonth.year();
-      this.month = lastMonth.month();
+      this.time = lastMonth;
       this.rankedRule = findRuleKey(1);
     }
 

@@ -1,12 +1,12 @@
 <template>
   <div>
-    <select v-model="year" @change="updateDatePicker()">
+    <select v-model="year" @change="onDatePickerChange()">
       <option :value="yearOption" v-for="yearOption in yearOptions" :key="yearOption"
         :selected="yearOption === year">
         {{ yearOption }}
       </option>
     </select>
-    <select v-model="month" @change="updateDatePicker()">
+    <select v-model="month" @change="onDatePickerChange()">
       <option v-for="monthOption in monthOptions" :value="monthOption.value" :key="monthOption.value"
         :selected="monthOption.value === month">
         {{ monthOption.text }}
@@ -14,13 +14,13 @@
     </select>
 
     <div v-if="rankingType === 'league' && showDate">
-      <select v-model="date" @change="updateDatePicker()">
+      <select v-model="date" @change="onDatePickerChange()">
         <option v-for="dateOption in dateOptions" :value="dateOption" :key="dateOption"
           :selected="dateOption === date">
           {{ dateOption }}
         </option>
       </select>
-      <select v-model="hour" @change="emitTimeChange"><!-- Changing hour won't update options -->
+      <select v-model="hour" @change="onDatePickerChange(false)"><!-- Changing hour won't update options -->
         <option v-for="hourOption in hourOptions" :value="hourOption" :key="hourOption"
           :selected="hourOption === hour">
           {{ hourOption }}
@@ -116,15 +116,25 @@ const getDatePickerOptions = (starting, ending, year, month, date) => {
 };
 
 export default {
-  name: 'LeagueDatePicker',
-  props: ['defaultRankingType', 'showDate', 'defaultYear', 'defaultMonth', 'defaultDate', 'defaultHour'],
+  name: 'DatePicker',
+  props: ['defaultRankingType', 'showDate', 'value'],
+  computed: {
+    time() {
+      return moment.utc({
+        year: this.year,
+        month: this.month,
+        date: this.date,
+        hour: this.hour,
+      });
+    },
+  },
   data() {
     return {
       rankingType: undefined,
-      year: undefined,
-      month: undefined,
-      date: undefined,
-      hour: undefined,
+      year: null,
+      month: null,
+      date: null,
+      hour: null,
       yearOptions: [],
       monthOptions: [],
       dateOptions: [],
@@ -133,11 +143,7 @@ export default {
   },
   created() {
     this.rankingType = this.defaultRankingType;
-    this.year = this.defaultYear;
-    this.month = this.defaultMonth;
-    this.date = this.defaultDate;
-    this.hour = this.defaultHour;
-
+    this.updateSelectedDate(this.value);
     this.updateDatePicker();
   },
   methods: {
@@ -145,14 +151,6 @@ export default {
       const start = moment.utc(time).local();
       const end = start.clone().add({ hour: 2 });
       return `${start.format('MM-DD HH:mm')}~${end.format('HH:mm')}`;
-    },
-    emitTimeChange() {
-      this.$emit('time-change', moment.utc({
-        year: this.year,
-        month: this.month,
-        date: this.date,
-        hour: this.hour,
-      }));
     },
     updateSelectedDate(newSelectedDate) {
       const now = moment.utc();
@@ -164,7 +162,14 @@ export default {
       this.year = newSelectedDate.year();
       this.month = newSelectedDate.month();
       this.date = newSelectedDate.date();
-      this.hour = 0;
+      this.hour = newSelectedDate.hour();
+    },
+    onDatePickerChange(updateDatePicker = true) {
+      if (updateDatePicker) {
+        this.updateDatePicker();
+      }
+
+      this.$emit('input', this.time);
     },
     updateDatePicker(newRankingType) {
       let startingYear, startingMonth, startingDate, ending;
@@ -195,32 +200,36 @@ export default {
       this.dateOptions = dateOptions;
       this.hourOptions = hourOptions;
 
+      let newSelectedDate;
+
       // Update selected date to latest available date if not available
       if (!monthOptions.some(monthOption => monthOption.value === this.month)) {
-        this.updateSelectedDate(moment.utc({
+        newSelectedDate = moment.utc({
           year: this.year,
           month: monthOptions[monthOptions.length - 1].value,
-        }));
+        });
       }
 
       if (this.rankingType === 'league') {
         if (!dateOptions.includes(this.date)) {
-          this.updateSelectedDate(moment.utc({
+          newSelectedDate = moment.utc({
             year: this.year,
             month: this.month,
             date: dateOptions[dateOptions.length - 1],
-          }));
+          });
         }
         if (!hourOptions.includes(this.hour)) {
-          this.updateSelectedDate(moment.utc({
+          newSelectedDate = moment.utc({
             year: this.year,
             month: this.month,
             date: this.date,
-          }));
+          });
         }
       }
 
-      this.emitTimeChange();
+      if (newSelectedDate) {
+        this.updateSelectedDate(newSelectedDate);
+      }
     },
   },
 };
