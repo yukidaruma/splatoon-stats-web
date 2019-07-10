@@ -86,7 +86,7 @@ import XRankedChart from '../components/PlayerSummaryXRankedChart';
 
 export default {
   name: 'Players',
-  props: ['defaultPlayerId'],
+  props: ['initialPlayerId'],
   components: { PlayerRankingEntry, XRankedChart },
   data() {
     return {
@@ -113,14 +113,14 @@ export default {
     };
   },
   created() {
-    if (isValidPlayerId(this.defaultPlayerId)) {
-      this.getPlayerRankingHistory(this.defaultPlayerId);
+    if (isValidPlayerId(this.initialPlayerId)) {
+      this.getPlayerRankingHistory(this.initialPlayerId);
     } else {
       this.$router.push('/players');
     }
   },
   watch: {
-    '$route.params.defaultPlayerId': {
+    '$route.params.initialPlayerId': {
       handler(playerId) {
         if (playerId) {
           this.getPlayerRankingHistory(playerId);

@@ -5,7 +5,7 @@
     <div class="controls">
       <div>
         <span class="label">Date</span>
-        <date-picker defaultRankingType="league" showDate="true" v-model="time" />
+        <date-picker initialRankingType="league" showDate="true" v-model="time" />
       </div>
       <div>
         <span class="label">Group type</span>
@@ -36,7 +36,7 @@ import { formatRankingEntry } from '../helper';
 export default {
   name: 'LeagueRankings',
   components: { DatePicker, Ranking },
-  props: ['defaultLeagueId'],
+  props: ['initialLeagueId'],
   data() {
     return {
       ranking: [],
@@ -72,7 +72,7 @@ export default {
     },
   },
   created() {
-    const leagueId = this.defaultLeagueId;
+    const leagueId = this.initialLeagueId;
 
     if (leagueId) {
       const groupType = leagueId.substr(leagueId.length - 1, 1);

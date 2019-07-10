@@ -5,7 +5,7 @@
     <div class="controls">
       <div>
         <span class="label">Date</span>
-        <date-picker defaultRankingType="x" v-model="time" />
+        <date-picker initialRankingType="x" v-model="time" />
       </div>
       <div>
         <span class="label">Rule</span>
@@ -33,7 +33,7 @@ import { capitalizeFirstLetters, findRuleKey, formatRankingEntry } from '../help
 export default {
   name: 'XRankings',
   components: { DatePicker, RankedRulePicker, Ranking },
-  props: ['defaultYear', 'defaultMonth', 'defaultRankedRule'],
+  props: ['initialYear', 'initialMonth', 'initialRankedRule'],
   data() {
     return {
       ranking: [],
@@ -75,13 +75,13 @@ export default {
     },
   },
   created() {
-    // You can assume year and month are valid, too, if defaultRankedRule is valid
-    if (this.defaultRankedRule) {
+    // You can assume year and month are valid, too, if initialRankedRule is valid
+    if (this.initialRankedRule) {
       this.time = moment.utc({
-        year: this.defaultYear,
-        month: this.defaultMonth - 1,
+        year: this.initialYear,
+        month: this.initialMonth - 1,
       });
-      this.rankedRule = this.defaultRankedRule;
+      this.rankedRule = this.initialRankedRule;
     } else {
       const lastMonth = moment.utc().add({ month: -1 });
       this.time = lastMonth;

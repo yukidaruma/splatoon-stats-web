@@ -34,7 +34,7 @@
         </div>
         <div style="display: inline;" v-else>
           <span class="label">Date</span>
-          <date-picker ref="datePicker" :defaultRankingType="rankingType" v-model="time" />
+          <date-picker ref="datePicker" :initialRankingType="rankingType" v-model="time" />
         </div>
         <button @click="fetchWeaponRanking" :disabled="isLoading">Go</button>
       </div>

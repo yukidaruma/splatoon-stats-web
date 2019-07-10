@@ -13,11 +13,11 @@
       </div>
       <div>
         <span class="label">From</span>
-        <date-picker v-model="oldDate" :defaultRankingType="rankingType" />
+        <date-picker v-model="oldDate" :initialRankingType="rankingType" />
       </div>
       <div>
         <span class="label">To</span>
-        <date-picker v-model="newDate" :defaultRankingType="rankingType" />
+        <date-picker v-model="newDate" :initialRankingType="rankingType" />
         <button @click="updateRoute()" :disabled="isLoading">Go</button>
       </div>
       <div>

@@ -46,12 +46,12 @@ export default new Router({
       component: XRankings,
     },
     {
-      path: `/rankings/x/:defaultYear(\\d{4})/:defaultMonth([1-9]|1[0-2])/:defaultRankedRule(${rulePattern})`,
+      path: `/rankings/x/:initialYear(\\d{4})/:initialMonth([1-9]|1[0-2])/:initialRankedRule(${rulePattern})`,
       component: XRankings,
       props: true,
     },
     {
-      path: '/rankings/league/:defaultLeagueId(\\d{8}[TP])?',
+      path: '/rankings/league/:initialLeagueId(\\d{8}[TP])?',
       component: LeagueRankings,
       props: true,
     },
@@ -72,7 +72,7 @@ export default new Router({
       component: Search,
     },
     {
-      path: '/players/:defaultPlayerId?',
+      path: '/players/:initialPlayerId?',
       component: PlayerSummary,
       props: true,
     },

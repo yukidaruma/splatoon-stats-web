@@ -117,7 +117,7 @@ const getDatePickerOptions = (starting, ending, year, month, date) => {
 
 export default {
   name: 'DatePicker',
-  props: ['defaultRankingType', 'showDate', 'value'],
+  props: ['initialRankingType', 'showDate', 'value'],
   computed: {
     time() {
       return moment.utc({
@@ -142,7 +142,7 @@ export default {
     };
   },
   created() {
-    this.rankingType = this.defaultRankingType;
+    this.rankingType = this.initialRankingType;
     this.updateSelectedDate(this.value);
     this.updateDatePicker();
   },
