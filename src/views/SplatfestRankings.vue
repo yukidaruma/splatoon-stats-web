@@ -12,8 +12,13 @@
       <h2 class="title">Splatfest Ranking for {{ titleizeSplatfest(lastFetchedSplatfest) }}</h2>
 
       <div class="columns is-multiline">
-        <div class="column is-half" v-for="i in [0, 1]" :key="i"><!-- iterate over team_id -->
-          <h3 class="table-title" :style="{ 'background-color': lastFetchedSplatfest.colors[i] }">{{ lastFetchedSplatfest.team_names[i] }}</h3>
+        <div :id="`team-${i}`" class="column is-half" v-for="i in [0, 1]" :key="i"><!-- iterate over team_id -->
+          <div class="is-hidden-tablet">
+            <a :href="`#team-${i ? 0 : 1}`">Jump to team {{ lastFetchedSplatfest.team_names[i ? 0 : 1] }}</a>
+          </div>
+          <h3 class="table-title" :style="{ 'background-color': lastFetchedSplatfest.colors[i] }">
+            {{ lastFetchedSplatfest.team_names[i] }}
+          </h3>
           <ranking rankingType="splatfest" :ranking="rankings[i]" :isLoading="isLoading" />
         </div>
       </div>
