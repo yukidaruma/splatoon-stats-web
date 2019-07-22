@@ -180,4 +180,7 @@ td.bar-chart-container {
   flex: 1 50%;
   min-width: 12em;
 }
+.weapon-popularity-link {
+  margin-bottom: 1em;
+}
 </style>

@@ -10,6 +10,11 @@
 
     <div v-if="hasFetchedOnce">
       <h2 class="title">Splatfest Ranking for {{ titleizeSplatfest(lastFetchedSplatfest) }}</h2>
+      <p class="weapon-popularity-link">
+        <router-link :to="weaponPopularityPagePath">
+          Most used weapons in Splatfest: {{ titleizeSplatfest(lastFetchedSplatfest) }}
+        </router-link>
+      </p>
 
       <div class="columns is-multiline">
         <div :id="`team-${i}`" class="column is-half" v-for="i in [0, 1]" :key="i"><!-- iterate over team_id -->
@@ -46,6 +51,11 @@ export default {
   },
   computed: {
     hasFetchedOnce() { return !!this.lastFetchedSplatfest; },
+    weaponPopularityPagePath() {
+      if (this.lastFetchedSplatfest) {
+        return `/weapons/weapons/splatfest/${this.lastFetchedSplatfest.region}/${this.lastFetchedSplatfest.splatfest_id}`;
+      }
+    },
   },
   methods: {
     titleizeSplatfest,
