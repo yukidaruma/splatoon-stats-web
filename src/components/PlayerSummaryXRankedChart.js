@@ -5,7 +5,7 @@ import { findRuleKey } from '../helper';
 export default {
   name: 'PlayerSummaryXRankedChart',
   extends: Line,
-  props: ['chartType', 'data', 'options'],
+  props: ['chartType', 'data', 'options', 'showLine'],
   computed: {
     chartData() {
       this.showXPowerChart = true;
@@ -20,6 +20,7 @@ export default {
         dataset.label = this.$t(`rules.${findRuleKey(ruleId)}.name`);
         dataset.borderColor = chartColors[i];
         dataset.backgroundColor = chartColors[i];
+        dataset.showLine = this.showLine;
         if (this.data.some(row => ruleId === row.rule_id)) {
           dataset.data = new Array(months).fill(null);
         }
@@ -69,7 +70,7 @@ export default {
   mounted() {
     this.updateChart();
     this.$watch(
-      () => [this.data, this.options, this.chartType],
+      () => [this.chartType, this.data, this.options, this.showLine],
       this.updateChart,
     );
   },

@@ -12,11 +12,12 @@
       <div v-if="chartData.length > 0">
         <h2 class="table-title">X Power</h2>
         <div class="chart-container">
-          <x-ranked-chart :height="320" :chart-type="chartType" :data="chartData" :options="chartOptions" />
+          <x-ranked-chart :height="320" :chart-type="chartType" :data="chartData" :options="chartOptions" :show-line="isLineVisible" />
         </div>
         <div class="chart-controls">
           <label><input type="radio" v-model="chartType" value="power"> Power</label>
           <label><input type="radio" v-model="chartType" value="rank"> Rank</label>
+          <label><input type="checkbox" v-model="isLineVisible"> Show line</label>
         </div>
       </div>
 
@@ -127,6 +128,7 @@ export default {
           },
         },
       },
+      isLineVisible: false,
     };
   },
   created() {
@@ -215,8 +217,8 @@ export default {
   background-color: $background;
 }
 .chart-controls {
-  label:first-of-type {
-    padding-right: 1em;
+  label:not(:first-of-type) {
+    padding-left: 1em;
   }
   label, input {
     display: table-cell;
