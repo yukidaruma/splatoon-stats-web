@@ -225,11 +225,11 @@ export default {
 @media screen and (max-width: 959px) { /* TODO: use $tablet */
   .league tr {
     grid-template-columns: auto auto auto;
-  }
-  .league tr >>> td:nth-child(1),
-  .league tr >>> td:nth-child(2),
-  .league tr >>> td:nth-child(3) {
-    border: 0;
+    /deep/ td:nth-child(1),
+    /deep/ td:nth-child(2),
+    /deep/ td:nth-child(3) {
+      border: 0;
+    }
   }
 }
 </style>
