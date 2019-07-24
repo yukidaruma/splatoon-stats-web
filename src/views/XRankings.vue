@@ -14,14 +14,16 @@
       </div>
     </div>
 
-    <h2 class="title table-title" v-if="title">
-      X Ranking for {{ title.year }}-{{ title.month }} {{ $t(`rules.${title.rankedRule}.name`) }}
-    </h2>
-    <p class="weapon-popularity-link">
-      <router-link :to="weaponPopularityPagePath">
-        Most used weapons for X Ranked {{ $t(`rules.${title.rankedRule}.name`) }} in {{ title.year }}-{{ title.month }}
-      </router-link>
-    </p>
+    <div v-if="title">
+      <h2 class="title table-title">
+        X Ranking for {{ title.year }}-{{ title.month }} {{ $t(`rules.${title.rankedRule}.name`) }}
+      </h2>
+      <p class="weapon-popularity-link">
+        <router-link :to="weaponPopularityPagePath">
+          Most used weapons for X Ranked {{ $t(`rules.${title.rankedRule}.name`) }} in {{ title.year }}-{{ title.month }}
+        </router-link>
+      </p>
+    </div>
     <ranking rankingType="x" :ranking="ranking" :isLoading="isLoading" />
   </div>
 </template>
