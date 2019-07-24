@@ -15,8 +15,8 @@
           <x-ranked-chart :height="320" :chart-type="chartType" :data="chartData" :options="chartOptions" />
         </div>
         <div class="chart-controls">
-          <label>Power <input type="radio" v-model="chartType" value="power"></label>
-          <label>Rank <input type="radio" v-model="chartType" value="rank"></label>
+          <label><input type="radio" v-model="chartType" value="power"> Power</label>
+          <label><input type="radio" v-model="chartType" value="rank"> Rank</label>
         </div>
       </div>
 
