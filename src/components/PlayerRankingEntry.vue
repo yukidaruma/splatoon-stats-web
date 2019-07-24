@@ -29,8 +29,8 @@
     <!-- Time -->
     <td>
       <router-link :to="rankingPath(rankingType, rankingEntry)">
-        {{ rankingEntry.start_time | formatDate(rankingType) }}
         <span v-if="rankingType === 'x'">{{ $t(`ui.rule_shortnames.${findRuleKey(rankingEntry.rule_id)}`) }}</span>
+        <span v-else>{{ rankingEntry.start_time | formatDate(rankingType) }}</span>
       </router-link>
     </td>
 

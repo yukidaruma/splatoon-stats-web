@@ -20,20 +20,25 @@
         </div>
       </div>
 
-      <div class="columns is-multiline">
+      <div class="columns is-multiline x">
         <div class="column is-half">
           <h2 class="table-title">X Ranked ({{ playerRankingHistory.x.length }})</h2>
           <div v-if="playerRankingHistory.x.length === 0">
             No X Ranked ranking record.
           </div>
-          <table class="table is-hoverable is-striped is-fullwidth" v-else>
-            <tbody>
-              <player-ranking-entry v-for="rankingEntry in playerRankingHistory.x"
-                rankingType="x"
-                :key="`${rankingEntry.start_time}_${rankingEntry.rule_id}`"
-                :rankingEntry="rankingEntry" />
-            </tbody>
-          </table>
+          <div v-else>
+            <div class="monthly-records" v-for="group in groupedXRankingHistory">
+              <h3>{{ group.time }}</h3>
+              <table class="table is-hoverable is-striped is-fullwidth">
+                <tbody>
+                  <player-ranking-entry v-for="rankingEntry in group.rankingEntries"
+                    rankingType="x"
+                    :key="`${rankingEntry.start_time}_${rankingEntry.rule_id}`"
+                    :rankingEntry="rankingEntry" />
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
 
         <div class="column is-half">
@@ -136,6 +141,26 @@ export default {
     },
   },
   computed: {
+    groupedXRankingHistory() {
+      const groupedXRankingHistory = [];
+
+      if (!this.playerRankingHistory) {
+        return [];
+      }
+
+      let lastMonth;
+      this.playerRankingHistory.x.forEach((rankingEntry) => {
+        if (lastMonth != rankingEntry.start_time) {
+          groupedXRankingHistory.push({
+            time: moment.utc(rankingEntry.start_time).format('YYYY-MM'),
+            rankingEntries: [],
+          });
+        }
+        groupedXRankingHistory[groupedXRankingHistory.length - 1].rankingEntries.push(rankingEntry);
+        lastMonth = rankingEntry.start_time;
+      });
+      return groupedXRankingHistory;
+    },
     latestName() {
       return this.knownNames[0] && this.knownNames[0].player_name;
     },
@@ -210,6 +235,25 @@ export default {
     /deep/ td:nth-child(2),
     /deep/ td:nth-child(3) {
       border: 0;
+    }
+  }
+}
+.x {
+  .monthly-records:not(:first-child) {
+    margin-top: 1em;
+  }
+  table {
+    margin-top: .375em;
+  }
+  tr {
+    /deep/ td:nth-child(1) {
+      width: 2.5em;
+    }
+    /deep/ td:nth-child(2) {
+      width: 4em;
+    }
+    /deep/ td:nth-child(4) {
+      width: 4em;
     }
   }
 }
