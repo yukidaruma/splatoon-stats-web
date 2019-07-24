@@ -20,9 +20,10 @@
         </div>
       </div>
 
-      <div class="columns is-multiline x">
-        <div class="column is-half">
+      <div class="columns is-multiline">
+        <div class="column is-half x">
           <h2 class="table-title">X Ranked ({{ playerRankingHistory.x.length }})</h2>
+
           <div v-if="playerRankingHistory.x.length === 0">
             No X Ranked ranking record.
           </div>
@@ -41,8 +42,9 @@
           </div>
         </div>
 
-        <div class="column is-half">
+        <div class="column is-half splatfest">
           <h2 class="table-title">Splatfest ({{ playerRankingHistory.splatfest.length }})</h2>
+
           <div v-if="playerRankingHistory.splatfest.length === 0">
             No Splatfest ranking record.
           </div>
@@ -57,19 +59,24 @@
         </div>
       </div>
 
-      <h2 class="table-title">League Battle ({{ playerRankingHistory.league.length }})</h2>
-      <div v-if="playerRankingHistory.league.length === 0">
-        No League Battle ranking record.
+      <div class="league">
+        <h2 class="table-title">League Battle ({{ playerRankingHistory.league.length }})</h2>
+
+        <div v-if="playerRankingHistory.league.length === 0">
+          No League Battle ranking record.
+        </div>
+        <div v-else>
+          <table class="table is-hoverable is-striped is-fullwidth">
+            <tbody>
+              <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league"
+                rankingType="league"
+                :key="`${rankingEntry.start_time}_${rankingEntry.group_id}`"
+                :rankingEntry="rankingEntry"
+                :playerName="latestName ? latestName : fetchedPlayerId" />
+            </tbody>
+          </table>
+        </div>
       </div>
-      <table class="table is-hoverable is-striped is-fullwidth league">
-        <tbody>
-          <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league"
-            rankingType="league"
-            :key="`${rankingEntry.start_time}_${rankingEntry.group_id}`"
-            :rankingEntry="rankingEntry"
-            :playerName="latestName ? latestName : fetchedPlayerId" />
-        </tbody>
-      </table>
 
       <h2 class="table-title">Known Names</h2>
       <div v-if="knownNames.length === 0">
