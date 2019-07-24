@@ -22,7 +22,7 @@
     <td v-else>
       <div class="weapon-name-container">
         <img class="weapon-icon" :src="rankingEntry.icon">
-        <span class="is-hidden-touch">{{ $t(`weapons.${rankingEntry.weapon_id}.name`) }}</span>
+        <span class="weapon-name">{{ $t(`weapons.${rankingEntry.weapon_id}.name`) }}</span>
       </div>
     </td>
 

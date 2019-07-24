@@ -225,29 +225,31 @@ export default {
     vertical-align: middle
   }
 }
-.league, .league tbody {
-  display: block;
-}
-.league tr {
-  display: grid;
-  width: 100%;
-}
-@media screen and (min-width: 960px) {
-  .league tr {
-    grid-template-columns: 3em 4em 1fr 7.5em 4em 12em;
+.league, .x, .splatfest {
+  tbody {
+    display: block;
+  }
+  tr {
+    display: grid;
+    width: 100%;
   }
 }
-@media screen and (max-width: 959px) { /* TODO: use $tablet */
-  .league tr {
-    grid-template-columns: auto auto auto;
-    /deep/ td:nth-child(1),
-    /deep/ td:nth-child(2),
-    /deep/ td:nth-child(3) {
-      border: 0;
+.league {
+  tr {
+    @media screen and (min-width: 960px) {
+      grid-template-columns: 3em 4em 1fr 7.5em 4em 12em;
+    }
+    @media screen and (max-width: 959px) {
+      grid-template-columns: auto auto auto;
+      /deep/ td:nth-child(1),
+      /deep/ td:nth-child(2),
+      /deep/ td:nth-child(3) {
+        border: 0;
+      }
     }
   }
 }
-.x {
+.x, .splatfest {
   .monthly-records:not(:first-child) {
     margin-top: 1em;
   }
@@ -255,14 +257,10 @@ export default {
     margin-top: .375em;
   }
   tr {
-    /deep/ td:nth-child(1) {
-      width: 2.5em;
-    }
-    /deep/ td:nth-child(2) {
-      width: 4em;
-    }
-    /deep/ td:nth-child(4) {
-      width: 4em;
+    display: grid;
+    grid-template-columns: 2.5em 4em 1fr 6em;
+    /deep/ td:nth-child(3) {
+      overflow: hidden;
     }
   }
 }
