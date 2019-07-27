@@ -31,6 +31,15 @@
   </div>
 </template>
 
+<style lang="scss" scoped>
+@import '@/assets/global-variables.scss';
+@import '@/assets/helper-functions.scss';
+
+.table-title {
+  @include --text-stroke(1, invert($body-color));
+}
+</style>
+
 <script>
 import apiClient from '../api-client';
 import { formatRankingEntry, titleizeSplatfest } from '../helper';
