@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="root-container">
     <h1 class="title">Records</h1>
     <h2 class="table-title">X Ranked Weapon records</h2>
     <div class="table-container">
       <table class="table is-hoverable is-striped is-fullwidth">
         <thead>
           <tr>
-            <th>Weapon</th>
+            <th><span class="is-hidden-mobile">Weapon</span></th>
             <th>{{ $t('rules.splat_zones.name') }}</th>
             <th>{{ $t('rules.tower_control.name') }}</th>
             <th>{{ $t('rules.rainmaker.name') }}</th>
@@ -33,6 +33,29 @@
     </div>
   </div>
 </template>
+
+<style scoped>
+.weapon-icon {
+  max-width: inherit;
+}
+@media screen and (max-width: 768px) {
+  .root-container {
+    position: relative;
+  }
+  .table-container {
+    margin-left: 40px;
+  }
+  th:nth-child(1) {
+    padding: 0;
+  }
+  td:nth-child(1) {
+    border: 0;
+    position: absolute;
+    width: 40px;
+    left: 0;
+  }
+}
+</style>
 
 <script>
 import moment from 'moment';
