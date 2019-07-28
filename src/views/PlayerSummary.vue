@@ -111,7 +111,11 @@ export default {
       fetchedPlayerId: '',
       hasLoaded: false,
       isLoading: false,
-      playerRankingHistory: {},
+      playerRankingHistory: {
+        x: [],
+        splatfest: [],
+        league: [],
+      },
       knownNames: [],
 
       // Properties used for chart
