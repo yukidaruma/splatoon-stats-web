@@ -267,6 +267,11 @@ export default {
     margin-left: 1em;
   }
 }
+@media screen and (max-width: 1023px) {
+  .inline-rule-picker {
+    margin-bottom: 1em;
+  }
+}
 .league, .x, .splatfest {
   tbody {
     display: block;
