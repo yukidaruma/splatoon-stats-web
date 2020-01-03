@@ -24,9 +24,9 @@
       <div class="columns is-multiline">
         <div class="column is-half x">
           <div>
-            <h2 class="is-flex-desktop is-inline-desktop table-title">X Ranked ({{ xRankingRecordsCount }})</h2>
+            <h2 class="is-inline-flex-desktop table-title">X Ranked ({{ xRankingRecordsCount }})</h2>
             <ranked-rule-picker
-              class="is-flex-desktop is-inline-desktop inline-rule-picker"
+              class="is-inline-flex-desktop inline-rule-picker"
               :type="RankedRulePickerTypes.checkbox"
               v-model="filters.x.rules" />
           </div>
@@ -67,9 +67,9 @@
       </div>
 
       <div class="league">
-        <h2 class="is-flex-desktop is-inline-desktop table-title">League Battle ({{ filteredLeagueRankingEntries.length }})</h2>
+        <h2 class="is-inline-flex-desktop table-title">League Battle ({{ filteredLeagueRankingEntries.length }})</h2>
         <ranked-rule-picker
-          class="is-flex-desktop is-inline-desktop inline-rule-picker"
+          class="is-inline-flex-desktop inline-rule-picker"
           :type="RankedRulePickerTypes.checkbox"
           v-model="filters.league.rules" />
 
