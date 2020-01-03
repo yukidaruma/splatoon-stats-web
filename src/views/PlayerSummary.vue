@@ -23,7 +23,13 @@
 
       <div class="columns is-multiline">
         <div class="column is-half x">
-          <h2 class="table-title">X Ranked ({{ playerRankingHistory.x.length }})</h2>
+          <div>
+            <h2 class="is-flex-desktop is-inline-desktop table-title">X Ranked ({{ xRankingRecordsCount }})</h2>
+            <ranked-rule-picker
+              class="is-flex-desktop is-inline-desktop inline-rule-picker"
+              :type="RankedRulePickerTypes.checkbox"
+              v-model="filters.x.rules" />
+          </div>
 
           <div v-if="playerRankingHistory.x.length === 0">
             No X Ranked ranking record.
@@ -61,7 +67,11 @@
       </div>
 
       <div class="league">
-        <h2 class="table-title">League Battle ({{ playerRankingHistory.league.length }})</h2>
+        <h2 class="is-flex-desktop is-inline-desktop table-title">League Battle ({{ filteredLeagueRankingEntries.length }})</h2>
+        <ranked-rule-picker
+          class="is-flex-desktop is-inline-desktop inline-rule-picker"
+          :type="RankedRulePickerTypes.checkbox"
+          v-model="filters.league.rules" />
 
         <div v-if="playerRankingHistory.league.length === 0">
           No League Battle ranking record.
@@ -69,7 +79,7 @@
         <div v-else>
           <table class="table is-hoverable is-striped is-fullwidth">
             <tbody>
-              <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league"
+              <player-ranking-entry v-for="rankingEntry in filteredLeagueRankingEntries"
                 rankingType="league"
                 :key="`${rankingEntry.start_time}_${rankingEntry.group_id}`"
                 :rankingEntry="rankingEntry"
@@ -93,18 +103,20 @@
 </template>
 
 <script>
+import flatten from 'array.prototype.flat';
 import moment from 'moment';
 
 import apiClient from '../api-client';
 import { isValidPlayerId, formatRankingEntry } from '../helper';
 
 import PlayerRankingEntry from '../components/PlayerRankingEntry.vue';
+import RankedRulePicker, { DefaultSelectedRules, RankedRulePickerTypes } from '../components/RankedRulePicker.vue';
 import XRankedChart from '../components/PlayerSummaryXRankedChart';
 
 export default {
   name: 'Players',
   props: ['initialPlayerId'],
-  components: { PlayerRankingEntry, XRankedChart },
+  components: { PlayerRankingEntry, RankedRulePicker, XRankedChart },
   data() {
     return {
       playerId: '',
@@ -133,6 +145,15 @@ export default {
         },
       },
       isLineVisible: false,
+      RankedRulePickerTypes,
+      filters: {
+        league: {
+          rules: DefaultSelectedRules.all,
+        },
+        x: {
+          rules: DefaultSelectedRules.all,
+        },
+      },
     };
   },
   created() {
@@ -154,6 +175,11 @@ export default {
     },
   },
   computed: {
+    filteredLeagueRankingEntries() {
+      return this.playerRankingHistory.league.filter((rankingEntry) => {
+        return this.filters.league.rules.includes(rankingEntry.rule_id);
+      });
+    },
     groupedXRankingHistory() {
       const groupedXRankingHistory = [];
 
@@ -163,7 +189,10 @@ export default {
 
       let lastMonth;
       this.playerRankingHistory.x.forEach((rankingEntry) => {
-        if (lastMonth != rankingEntry.start_time) {
+        if (!this.filters.x.rules.includes(rankingEntry.rule_id)) {
+          return;
+        }
+        if (lastMonth !== rankingEntry.start_time) {
           groupedXRankingHistory.push({
             time: moment.utc(rankingEntry.start_time).format('YYYY-MM'),
             rankingEntries: [],
@@ -177,8 +206,12 @@ export default {
     latestName() {
       return this.knownNames[0] && this.knownNames[0].player_name;
     },
+    xRankingRecordsCount() {
+      return flatten(this.groupedXRankingHistory.map(g => g.rankingEntries), 2).length;
+    },
   },
   methods: {
+    flatten,
     getPlayerRankingHistory(playerId) {
       if (!isValidPlayerId(playerId)
         || playerId === this.fetchedPlayerId) { // Skip if the ID was already fetched
@@ -227,6 +260,11 @@ export default {
   label, input {
     display: table-cell;
     vertical-align: middle
+  }
+}
+@media screen and (min-width: 1024px) {
+  .inline-rule-picker {
+    margin-left: 1em;
   }
 }
 .league, .x, .splatfest {

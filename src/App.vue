@@ -65,7 +65,7 @@ export default {
 table a {
   font-weight: 300;
 }
-input, select, option, button {
+input:not([type="checkbox"]), select, option, button {
   height: 2.5em;
   color: #ecf0f1;
 }
@@ -93,6 +93,12 @@ button:disabled {
 }
 button:active {
   outline: 0;
+}
+.checkboxes .checkbox:not(:last-child) {
+  margin-right: 1em;
+}
+.checkboxes .checkbox input[type="checkbox"] {
+  margin-right: .25em;
 }
 
 #app {
