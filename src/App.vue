@@ -35,7 +35,7 @@
 
     <router-view></router-view>
 
-    <footer>
+    <footer class="is-flex align-center justify-center">
       <global-footer></global-footer>
     </footer>
   </div>
@@ -113,9 +113,6 @@ button:active {
   margin-bottom: 1em;
 }
 #app > footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 100%;
   position: absolute;
   left: 0;

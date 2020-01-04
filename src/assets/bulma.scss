@@ -140,6 +140,14 @@ h2 {
   font-size: $size-5;
 }
 
+// Custom helper styles
+.align-center {
+  align-items: center;
+}
+.justify-center {
+  justify-content: center;
+}
+
 /*
 @import "../../node_modules/bulma/sass/elements/button.sass";
 @import "../../node_modules/bulma/sass/form/_all.sass";

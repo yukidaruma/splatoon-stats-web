@@ -76,7 +76,7 @@
             v-model="filters.league.rules" />
         </div>
         <div class="is-hidden-tablet">
-          <div class="is-flex" style="align-items: center;">
+          <div class="is-flex align-center">
             <h2 class="table-title">League Battle ({{ filteredLeagueRankingEntries.length }})</h2>
             <league-team-type-picker class="league-team-type-picker" v-model="filters.league.teamType" />
           </div>
