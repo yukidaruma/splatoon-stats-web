@@ -67,11 +67,24 @@
       </div>
 
       <div class="league">
-        <h2 class="is-inline-flex-desktop table-title">League Battle ({{ filteredLeagueRankingEntries.length }})</h2>
-        <ranked-rule-picker
-          class="is-inline-flex-desktop inline-rule-picker"
-          :type="RankedRulePickerTypes.checkbox"
-          v-model="filters.league.rules" />
+        <div class="is-hidden-mobile">
+          <h2 class="is-inline-flex-tablet table-title">League Battle ({{ filteredLeagueRankingEntries.length }})</h2>
+          <league-team-type-picker class="is-inline-flex-tablet league-team-type-picker" v-model="filters.league.teamType" />
+          <ranked-rule-picker
+            class="is-inline-flex-tablet inline-rule-picker"
+            :type="RankedRulePickerTypes.checkbox"
+            v-model="filters.league.rules" />
+        </div>
+        <div class="is-hidden-tablet">
+          <div class="is-flex" style="align-items: center;">
+            <h2 class="table-title">League Battle ({{ filteredLeagueRankingEntries.length }})</h2>
+            <league-team-type-picker class="league-team-type-picker" v-model="filters.league.teamType" />
+          </div>
+          <ranked-rule-picker
+            class="rule-picker"
+            :type="RankedRulePickerTypes.checkbox"
+            v-model="filters.league.rules" />
+        </div>
 
         <div v-if="playerRankingHistory.league.length === 0">
           No League Battle ranking record.
@@ -110,13 +123,19 @@ import apiClient from '../api-client';
 import { isValidPlayerId, formatRankingEntry } from '../helper';
 
 import PlayerRankingEntry from '../components/PlayerRankingEntry.vue';
+import LeagueTeamTypePicker, { LeagueTeamTypes } from '../components/LeagueTeamTypePicker.vue';
 import RankedRulePicker, { DefaultSelectedRules, RankedRulePickerTypes } from '../components/RankedRulePicker.vue';
 import XRankedChart from '../components/PlayerSummaryXRankedChart';
 
 export default {
   name: 'Players',
   props: ['initialPlayerId'],
-  components: { PlayerRankingEntry, RankedRulePicker, XRankedChart },
+  components: {
+    LeagueTeamTypePicker,
+    PlayerRankingEntry,
+    RankedRulePicker,
+    XRankedChart,
+  },
   data() {
     return {
       playerId: '',
@@ -149,6 +168,7 @@ export default {
       filters: {
         league: {
           rules: DefaultSelectedRules.all,
+          teamType: LeagueTeamTypes.all,
         },
         x: {
           rules: DefaultSelectedRules.all,
@@ -177,6 +197,16 @@ export default {
   computed: {
     filteredLeagueRankingEntries() {
       return this.playerRankingHistory.league.filter((rankingEntry) => {
+        if (this.filters.league.teamType === LeagueTeamTypes.team) {
+          if (rankingEntry.group_type !== 'T') {
+            return false;
+          }
+        } else if (this.filters.league.teamType === LeagueTeamTypes.pair) {
+          if (rankingEntry.group_type !== 'P') {
+            return false;
+          }
+        }
+
         return this.filters.league.rules.includes(rankingEntry.rule_id);
       });
     },
@@ -261,6 +291,15 @@ export default {
     display: table-cell;
     vertical-align: middle
   }
+}
+.league-team-type-picker {
+  margin-left: 1em;
+}
+.league .inline-rule-picker {
+  margin-left: 1em;
+}
+.is-hidden-tablet .rule-picker {
+  margin-bottom: 1em;
 }
 @media screen and (min-width: 1024px) {
   .inline-rule-picker {
