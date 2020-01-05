@@ -143,6 +143,9 @@ button:active {
 .controls select.l {
   width: 8em;
 }
+.controls input.four-digits-num {
+  width: 5em;
+}
 
 .table-title {
   margin: .5em 0;

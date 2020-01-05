@@ -9,7 +9,7 @@
       </div>
       <div>
         <span class="label">Rule</span>
-        <ranked-rule-picker v-model="rankedRule" :value="rankedRule" noAllRules="true" />
+        <ranked-rule-picker v-model="rankedRule" :value="rankedRule" :no-all-rules="true" />
         <button @click="fetchXRanking" :disabled="isLoading">Go</button>
       </div>
     </div>

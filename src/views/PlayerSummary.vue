@@ -69,21 +69,30 @@
       <div class="league">
         <div class="is-hidden-mobile">
           <h2 class="is-inline-flex-tablet table-title">League Battle ({{ filteredLeagueRankingEntries.length }})</h2>
-          <league-team-type-picker class="is-inline-flex-tablet league-team-type-picker" v-model="filters.league.teamType" />
           <ranked-rule-picker
             class="is-inline-flex-tablet inline-rule-picker"
             :type="RankedRulePickerTypes.checkbox"
             v-model="filters.league.rules" />
         </div>
         <div class="is-hidden-tablet">
-          <div class="is-flex align-center">
-            <h2 class="table-title">League Battle ({{ filteredLeagueRankingEntries.length }})</h2>
-            <league-team-type-picker class="league-team-type-picker" v-model="filters.league.teamType" />
-          </div>
+          <h2 class="table-title">League Battle ({{ filteredLeagueRankingEntries.length }})</h2>
           <ranked-rule-picker
             class="rule-picker"
             :type="RankedRulePickerTypes.checkbox"
             v-model="filters.league.rules" />
+        </div>
+
+        <div class="controls">
+          <div class="align-center">
+            <label class="label" for="league-group-type-picker">{{$t('ui.group_type')}}</label>
+            <league-team-type-picker id="league-group-type-picker" class="league-group-type-picker" v-model="filters.league.teamType" />
+          </div>
+          <div>
+            <label class="label" for="min-league-power-filter">{{$t('ui.min_power')}}</label>
+            <input class="four-digits-num" id="min-league-power-filter"
+              placeholder="2100"
+              type="number" min="0" step="100" v-model="filters.league.minPower">
+          </div>
         </div>
 
         <div v-if="playerRankingHistory.league.length === 0">
@@ -127,6 +136,17 @@ import LeagueTeamTypePicker, { LeagueTeamTypes } from '../components/LeagueTeamT
 import RankedRulePicker, { DefaultSelectedRules, RankedRulePickerTypes } from '../components/RankedRulePicker.vue';
 import XRankedChart from '../components/PlayerSummaryXRankedChart';
 
+const initialFilterState = {
+  league: {
+    minPower: null,
+    rules: DefaultSelectedRules.all,
+    teamType: LeagueTeamTypes.all,
+  },
+  x: {
+    rules: DefaultSelectedRules.all,
+  },
+};
+
 export default {
   name: 'Players',
   props: ['initialPlayerId'],
@@ -167,6 +187,7 @@ export default {
       RankedRulePickerTypes,
       filters: {
         league: {
+          minPower: null,
           rules: DefaultSelectedRules.all,
           teamType: LeagueTeamTypes.all,
         },
@@ -196,6 +217,10 @@ export default {
   },
   computed: {
     filteredLeagueRankingEntries() {
+      const minPower = this.filters.league.minPower !== null
+        ? parseInt(this.filters.league.minPower, 10)
+        : 0;
+
       return this.playerRankingHistory.league.filter((rankingEntry) => {
         if (this.filters.league.teamType === LeagueTeamTypes.team) {
           if (rankingEntry.group_type !== 'T') {
@@ -205,6 +230,10 @@ export default {
           if (rankingEntry.group_type !== 'P') {
             return false;
           }
+        }
+
+        if (rankingEntry.rating < minPower) {
+          return false;
         }
 
         return this.filters.league.rules.includes(rankingEntry.rule_id);
@@ -292,14 +321,8 @@ export default {
     vertical-align: middle
   }
 }
-.league-team-type-picker {
-  margin-left: 1em;
-}
 .league .inline-rule-picker {
   margin-left: 1em;
-}
-.is-hidden-tablet .rule-picker {
-  margin-bottom: 1em;
 }
 @media screen and (min-width: 1024px) {
   .inline-rule-picker {
@@ -321,6 +344,10 @@ export default {
   }
 }
 .league {
+  .controls div:first-of-type {
+    margin-top: 0;
+  }
+
   tr {
     @media screen and (min-width: 960px) {
       grid-template-columns: 3em 4em 1fr 7.5em 4em 12em;
