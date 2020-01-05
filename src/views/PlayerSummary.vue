@@ -86,6 +86,15 @@
             v-model="filters.league.rules" />
         </div>
 
+        <div class="controls">
+          <div>
+            <label class="label" for="min-league-power-filter">{{$t('ui.min_power')}}</label>
+            <input class="four-digits-num" id="min-league-power-filter"
+              placeholder="2100"
+              type="number" min="0" step="100" v-model="filters.league.minPower">
+          </div>
+        </div>
+
         <div v-if="playerRankingHistory.league.length === 0">
           No League Battle ranking record.
         </div>
@@ -167,6 +176,7 @@ export default {
       RankedRulePickerTypes,
       filters: {
         league: {
+          minPower: null,
           rules: DefaultSelectedRules.all,
           teamType: LeagueTeamTypes.all,
         },
@@ -196,6 +206,10 @@ export default {
   },
   computed: {
     filteredLeagueRankingEntries() {
+      const minPower = this.filters.league.minPower !== null
+        ? parseInt(this.filters.league.minPower, 10)
+        : 0;
+
       return this.playerRankingHistory.league.filter((rankingEntry) => {
         if (this.filters.league.teamType === LeagueTeamTypes.team) {
           if (rankingEntry.group_type !== 'T') {
@@ -205,6 +219,10 @@ export default {
           if (rankingEntry.group_type !== 'P') {
             return false;
           }
+        }
+
+        if (rankingEntry.rating < minPower) {
+          return false;
         }
 
         return this.filters.league.rules.includes(rankingEntry.rule_id);
@@ -321,6 +339,10 @@ export default {
   }
 }
 .league {
+  .controls div:first-of-type {
+    margin-top: 0;
+  }
+
   tr {
     @media screen and (min-width: 960px) {
       grid-template-columns: 3em 4em 1fr 7.5em 4em 12em;
