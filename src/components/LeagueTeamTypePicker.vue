@@ -1,6 +1,6 @@
 <template>
   <select v-model="teamType" @change="$emit('input', teamType)">
-    <option v-for="(v, k) in LeagueTeamTypes" :key="k" :value="v">
+    <option v-for="(v, k) in leagueTeamTypeOptions" :key="k" :value="v">
       {{$t(`ui.team_types.${k}`)}}
     </option>
   </select>
@@ -19,7 +19,18 @@ export const LeagueTeamTypes = {
 
 export default {
   name: 'LeagueTeamTypePicker',
-  props: ['value'],
+  props: ['noAll', 'value'],
+  computed: {
+    leagueTeamTypeOptions() {
+      if (this.noAll) {
+        return Object.fromEntries(
+          Object.entries(LeagueTeamTypes)
+            .filter(([_, v]) => v !== LeagueTeamTypes.all), // eslint-disable-line no-unused-vars
+        );
+      }
+      return LeagueTeamTypes;
+    },
+  },
   data() {
     return {
       teamType: this.value,

@@ -5,14 +5,11 @@
     <div class="controls">
       <div>
         <span class="label">Date</span>
-        <date-picker initialRankingType="league" showDate="true" v-model="time" />
+        <date-picker initialRankingType="league" :showDate="true" v-model="time" />
       </div>
       <div>
         <span class="label">Group type</span>
-        <select v-model="groupType">
-          <option value="T">Team</option>
-          <option value="P">Pair</option>
-        </select>
+        <league-team-type-picker v-model="groupTypeId" :no-all="true" />
 
         <button @click="fetchLeagueRanking" :disabled="isLoading">Go</button>
       </div>
@@ -29,20 +26,32 @@
 import moment from 'moment';
 
 import apiClient from '../api-client';
-import DatePicker from '../components/DatePicker.vue';
-import Ranking from '../components/Ranking.vue';
 import { formatRankingEntry } from '../helper';
+
+import DatePicker from '../components/DatePicker.vue';
+import LeagueTeamTypePicker, { LeagueTeamTypes } from '../components/LeagueTeamTypePicker.vue';
+import Ranking from '../components/Ranking.vue';
+
+const teamTypeSymbols = {
+  [LeagueTeamTypes.team]: 'T',
+  [LeagueTeamTypes.pair]: 'P',
+};
 
 export default {
   name: 'LeagueRankings',
-  components: { DatePicker, Ranking },
+  components: { DatePicker, LeagueTeamTypePicker, Ranking },
   props: ['initialLeagueId'],
+  computed: {
+    groupType() {
+      return teamTypeSymbols[this.groupTypeId];
+    },
+  },
   data() {
     return {
       ranking: [],
       isLoading: false,
       time: undefined,
-      groupType: 'T',
+      groupTypeId: LeagueTeamTypes.team,
       title: null,
     };
   },
@@ -67,9 +76,6 @@ export default {
           this.isLoading = false;
         });
     },
-    onGroupTypeChange(groupType) {
-      this.groupType = groupType;
-    },
   },
   created() {
     const leagueId = this.initialLeagueId;
@@ -78,7 +84,9 @@ export default {
       const groupType = leagueId.substr(leagueId.length - 1, 1);
       const leagueTime = moment.utc(leagueId.substr(0, leagueId.length - 1), 'YYMMDDHH', true);
 
-      this.groupType = groupType;
+      [this.groupTypeId] = Object.entries(teamTypeSymbols)
+        .find(([_, v]) => v === groupType); // eslint-disable-line no-unused-vars
+
       if (leagueTime.isValid()) {
         this.time = leagueTime;
       }
