@@ -23,7 +23,7 @@ const rankedRules = [
 ];
 const findRuleKey = rankedRuleId => rankedRules.find(rule => rule.id === rankedRuleId).key;
 
-const formatRankingEntry = (rankingEntry, weaponType) => {
+const formatRankingEntry = (rankingEntry, weaponType, rankingType) => {
   if (weaponType === 'mains') {
     weaponType = 'weapons';
   }
@@ -40,6 +40,20 @@ const formatRankingEntry = (rankingEntry, weaponType) => {
     rankingEntry.localizationKey = `${weaponTypeLocaleKey}.${weaponId}.name`;
   }
   rankingEntry.icon = weaponIcon(weaponType, weaponId);
+
+  switch (rankingType) {
+    case 'x':
+      rankingEntry.key = `${rankingEntry.start_time}-${rankingEntry.rule_id}`;
+      break;
+    case 'league':
+      rankingEntry.key = `${rankingEntry.start_time}-${rankingEntry.group_id}`;
+      break;
+    case 'splatfest':
+      rankingEntry.key = `${rankingEntry.region}-${rankingEntry.splatfest_id}`;
+      break;
+    default:
+      break;
+  }
 
   return rankingEntry;
 };

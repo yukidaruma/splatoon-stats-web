@@ -41,7 +41,7 @@
                 <tbody>
                   <player-ranking-entry v-for="rankingEntry in group.rankingEntries"
                     rankingType="x"
-                    :key="`${rankingEntry.start_time}_${rankingEntry.rule_id}`"
+                    :key="rankingEntry.key"
                     :rankingEntry="rankingEntry" />
                 </tbody>
               </table>
@@ -59,7 +59,7 @@
             <tbody>
               <player-ranking-entry v-for="rankingEntry in playerRankingHistory.splatfest"
                 rankingType="splatfest"
-                :key="`${rankingEntry.region}-${rankingEntry.splatfest_id}`"
+                :key="rankingEntry.key"
                 :rankingEntry="rankingEntry" />
             </tbody>
           </table>
@@ -68,14 +68,14 @@
 
       <div class="league">
         <div class="is-hidden-mobile">
-          <h2 class="is-inline-flex-tablet table-title">League Battle ({{ filteredLeagueRankingEntries.length }})</h2>
+          <h2 class="is-inline-flex-tablet table-title">League Battle ({{ filteredLeagueRankingEntryKeysSet.size }})</h2>
           <ranked-rule-picker
             class="is-inline-flex-tablet inline-rule-picker"
             :type="RankedRulePickerTypes.checkbox"
             v-model="filters.league.rules" />
         </div>
         <div class="is-hidden-tablet">
-          <h2 class="table-title">League Battle ({{ filteredLeagueRankingEntries.length }})</h2>
+          <h2 class="table-title">League Battle ({{ filteredLeagueRankingEntryKeysSet.size }})</h2>
           <ranked-rule-picker
             class="rule-picker"
             :type="RankedRulePickerTypes.checkbox"
@@ -105,9 +105,10 @@
         <div v-else>
           <table class="table is-hoverable is-striped is-fullwidth">
             <tbody>
-              <player-ranking-entry v-for="rankingEntry in filteredLeagueRankingEntries"
+              <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league"
+                v-show="filteredLeagueRankingEntryKeysSet.has(rankingEntry.key)"
                 rankingType="league"
-                :key="`${rankingEntry.start_time}_${rankingEntry.group_id}`"
+                :key="rankingEntry.key"
                 :rankingEntry="rankingEntry"
                 :playerName="latestName ? latestName : fetchedPlayerId" />
             </tbody>
@@ -213,31 +214,35 @@ export default {
     },
   },
   computed: {
-    filteredLeagueRankingEntries() {
+    filteredLeagueRankingEntryKeysSet() {
       const minPower = safeParseInt(this.filters.league.minPower);
       const minRank = safeParseInt(this.filters.league.minRank);
 
-      return this.playerRankingHistory.league.filter((rankingEntry) => {
-        if (this.filters.league.teamType === LeagueTeamTypes.team) {
-          if (rankingEntry.group_type !== 'T') {
-            return false;
-          }
-        } else if (this.filters.league.teamType === LeagueTeamTypes.pair) {
-          if (rankingEntry.group_type !== 'P') {
-            return false;
-          }
-        }
+      return new Set(
+        this.playerRankingHistory.league
+          .filter((rankingEntry) => {
+            if (this.filters.league.teamType === LeagueTeamTypes.team) {
+              if (rankingEntry.group_type !== 'T') {
+                return false;
+              }
+            } else if (this.filters.league.teamType === LeagueTeamTypes.pair) {
+              if (rankingEntry.group_type !== 'P') {
+                return false;
+              }
+            }
 
-        if (rankingEntry.rating < minPower) {
-          return false;
-        }
+            if (rankingEntry.rating < minPower) {
+              return false;
+            }
 
-        if (minRank && rankingEntry.rank > minRank) {
-          return false;
-        }
+            if (minRank && rankingEntry.rank > minRank) {
+              return false;
+            }
 
-        return this.filters.league.rules.includes(rankingEntry.rule_id);
-      });
+            return this.filters.league.rules.includes(rankingEntry.rule_id);
+          })
+          .map(rankingEntry => rankingEntry.key),
+      );
     },
     groupedXRankingHistory() {
       const groupedXRankingHistory = [];
@@ -285,7 +290,7 @@ export default {
         apiClient.get(`/players/${playerId}/known_names`)
           .then((res) => { this.knownNames = res.data; }),
         ...['x', 'league', 'splatfest'].map(rankingType => apiClient.get(`/players/${playerId}/rankings/${rankingType}`).then((res) => {
-          this.playerRankingHistory[rankingType] = res.data.map(rankingEntry => formatRankingEntry(rankingEntry, 'weapons'));
+          this.playerRankingHistory[rankingType] = res.data.map(rankingEntry => formatRankingEntry(rankingEntry, 'weapons', rankingType));
 
           if (rankingType === 'x') {
             this.chartData = res.data;

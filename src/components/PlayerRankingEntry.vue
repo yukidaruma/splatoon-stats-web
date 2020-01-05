@@ -19,6 +19,7 @@
           </router-link>
         </div>
       </div>
+    </td>
     <td v-else>
       <div class="weapon-name-container">
         <img class="weapon-icon" :src="rankingEntry.icon">
@@ -40,7 +41,6 @@
         <p class="stage-name">{{ $t(`stages.${rankingEntry.stage_ids[0]}.name`) }}</p>
         <p class="stage-name">{{ $t(`stages.${rankingEntry.stage_ids[1]}.name`) }}</p>
       </div>
-    </td>
     </td>
   </tr>
 </template>
