@@ -136,7 +136,7 @@ import LeagueTeamTypePicker, { LeagueTeamTypes } from '../components/LeagueTeamT
 import RankedRulePicker, { DefaultSelectedRules, RankedRulePickerTypes } from '../components/RankedRulePicker.vue';
 import XRankedChart from '../components/PlayerSummaryXRankedChart';
 
-const initialFilterState = {
+const getInitialFilterState = () => ({
   league: {
     minPower: null,
     rules: DefaultSelectedRules.all,
@@ -145,7 +145,7 @@ const initialFilterState = {
   x: {
     rules: DefaultSelectedRules.all,
   },
-};
+});
 
 export default {
   name: 'Players',
@@ -185,16 +185,7 @@ export default {
       },
       isLineVisible: false,
       RankedRulePickerTypes,
-      filters: {
-        league: {
-          minPower: null,
-          rules: DefaultSelectedRules.all,
-          teamType: LeagueTeamTypes.all,
-        },
-        x: {
-          rules: DefaultSelectedRules.all,
-        },
-      },
+      filters: getInitialFilterState(),
     };
   },
   created() {
@@ -208,6 +199,7 @@ export default {
     '$route.params.initialPlayerId': {
       handler(playerId) {
         if (playerId) {
+          this.filters = getInitialFilterState();
           this.getPlayerRankingHistory(playerId);
         } else {
           this.hasLoaded = false;
