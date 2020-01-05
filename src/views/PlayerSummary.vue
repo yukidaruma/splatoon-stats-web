@@ -69,17 +69,13 @@
       <div class="league">
         <div class="is-hidden-mobile">
           <h2 class="is-inline-flex-tablet table-title">League Battle ({{ filteredLeagueRankingEntries.length }})</h2>
-          <league-team-type-picker class="is-inline-flex-tablet league-team-type-picker" v-model="filters.league.teamType" />
           <ranked-rule-picker
             class="is-inline-flex-tablet inline-rule-picker"
             :type="RankedRulePickerTypes.checkbox"
             v-model="filters.league.rules" />
         </div>
         <div class="is-hidden-tablet">
-          <div class="is-flex align-center">
-            <h2 class="table-title">League Battle ({{ filteredLeagueRankingEntries.length }})</h2>
-            <league-team-type-picker class="league-team-type-picker" v-model="filters.league.teamType" />
-          </div>
+          <h2 class="table-title">League Battle ({{ filteredLeagueRankingEntries.length }})</h2>
           <ranked-rule-picker
             class="rule-picker"
             :type="RankedRulePickerTypes.checkbox"
@@ -87,6 +83,10 @@
         </div>
 
         <div class="controls">
+          <div class="align-center">
+            <label class="label" for="league-group-type-picker">{{$t('ui.group_type')}}</label>
+            <league-team-type-picker id="league-group-type-picker" class="league-group-type-picker" v-model="filters.league.teamType" />
+          </div>
           <div>
             <label class="label" for="min-league-power-filter">{{$t('ui.min_power')}}</label>
             <input class="four-digits-num" id="min-league-power-filter"
@@ -135,6 +135,17 @@ import PlayerRankingEntry from '../components/PlayerRankingEntry.vue';
 import LeagueTeamTypePicker, { LeagueTeamTypes } from '../components/LeagueTeamTypePicker.vue';
 import RankedRulePicker, { DefaultSelectedRules, RankedRulePickerTypes } from '../components/RankedRulePicker.vue';
 import XRankedChart from '../components/PlayerSummaryXRankedChart';
+
+const initialFilterState = {
+  league: {
+    minPower: null,
+    rules: DefaultSelectedRules.all,
+    teamType: LeagueTeamTypes.all,
+  },
+  x: {
+    rules: DefaultSelectedRules.all,
+  },
+};
 
 export default {
   name: 'Players',
@@ -310,14 +321,8 @@ export default {
     vertical-align: middle
   }
 }
-.league-team-type-picker {
-  margin-left: 1em;
-}
 .league .inline-rule-picker {
   margin-left: 1em;
-}
-.is-hidden-tablet .rule-picker {
-  margin-bottom: 1em;
 }
 @media screen and (min-width: 1024px) {
   .inline-rule-picker {

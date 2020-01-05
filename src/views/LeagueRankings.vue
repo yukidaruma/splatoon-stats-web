@@ -8,7 +8,7 @@
         <date-picker initialRankingType="league" :showDate="true" v-model="time" />
       </div>
       <div>
-        <span class="label">Group type</span>
+        <span class="label">{{$t('ui.group_type')}}</span>
         <league-team-type-picker v-model="groupTypeId" :no-all="true" />
 
         <button @click="fetchLeagueRanking" :disabled="isLoading">Go</button>
