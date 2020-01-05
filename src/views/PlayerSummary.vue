@@ -41,7 +41,7 @@
                 <tbody>
                   <player-ranking-entry v-for="rankingEntry in group.rankingEntries"
                     rankingType="x"
-                    :key="`${rankingEntry.start_time}_${rankingEntry.rule_id}`"
+                    :key="rankingEntry.key"
                     :rankingEntry="rankingEntry" />
                 </tbody>
               </table>
@@ -59,7 +59,7 @@
             <tbody>
               <player-ranking-entry v-for="rankingEntry in playerRankingHistory.splatfest"
                 rankingType="splatfest"
-                :key="`${rankingEntry.region}-${rankingEntry.splatfest_id}`"
+                :key="rankingEntry.key"
                 :rankingEntry="rankingEntry" />
             </tbody>
           </table>
@@ -107,7 +107,7 @@
             <tbody>
               <player-ranking-entry v-for="rankingEntry in filteredLeagueRankingEntries"
                 rankingType="league"
-                :key="`${rankingEntry.start_time}_${rankingEntry.group_id}`"
+                :key="rankingEntry.key"
                 :rankingEntry="rankingEntry"
                 :playerName="latestName ? latestName : fetchedPlayerId" />
             </tbody>
@@ -285,7 +285,7 @@ export default {
         apiClient.get(`/players/${playerId}/known_names`)
           .then((res) => { this.knownNames = res.data; }),
         ...['x', 'league', 'splatfest'].map(rankingType => apiClient.get(`/players/${playerId}/rankings/${rankingType}`).then((res) => {
-          this.playerRankingHistory[rankingType] = res.data.map(rankingEntry => formatRankingEntry(rankingEntry, 'weapons'));
+          this.playerRankingHistory[rankingType] = res.data.map(rankingEntry => formatRankingEntry(rankingEntry, 'weapons', rankingType));
 
           if (rankingType === 'x') {
             this.chartData = res.data;
