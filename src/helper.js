@@ -56,6 +56,17 @@ const calculateEndTime = (rankingType, startTime) => {
   return moment.utc(startTime).add(duration).toDate();
 };
 
+const safeParseInt = (numString) => {
+  if (numString === null) {
+    return 0;
+  }
+
+  const num = parseInt(numString, 10);
+  return Number.isNaN(num)
+    ? 0
+    : num;
+};
+
 const titleizeSplatfest = splatfest => `[${splatfest.region.toUpperCase()}] ${splatfest.team_names.join(' VS ')}`;
 
 export {
@@ -67,5 +78,6 @@ export {
   findRuleKey,
   formatRankingEntry,
   calculateEndTime,
+  safeParseInt,
   titleizeSplatfest,
 };

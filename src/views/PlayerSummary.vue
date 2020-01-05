@@ -90,8 +90,12 @@
           <div>
             <label class="label" for="min-league-power-filter">{{$t('ui.min_power')}}</label>
             <input class="four-digits-num" id="min-league-power-filter"
-              placeholder="2100"
               type="number" min="0" step="100" v-model="filters.league.minPower">
+          </div>
+          <div>
+            <label class="label" for="min-league-rank-filter">{{$t('ui.min_rank')}}</label>
+            <input class="four-digits-num" id="min-league-rank-filter"
+              type="number" min="1" max="100" v-model="filters.league.minRank">
           </div>
         </div>
 
@@ -129,7 +133,7 @@ import flatten from 'array.prototype.flat';
 import moment from 'moment';
 
 import apiClient from '../api-client';
-import { isValidPlayerId, formatRankingEntry } from '../helper';
+import { formatRankingEntry, isValidPlayerId, safeParseInt } from '../helper';
 
 import PlayerRankingEntry from '../components/PlayerRankingEntry.vue';
 import LeagueTeamTypePicker, { LeagueTeamTypes } from '../components/LeagueTeamTypePicker.vue';
@@ -139,6 +143,7 @@ import XRankedChart from '../components/PlayerSummaryXRankedChart';
 const getInitialFilterState = () => ({
   league: {
     minPower: null,
+    minRank: null,
     rules: DefaultSelectedRules.all,
     teamType: LeagueTeamTypes.all,
   },
@@ -209,9 +214,8 @@ export default {
   },
   computed: {
     filteredLeagueRankingEntries() {
-      const minPower = this.filters.league.minPower !== null
-        ? parseInt(this.filters.league.minPower, 10)
-        : 0;
+      const minPower = safeParseInt(this.filters.league.minPower);
+      const minRank = safeParseInt(this.filters.league.minRank);
 
       return this.playerRankingHistory.league.filter((rankingEntry) => {
         if (this.filters.league.teamType === LeagueTeamTypes.team) {
@@ -225,6 +229,10 @@ export default {
         }
 
         if (rankingEntry.rating < minPower) {
+          return false;
+        }
+
+        if (minRank && rankingEntry.rank > minRank) {
           return false;
         }
 
