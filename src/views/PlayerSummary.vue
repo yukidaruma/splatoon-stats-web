@@ -25,7 +25,7 @@
         <div class="column is-half x">
           <div>
             <h2 class="is-inline-flex-desktop table-title">X Ranked ({{ xRankingRecordsCount }})</h2>
-            <ranked-rule-picker
+            <ranked-rule-picker v-if="playerRankingHistory.x.length"
               class="is-inline-flex-desktop inline-rule-picker"
               :type="RankedRulePickerTypes.checkbox"
               v-model="filters.x.rules" />
@@ -70,6 +70,7 @@
         <div class="is-hidden-mobile">
           <h2 class="is-inline-flex-tablet table-title">League Battle ({{ filteredLeagueRankingEntryKeysSet.size }})</h2>
           <ranked-rule-picker
+            v-if="playerRankingHistory.league.length > 0"
             class="is-inline-flex-tablet inline-rule-picker"
             :type="RankedRulePickerTypes.checkbox"
             v-model="filters.league.rules" />
@@ -82,27 +83,27 @@
             v-model="filters.league.rules" />
         </div>
 
-        <div class="controls">
-          <div class="align-center">
-            <label class="label" for="league-group-type-picker">{{$t('ui.group_type')}}</label>
-            <league-team-type-picker id="league-group-type-picker" class="league-group-type-picker" v-model="filters.league.teamType" />
-          </div>
-          <div>
-            <label class="label" for="min-league-power-filter">{{$t('ui.min_power')}}</label>
-            <input class="four-digits-num" id="min-league-power-filter"
-              type="number" min="0" step="100" v-model="filters.league.minPower">
-          </div>
-          <div>
-            <label class="label" for="min-league-rank-filter">{{$t('ui.min_rank')}}</label>
-            <input class="four-digits-num" id="min-league-rank-filter"
-              type="number" min="1" max="100" v-model="filters.league.minRank">
-          </div>
-        </div>
-
         <div v-if="playerRankingHistory.league.length === 0">
           No League Battle ranking record.
         </div>
         <div v-else>
+          <div class="controls">
+            <div class="align-center">
+              <label class="label" for="league-group-type-picker">{{$t('ui.group_type')}}</label>
+              <league-team-type-picker id="league-group-type-picker" class="league-group-type-picker" v-model="filters.league.teamType" />
+            </div>
+            <div>
+              <label class="label" for="min-league-power-filter">{{$t('ui.min_power')}}</label>
+              <input class="four-digits-num" id="min-league-power-filter"
+                type="number" min="0" step="100" v-model="filters.league.minPower">
+            </div>
+            <div>
+              <label class="label" for="min-league-rank-filter">{{$t('ui.min_rank')}}</label>
+              <input class="four-digits-num" id="min-league-rank-filter"
+                type="number" min="1" max="100" v-model="filters.league.minRank">
+            </div>
+          </div>
+
           <table class="table is-hoverable is-striped is-fullwidth">
             <tbody>
               <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league"
