@@ -69,8 +69,9 @@
       url(//fonts.gstatic.com/ea/notosansjapanese/v6/NotoSansJP-Black.otf) format('opentype');
 }
 
-// Update Bulma's global variables
+// Override Bulma's global variables
 $fullhd-enabled: false;
+$text: $body-color;
 $text-strong: $body-color;
 $family-sans-serif: 'Noto Sans Japanese', sans-serif;
 $link-hover: $link;
@@ -78,16 +79,16 @@ $link-hover: $link;
 /*
  * Update Bulma's component variables
  */
-@import "../../node_modules/bulma/sass/utilities/_all.sass";
-@import "../../node_modules/bulma/sass/base/_all.sass";
+@import "~bulma/sass/utilities/_all.sass";
+@import "~bulma/sass/base/_all.sass";
 .container {
   // Due to bulma's bug, we need overflow-x: hidden; on container. Remove if it's fixed.
   // https://github.com/jgthms/bulma/issues/1540
   overflow-x: hidden;
 }
 
-@import "../../node_modules/bulma/sass/grid/columns.sass";
-@import "../../node_modules/bulma/sass/elements/container.sass";
+@import "~bulma/sass/grid/columns.sass";
+@import "~bulma/sass/elements/container.sass";
 
 // Global navigation (components/navbar)
 $navbar-height: 2.5rem;
@@ -104,7 +105,7 @@ $navbar-dropdown-item-hover-color: $navbar-item-hover-color;
 $navbar-dropdown-item-hover-background-color: lighten($navbar-dropdown-background-color, 10%);
 $navbar-dropdown-item-active-color: $navbar-item-active-color;
 $navbar-dropdown-item-active-background-color: $navbar-dropdown-item-hover-background-color;
-@import "../../node_modules/bulma/sass/components/navbar.sass";
+@import "~bulma/sass/components/navbar.sass";
 .navbar-brand a {
   color: $white !important;
 }
@@ -123,11 +124,11 @@ $table-striped-row-even-hover-background-color: lighten($background, 10%);
 $table-head-cell-color: lighten($table-color, 10%);
 $table-cell-padding: .25em;
 $table-cell-border: 1px solid $border;
-@import "../../node_modules/bulma/sass/elements/table.sass";
+@import "~bulma/sass/elements/table.sass";
 
 // Title (<hN>)
 // We are not using Bulma's title element.
-// @import "../../node_modules/bulma/sass/elements/title.sass";
+// @import "~bulma/sass/elements/title.sass";
 $title-color: $white;
 $subtitle-color: $title-color;
 h1, h2, h3, h4, h5, h6 {
@@ -149,8 +150,8 @@ h2 {
 }
 
 /*
-@import "../../node_modules/bulma/sass/elements/button.sass";
-@import "../../node_modules/bulma/sass/form/_all.sass";
-@import "../../node_modules/bulma/sass/layout/hero.sass";
-@import "../../node_modules/bulma/sass/layout/section.sass";
+@import "~bulma/sass/elements/button.sass";
+@import "~bulma/sass/form/_all.sass";
+@import "~bulma/sass/layout/hero.sass";
+@import "~bulma/sass/layout/section.sass";
 */
