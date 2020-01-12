@@ -1,8 +1,22 @@
 <template>
   <div class="root-container">
     <h1 class="title">Records</h1>
-    <h2 class="table-title">X Ranked Weapon records</h2>
-    <div class="table-container">
+
+    <tab-switcher
+      v-model="activeTab"
+      :tabs="[
+        {
+          key: 'x-weapons',
+          label: 'X Ranked Weapon records',
+        },
+        {
+          key: 'x-powers',
+          label: 'X Power all time records',
+        },
+      ]"
+    />
+
+    <div v-show="activeTab === 'x-weapons'" class="table-container">
       <table class="table is-hoverable is-striped is-fullwidth">
         <thead>
           <tr>
@@ -30,6 +44,22 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <div v-show="activeTab === 'x-powers'" class="columns is-multiline">
+      <template v-for="(records, i) in xRecords">
+        <div class="column is-6">
+          <h3>{{$t(`ui.rule_shortnames.${findRuleKey(i + 1)}`)}}</h3>
+          <table class="table is-fullwidth">
+            <tr v-for="record in records">
+              <td><img class="weapon-icon" :src="record.icon"></td>
+              <td>{{record.rating}}</td>
+              <td><router-link :to="`/players/${record.player_id}`">{{record.player_name}}</router-link></td>
+              <td>{{formatTime(record.start_time)}}</td>
+            </tr>
+          </table>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -61,16 +91,21 @@
 import moment from 'moment';
 
 import apiClient from '../api-client';
-import { formatRankingEntry } from '../helper';
+import { findRuleKey, formatRankingEntry } from '../helper';
+import TabSwitcher from '../components/TabSwitcher.vue';
 
 export default {
   name: 'Records',
+  components: { TabSwitcher },
   data() {
     return {
+      activeTab: 'x-weapons',
+      xRecords: [],
       weapons: {},
     };
   },
   methods: {
+    findRuleKey,
     formatTime(time) {
       return moment.utc(time).local().format('YYYY-MM');
     },
@@ -78,9 +113,11 @@ export default {
       this.isLoading = true;
 
       apiClient
-        .get('/weapons/x/top-players')
+        .get('/records')
         .then((res) => {
-          this.weapons = res.data.map(weapon => formatRankingEntry(weapon, 'weapons'));
+          this.weapons = res.data.weapons_top_players.map(weapon => formatRankingEntry(weapon, 'weapons'));
+          this.xRecords = res.data.x_ranked_rating_records
+            .map(ruleRecords => ruleRecords.map(record => formatRankingEntry(record, 'mains')));
         })
         .finally(() => {
           this.isLoading = false;
