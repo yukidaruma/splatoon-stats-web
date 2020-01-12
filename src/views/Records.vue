@@ -7,11 +7,11 @@
       :tabs="[
         {
           key: 'x-weapons',
-          label: 'X Ranked Weapon records',
+          label: 'X Weapon records',
         },
         {
           key: 'x-powers',
-          label: 'X Power all time records',
+          label: 'X Power records',
         },
       ]"
     />
@@ -50,13 +50,21 @@
       <template v-for="(records, i) in xRecords">
         <div class="column is-6">
           <h3>{{$t(`ui.rule_shortnames.${findRuleKey(i + 1)}`)}}</h3>
-          <table class="table is-fullwidth">
-            <tr v-for="record in records">
-              <td><img class="weapon-icon" :src="record.icon"></td>
-              <td>{{record.rating}}</td>
-              <td><router-link :to="`/players/${record.player_id}`">{{record.player_name}}</router-link></td>
-              <td><router-link :to="`/rankings/x/${record.year}/${record.month}/${findRuleKey(i + 1)}`">{{formatTime(record.start_time)}}</router-link></td>
-            </tr>
+          <table class="table is-hoverable is-striped is-fullwidth">
+            <tbody>
+              <tr v-for="record in records">
+                <td>{{record.rating}}</td>
+                <td>
+                  <div class="weapon-name-container">
+                    <img class="weapon-icon" :src="record.icon">
+                    <router-link :to="`/players/${record.player_id}`">{{record.player_name}}</router-link>
+                  </div>
+                </td>
+                <td>
+                  <router-link :to="`/rankings/x/${record.year}/${record.month}/${findRuleKey(i + 1)}`">{{formatTime(record.start_time)}}</router-link>
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </template>
@@ -64,7 +72,7 @@
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .weapon-icon {
   max-width: inherit;
 }
@@ -74,15 +82,15 @@
   }
   .table-container {
     margin-left: 40px;
-  }
-  th:nth-child(1) {
-    padding: 0;
-  }
-  td:nth-child(1) {
-    border: 0;
-    position: absolute;
-    width: 40px;
-    left: 0;
+    th:nth-child(1) {
+      padding: 0;
+    }
+    td:nth-child(1) {
+      border: 0;
+      position: absolute;
+      width: 40px;
+      left: 0;
+    }
   }
 }
 </style>
