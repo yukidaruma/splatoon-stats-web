@@ -55,7 +55,7 @@
               <td><img class="weapon-icon" :src="record.icon"></td>
               <td>{{record.rating}}</td>
               <td><router-link :to="`/players/${record.player_id}`">{{record.player_name}}</router-link></td>
-              <td>{{formatTime(record.start_time)}}</td>
+              <td><router-link :to="`/rankings/x/${record.year}/${record.month}/${findRuleKey(i + 1)}`">{{formatTime(record.start_time)}}</router-link></td>
             </tr>
           </table>
         </div>
@@ -117,7 +117,15 @@ export default {
         .then((res) => {
           this.weapons = res.data.weapons_top_players.map(weapon => formatRankingEntry(weapon, 'weapons'));
           this.xRecords = res.data.x_ranked_rating_records
-            .map(ruleRecords => ruleRecords.map(record => formatRankingEntry(record, 'mains')));
+            .map(ruleRecords => ruleRecords
+              .map(record => formatRankingEntry(record, 'weapons', 'x'))
+              .map((record) => {
+                const startTime = moment.utc(record.start_time);
+                record.year = startTime.year();
+                record.month = startTime.month() + 1;
+                return record;
+              }),
+            );
         })
         .finally(() => {
           this.isLoading = false;
