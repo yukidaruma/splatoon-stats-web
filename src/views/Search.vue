@@ -4,13 +4,13 @@
 
     <div class="controls">
       <div>
-        <span class="label">Player name</span>
-        <input v-model="playerName" maxlength="10" placeholder="Yuki">
+        <label class="label" for="player-name">Player name</label>
+        <input id="player-name" v-model="playerName" maxlength="10" placeholder="Yuki">
         <button @click="searchPlayersByName(playerName)" :disabled="isLoading">Find</button>
       </div>
       <div>
-        <span class="label">Player ID</span>
-        <input v-model="playerId" maxlength="16" placeholder="1234567890abcdef">
+        <label class="label" for="player-id">Player ID</label>
+        <input id="player-id" v-model="playerId" maxlength="16" placeholder="1234567890abcdef">
         <button @click="searchPlayerById(playerId)" :disabled="isLoading">Go</button>
       </div>
     </div>
