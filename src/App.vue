@@ -86,7 +86,7 @@ input:focus, select:focus {
 button {
   font-weight: bold;
   border: 1px solid #7f8c8d;
-  background-color: #16a085;
+  background-color: #27ae60;
 }
 button.red {
   background-color: #e74c3c;
