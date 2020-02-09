@@ -253,7 +253,7 @@ export default {
               return false;
             }
 
-            if ((this.filters.league.weapons && this.$store.state.weapons.length > 0) && !weapons.has(rankingEntry.weapon_id)) {
+            if (this.filters.league.weapons && !weapons.has(rankingEntry.weapon_id)) {
               return false;
             }
 

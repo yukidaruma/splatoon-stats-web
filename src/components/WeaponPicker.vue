@@ -7,7 +7,7 @@
       <div class="modal-background" @click="closeModal"></div>
       <div class="modal-content">
         <div class="modal-controls">
-          <button v-if="showSelectAll" @click="selectAll">Select All</button>
+          <button v-if="!isAllSelected" @click="selectAll">Select All</button>
           <button v-else @click="unselectAll">Unselect All</button>
           <button class="red" @click="closeModal">Close</button>
         </div>
@@ -52,14 +52,14 @@ export default {
         return state.weapons;
       },
     }),
+    isAllSelected() {
+      return this.selectedWeapons.length === this.weapons.length;
+    },
     weapons() {
       if (this.options) {
         return this.allWeapons.filter(w => this.options.includes(w.weapon_id));
       }
       return this.allWeapons;
-    },
-    showSelectAll() {
-      return this.selectedWeapons.length < this.weapons.length;
     },
   },
   props: ['options', 'value'],
@@ -96,6 +96,11 @@ export default {
   },
   watch: {
     selectedWeapons() {
+      if (this.isAllSelected) {
+        // Emits null instead of full array for faster filtering.
+        this.$emit('input', null);
+        return;
+      }
       this.$emit('input', this.selectedWeapons);
     },
     options() {
