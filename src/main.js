@@ -12,11 +12,13 @@ Chart.defaults.global.defaultFontColor = '#bdc3c7';
 const browserLang = navigator.language.slice(0, 2);
 loadLanguageAsync(browserLang, true);
 
-store.dispatch('getWeapons');
+(async () => {
+  await store.dispatch('getWeapons');
 
-new Vue({
-  i18n,
-  router,
-  store,
-  render: h => h(App),
-}).$mount('#app');
+  new Vue({
+    i18n,
+    router,
+    store,
+    render: h => h(App),
+  }).$mount('#app');
+})();

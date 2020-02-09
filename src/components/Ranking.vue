@@ -7,7 +7,7 @@
       <p v-if="ranking.length === 0">No data found.</p>
       <table class="table is-fullwidth is-striped is-hoverable" v-else>
         <tbody>
-          <tr v-for="rankingEntry in ranking" :key="rankingEntry.rank">
+          <tr v-for="rankingEntry in filteredRanking" :key="rankingEntry.rank">
             <td>#{{ rankingEntry.rank }}</td>
             <td>{{ rankingEntry.rating }}</td>
             <td>
@@ -50,7 +50,14 @@ import { weaponIcon } from '../helper';
 
 export default {
   name: 'Ranking',
-  props: ['rankingType', 'ranking', 'isLoading'],
+  props: ['isLoading', 'ranking', 'rankingType', 'weaponFilter'],
   methods: { weaponIcon },
+  computed: {
+    filteredRanking() {
+      if (!Array.isArray(this.weaponFilter)) return this.ranking;
+
+      return this.ranking.filter(record => this.weaponFilter.includes(record.weapon_id));
+    },
+  },
 };
 </script>

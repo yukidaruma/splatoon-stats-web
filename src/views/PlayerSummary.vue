@@ -104,7 +104,7 @@
             </div>
             <div>
               <label class="label" for="min-league-rank-filter">Weapons</label>
-              <weapon-picker v-model="filters.league.weapons" :options="leagueWeapons" />
+              <weapon-picker v-model="filters.league.weapons" :options="weaponsUsedInLeague" />
             </div>
           </div>
 
@@ -139,7 +139,12 @@ import flatten from 'array.prototype.flat';
 import moment from 'moment';
 
 import apiClient from '../api-client';
-import { formatRankingEntry, isValidPlayerId, safeParseInt } from '../helper';
+import {
+  formatRankingEntry,
+  isValidPlayerId,
+  safeParseInt,
+  unique,
+} from '../helper';
 
 import LeagueTeamTypePicker, { LeagueTeamTypes } from '../components/LeagueTeamTypePicker.vue';
 import PlayerRankingEntry from '../components/PlayerRankingEntry.vue';
@@ -283,9 +288,9 @@ export default {
     latestName() {
       return this.knownNames[0] && this.knownNames[0].player_name;
     },
-    leagueWeapons() {
+    weaponsUsedInLeague() {
       return Array.from(
-        new Set(this.playerRankingHistory.league.map(record => record.weapon_id)),
+        unique(this.playerRankingHistory.league.map(record => record.weapon_id)),
       );
     },
     xRankingRecordsCount() {

@@ -87,6 +87,9 @@ export default {
       }
       this.selectedWeapons.push(weaponId);
     },
+    initialize() {
+      this.selectAll();
+    },
     unselectAll() {
       this.selectedWeapons = [];
     },
@@ -95,11 +98,12 @@ export default {
     selectedWeapons() {
       this.$emit('input', this.selectedWeapons);
     },
+    options() {
+      this.initialize();
+    },
   },
-  async mounted() {
-    await this.$store.dispatch('getWeapons');
-
-    this.selectAll();
+  mounted() {
+    this.initialize();
   },
 };
 </script>

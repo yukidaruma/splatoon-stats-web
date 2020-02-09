@@ -83,6 +83,8 @@ const safeParseInt = (numString) => {
 
 const titleizeSplatfest = splatfest => `[${splatfest.region.toUpperCase()}] ${splatfest.team_names.join(' VS ')}`;
 
+const unique = iterable => Array.from(new Set(iterable));
+
 export {
   weaponIcon,
   capitalizeFirstLetters,
@@ -94,4 +96,5 @@ export {
   calculateEndTime,
   safeParseInt,
   titleizeSplatfest,
+  unique,
 };
