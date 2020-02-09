@@ -24,7 +24,7 @@
           <h3 class="table-title" :style="{ 'background-color': lastFetchedSplatfest.colors[i] }">
             {{ lastFetchedSplatfest.team_names[i] }}
           </h3>
-          <ranking rankingType="splatfest" :ranking="rankings[i]" :isLoading="isLoading" />
+          <ranking rankingType="splatfest" :ranking="rankings[i]" :isLoading="isLoading" :show-records-count="false" />
         </div>
       </div>
     </div>

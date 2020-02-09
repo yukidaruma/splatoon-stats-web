@@ -18,7 +18,7 @@
     <h2 class="title table-title" v-if="title">
       League ranking for {{ title.time }}
     </h2>
-    <ranking rankingType="league" :ranking="ranking" :isLoading="isLoading" />
+    <ranking rankingType="league" :ranking="ranking" :isLoading="isLoading" :show-records-count="false" />
   </div>
 </template>
 

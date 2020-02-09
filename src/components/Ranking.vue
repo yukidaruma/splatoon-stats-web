@@ -6,8 +6,10 @@
     <div v-else>
       <p v-if="ranking.length === 0">No data found.</p>
       <div v-else>
-        <p v-if="weaponFilter">{{ filteredRanking.length }} records ({{ranking.length}} before filter)</p>
-        <p v-else>{{ ranking.length }} records</p>
+        <template v-if="showRecordsCount">
+          <p v-if="weaponFilter">{{ filteredRanking.length }} records ({{ranking.length}} before filter)</p>
+          <p v-else>{{ ranking.length }} records</p>
+        </template>
         <table class="table is-fullwidth is-striped is-hoverable">
           <tbody>
             <tr v-for="rankingEntry in filteredRanking" :key="rankingEntry.rank">
@@ -54,7 +56,16 @@ import { weaponIcon } from '../helper';
 
 export default {
   name: 'Ranking',
-  props: ['isLoading', 'ranking', 'rankingType', 'weaponFilter'],
+  props: {
+    isLoading: Boolean,
+    ranking: Array,
+    rankingType: String,
+    showRecordsCount: {
+      type: Boolean,
+      default: true,
+    },
+    weaponFilter: Array,
+  },
   methods: { weaponIcon },
   computed: {
     filteredRanking() {
