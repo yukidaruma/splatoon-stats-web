@@ -102,6 +102,10 @@
               <input class="four-digits-num" id="min-league-rank-filter"
                 type="number" min="1" max="100" v-model="filters.league.minRank">
             </div>
+            <div>
+              <label class="label" for="min-league-rank-filter">Weapons</label>
+              <weapon-picker v-model="filters.league.weapons" />
+            </div>
           </div>
 
           <table class="table is-hoverable is-striped is-fullwidth">
@@ -137,9 +141,10 @@ import moment from 'moment';
 import apiClient from '../api-client';
 import { formatRankingEntry, isValidPlayerId, safeParseInt } from '../helper';
 
-import PlayerRankingEntry from '../components/PlayerRankingEntry.vue';
 import LeagueTeamTypePicker, { LeagueTeamTypes } from '../components/LeagueTeamTypePicker.vue';
+import PlayerRankingEntry from '../components/PlayerRankingEntry.vue';
 import RankedRulePicker, { DefaultSelectedRules, RankedRulePickerTypes } from '../components/RankedRulePicker.vue';
+import WeaponPicker from '../components/WeaponPicker.vue';
 import XRankedChart from '../components/PlayerSummaryXRankedChart';
 
 const getInitialFilterState = () => ({
@@ -148,6 +153,7 @@ const getInitialFilterState = () => ({
     minRank: null,
     rules: DefaultSelectedRules.all,
     teamType: LeagueTeamTypes.all,
+    weapons: null,
   },
   x: {
     rules: DefaultSelectedRules.all,
@@ -161,6 +167,7 @@ export default {
     LeagueTeamTypePicker,
     PlayerRankingEntry,
     RankedRulePicker,
+    WeaponPicker,
     XRankedChart,
   },
   data() {
@@ -218,6 +225,7 @@ export default {
     filteredLeagueRankingEntryKeysSet() {
       const minPower = safeParseInt(this.filters.league.minPower);
       const minRank = safeParseInt(this.filters.league.minRank);
+      const weapons = new Set(this.filters.league.weapons);
 
       return new Set(
         this.playerRankingHistory.league
@@ -237,6 +245,10 @@ export default {
             }
 
             if (minRank && rankingEntry.rank > minRank) {
+              return false;
+            }
+
+            if ((this.filters.league.weapons && this.$store.state.weapons.length > 0) && !weapons.has(rankingEntry.weapon_id)) {
               return false;
             }
 

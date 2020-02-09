@@ -88,6 +88,9 @@ button {
   border: 1px solid #7f8c8d;
   background-color: #16a085;
 }
+button.red {
+  background-color: #e74c3c;
+}
 button:disabled {
   background-color: #7f8c8d;
 }
