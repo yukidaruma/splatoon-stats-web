@@ -13,24 +13,30 @@
 
         <button @click="fetchLeagueRanking" :disabled="isLoading">Go</button>
       </div>
+      <div>
+        <span class="label">Weapons</span>
+        <weapon-picker v-model="filters.weapons" :options="weaponsUsed" />
+      </div>
     </div>
 
     <h2 class="title table-title" v-if="title">
       League ranking for {{ title.time }}
     </h2>
-    <ranking rankingType="league" :ranking="ranking" :isLoading="isLoading" :show-records-count="false" />
+    <ranking rankingType="league" :ranking="ranking" :isLoading="isLoading" :show-records-count="!!filters.weapons" :weapon-filter="filters.weapons" />
   </div>
 </template>
 
 <script>
+import flatten from 'array.prototype.flat';
 import moment from 'moment';
 
 import apiClient from '../api-client';
-import { formatRankingEntry } from '../helper';
+import { formatRankingEntry, unique } from '../helper';
 
 import DatePicker from '../components/DatePicker.vue';
 import LeagueTeamTypePicker, { LeagueTeamTypes } from '../components/LeagueTeamTypePicker.vue';
 import Ranking from '../components/Ranking.vue';
+import WeaponPicker from '../components/WeaponPicker.vue';
 
 const teamTypeSymbols = {
   [LeagueTeamTypes.team]: 'T',
@@ -39,11 +45,16 @@ const teamTypeSymbols = {
 
 export default {
   name: 'LeagueRankings',
-  components: { DatePicker, LeagueTeamTypePicker, Ranking },
+  components: { DatePicker, LeagueTeamTypePicker, Ranking, WeaponPicker },
   props: ['initialLeagueId'],
   computed: {
     groupType() {
       return teamTypeSymbols[this.groupTypeId];
+    },
+    weaponsUsed() {
+      return unique(flatten(
+        this.ranking.map(team => team.group_members.map(member => parseInt(member[1], 10))),
+      ));
     },
   },
   data() {
@@ -53,6 +64,9 @@ export default {
       time: undefined,
       groupTypeId: LeagueTeamTypes.team,
       title: null,
+      filters: {
+        weapons: null,
+      },
     };
   },
   methods: {

@@ -71,6 +71,11 @@ export default {
     filteredRanking() {
       if (!Array.isArray(this.weaponFilter)) return this.ranking;
 
+      if (this.rankingType === 'league') {
+        return this.ranking.filter(team => team.group_members
+          .some(member => this.weaponFilter.includes(parseInt(member[1], 10))));
+      }
+
       return this.ranking.filter(record => this.weaponFilter.includes(record.weapon_id));
     },
   },
