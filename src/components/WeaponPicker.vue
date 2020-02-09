@@ -1,7 +1,12 @@
 <template>
-  <div v-if="weapons.length">
-    <button @click="openModal">Open</button>
-    ({{selectedWeapons.length}}/{{weapons.length}})
+  <div>
+    <template v-if="weapons.length === 0">
+      <button @click="openModal" disabled>Open</button>
+    </template>
+    <template v-else>
+      <button @click="openModal">Open</button>
+      ({{selectedWeapons.length}}/{{weapons.length}})
+    </template>
 
     <div :class="['modal', isOpen ? 'is-active' : '']">
       <div class="modal-background" @click="closeModal"></div>
