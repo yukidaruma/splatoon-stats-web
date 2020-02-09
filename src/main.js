@@ -13,7 +13,7 @@ const browserLang = navigator.language.slice(0, 2);
 loadLanguageAsync(browserLang, true);
 
 (async () => {
-  await store.dispatch('getWeapons');
+  await store.dispatch('getWeapons').catch(e => console.error(e));
 
   new Vue({
     i18n,
