@@ -12,6 +12,10 @@
         <ranked-rule-picker v-model="rankedRule" :value="rankedRule" :no-all-rules="true" />
         <button @click="fetchXRanking" :disabled="isLoading">Go</button>
       </div>
+      <div>
+        <span class="label">Weapons</span>
+        <weapon-picker v-model="filters.weapons" :options="weaponsUsed" />
+      </div>
     </div>
 
     <div v-if="title">
@@ -24,7 +28,7 @@
         </router-link>
       </p>
     </div>
-    <ranking rankingType="x" :ranking="ranking" :isLoading="isLoading" />
+    <ranking rankingType="x" :ranking="ranking" :isLoading="isLoading" :weapon-filter="filters.weapons" />
   </div>
 </template>
 
@@ -35,11 +39,17 @@ import apiClient from '../api-client';
 import DatePicker from '../components/DatePicker.vue';
 import RankedRulePicker from '../components/RankedRulePicker.vue';
 import Ranking from '../components/Ranking.vue';
-import { capitalizeFirstLetters, findRuleKey, formatRankingEntry } from '../helper';
+import WeaponPicker from '../components/WeaponPicker.vue';
+import {
+  capitalizeFirstLetters,
+  findRuleKey,
+  formatRankingEntry,
+  unique,
+} from '../helper';
 
 export default {
   name: 'XRankings',
-  components: { DatePicker, RankedRulePicker, Ranking },
+  components: { DatePicker, RankedRulePicker, Ranking, WeaponPicker },
   props: ['initialYear', 'initialMonth', 'initialRankedRule'],
   data() {
     return {
@@ -48,6 +58,9 @@ export default {
       time: null,
       rankedRule: undefined,
       title: null,
+      filters: {
+        weapons: null,
+      },
     };
   },
   computed: {
@@ -61,6 +74,9 @@ export default {
       if (this.title) {
         return `/weapons/weapons/x/${this.title.year}/${this.title.month}/${this.title.rankedRule}`;
       }
+    },
+    weaponsUsed() {
+      return unique(this.ranking.map(record => record.weapon_id));
     },
   },
   methods: {
