@@ -47,12 +47,22 @@ import { weaponIcon } from '../helper';
 
 export default {
   computed: {
-    ...mapState(['weapons']),
+    ...mapState({
+      allWeapons(state) {
+        return state.weapons;
+      },
+    }),
+    weapons() {
+      if (this.options) {
+        return this.allWeapons.filter(w => this.options.includes(w.weapon_id));
+      }
+      return this.allWeapons;
+    },
     showSelectAll() {
       return this.selectedWeapons.length < this.weapons.length;
     },
   },
-  props: ['value'],
+  props: ['options', 'value'],
   data() {
     return {
       isOpen: false,

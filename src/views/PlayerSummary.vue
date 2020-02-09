@@ -104,7 +104,7 @@
             </div>
             <div>
               <label class="label" for="min-league-rank-filter">Weapons</label>
-              <weapon-picker v-model="filters.league.weapons" />
+              <weapon-picker v-model="filters.league.weapons" :options="leagueWeapons" />
             </div>
           </div>
 
@@ -282,6 +282,11 @@ export default {
     },
     latestName() {
       return this.knownNames[0] && this.knownNames[0].player_name;
+    },
+    leagueWeapons() {
+      return Array.from(
+        new Set(this.playerRankingHistory.league.map(record => record.weapon_id)),
+      );
     },
     xRankingRecordsCount() {
       return flatten(this.groupedXRankingHistory.map(g => g.rankingEntries), 2).length;
