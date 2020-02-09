@@ -3,9 +3,15 @@
     <h1 class="title">Splatfest Rankings</h1>
 
     <div class="controls">
-      <span class="label">Splatfest</span>
-      <splatfest-picker @splatfest-change="onSplatfestChange" />
-      <button @click="selectedSplatfest && fetchSplatfestRanking(selectedSplatfest.region, selectedSplatfest.splatfest_id)">Go</button>
+      <div>
+        <span class="label">Splatfest</span>
+        <splatfest-picker @splatfest-change="onSplatfestChange" />
+        <button @click="selectedSplatfest && fetchSplatfestRanking(selectedSplatfest.region, selectedSplatfest.splatfest_id)">Go</button>
+      </div>
+      <div>
+        <span class="label">Weapons</span>
+        <weapon-picker v-model="filters.weapons" :options="weaponsUsed" />
+      </div>
     </div>
 
     <div v-if="hasFetchedOnce">
@@ -24,7 +30,7 @@
           <h3 class="table-title" :style="{ 'background-color': lastFetchedSplatfest.colors[i] }">
             {{ lastFetchedSplatfest.team_names[i] }}
           </h3>
-          <ranking rankingType="splatfest" :ranking="rankings[i]" :isLoading="isLoading" :show-records-count="false" />
+          <ranking rankingType="splatfest" :ranking="rankings[i]" :isLoading="isLoading" :show-records-count="!!filters.weapons" :weapon-filter="filters.weapons" />
         </div>
       </div>
     </div>
@@ -41,14 +47,17 @@
 </style>
 
 <script>
+import flatten from 'array.prototype.flat';
+
 import apiClient from '../api-client';
-import { formatRankingEntry, titleizeSplatfest } from '../helper';
+import { formatRankingEntry, titleizeSplatfest, unique } from '../helper';
 import Ranking from '../components/Ranking.vue';
 import SplatfestPicker from '../components/SplatfestPicker.vue';
+import WeaponPicker from '../components/WeaponPicker.vue';
 
 export default {
   name: 'SplatfestRankings',
-  components: { Ranking, SplatfestPicker },
+  components: { Ranking, SplatfestPicker, WeaponPicker },
   data() {
     return {
       selectedSplatfest: null,
@@ -56,6 +65,9 @@ export default {
       lastFetchedSplatfest: null,
       currentRankingKey: '',
       isLoading: false,
+      filters: {
+        weapons: null,
+      },
     };
   },
   computed: {
@@ -64,6 +76,12 @@ export default {
       if (this.lastFetchedSplatfest) {
         return `/weapons/weapons/splatfest/${this.lastFetchedSplatfest.region}/${this.lastFetchedSplatfest.splatfest_id}`;
       }
+    },
+    weaponsUsed() {
+      return unique(flatten(
+        // #30 Use flatMap()
+        this.rankings.map(records => records.map(record => record.weapon_id)),
+      ));
     },
   },
   methods: {
@@ -84,6 +102,7 @@ export default {
           this.currentRankingKey = `${region}-${splatfestId}`;
 
           const rankings = res.data;
+          this.rankings = new Array(2);
           [0, 1].forEach((teamId) => {
             this.rankings[teamId] = rankings
               .filter(rankingEntry => rankingEntry.team_id === teamId)
