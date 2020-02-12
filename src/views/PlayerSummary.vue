@@ -4,12 +4,19 @@
       Loading...
     </div>
     <div v-else-if="hasLoaded">
-      <div class="title-container">
+      <div class="title-container is-hidden-mobile">
         <h1 class="title">
           <span class="player-name" v-if="latestName">{{ latestName }}</span>
           <span v-else>ID: <span class="player-id">{{ fetchedPlayerId }}</span></span>
         </h1>
-        <favorite-player-button :id="fetchedPlayerId" :name="latestName" />
+        <favorite-player-button class="favorite-player-button" :id="fetchedPlayerId" :name="latestName" />
+      </div>
+      <div class="is-hidden-tablet">
+        <h1 class="title">
+          <span class="player-name" v-if="latestName">{{ latestName }}</span>
+          <span v-else>ID: <span class="player-id">{{ fetchedPlayerId }}</span></span>
+        </h1>
+        <favorite-player-button class="favorite-player-button" :id="fetchedPlayerId" :name="latestName" />
       </div>
 
       <div v-if="chartData.length > 0">
@@ -372,9 +379,17 @@ export default {
 <style lang="scss" scoped>
 @import '../assets/global-variables.scss';
 
-.title-container {
-  display: flex;
-  align-items: center;
+.is-hidden-tablet .favorite-player-button {
+  margin-bottom: 1em;
+}
+.is-hidden-mobile {
+  &.title-container {
+    display: flex;
+    align-items: center;
+  }
+  .favorite-player-button {
+    margin-left: 1em;
+  }
 }
 
 .chart-container {

@@ -11,7 +11,7 @@
 @import '@/assets/global-variables.scss';
 
 .button {
-  margin-left: 1em;
+  display: inline-block;
   padding: .25em 1em;
   border-radius: 8px;
   border: 1px solid $body-color;
