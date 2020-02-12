@@ -192,4 +192,8 @@ td.bar-chart-container {
 .weapon-popularity-link {
   margin-bottom: 1em;
 }
+
+.section:not(:first-child) {
+  margin-top: 1.5em;
+}
 </style>
