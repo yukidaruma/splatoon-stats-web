@@ -14,7 +14,7 @@
       </div>
       <div>
         <span class="label">Weapons</span>
-        <weapon-picker v-model="filters.weapons" :options="weaponsUsed" />
+        <weapon-picker v-model="filters.weapons" :options="weaponsUsed" :counts="weaponCounts" />
       </div>
     </div>
 
@@ -75,8 +75,16 @@ export default {
         return `/weapons/weapons/x/${this.title.year}/${this.title.month}/${this.title.rankedRule}`;
       }
     },
+    weaponCounts() {
+      const counts = {};
+      this.weaponIds.forEach((weaponId) => { counts[weaponId] = counts[weaponId] ? counts[weaponId] + 1 : 1; });
+      return counts;
+    },
+    weaponIds() {
+      return this.ranking.map(record => record.weapon_id);
+    },
     weaponsUsed() {
-      return unique(this.ranking.map(record => record.weapon_id));
+      return unique(this.weaponIds);
     },
   },
   methods: {
