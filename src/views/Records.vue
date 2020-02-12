@@ -38,7 +38,7 @@
             <td v-for="(player, ruleId) in weapon.top_players" :key="`${weapon.weapon_id}-${ruleId}`">
               <div class="player" v-if="player">
                 <p>{{ player.rating }}</p>
-                <p><router-link :to="`/players/${player.player_id}`">{{ player.name }}</router-link></p>
+                <p><player-link :player="new Player(player.player_id, player.name)" /></p>
               </div>
             </td>
           </tr>
@@ -57,7 +57,7 @@
                 <td>
                   <div class="weapon-name-container">
                     <img class="weapon-icon" :src="record.icon">
-                    <router-link :to="`/players/${record.player_id}`">{{record.player_name}}</router-link>
+                    <player-link :player="new Player(record.player_id, record.player_name)" />
                   </div>
                 </td>
                 <td>
@@ -100,11 +100,14 @@ import moment from 'moment';
 
 import apiClient from '../api-client';
 import { findRuleKey, formatRankingEntry } from '../helper';
+import Player from '../player';
+
+import PlayerLink from '../components/PlayerLink.vue';
 import TabSwitcher from '../components/TabSwitcher.vue';
 
 export default {
   name: 'Records',
-  components: { TabSwitcher },
+  components: { PlayerLink, TabSwitcher },
   data() {
     return {
       activeTab: 'x-weapons',
@@ -114,6 +117,7 @@ export default {
   },
   methods: {
     findRuleKey,
+    Player,
     formatTime(time) {
       return moment.utc(time).local().format('YYYY-MM');
     },

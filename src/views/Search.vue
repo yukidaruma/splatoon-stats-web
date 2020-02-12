@@ -29,7 +29,7 @@
           -->
           <div class="columns is-mobile is-multiline" v-if="searchResults.length !== 0">
             <div class="column is-half-mobile is-one-quarter-tablet" v-for="player in searchResults" :key="`${player.player_id}-${player.player_name}`">
-              <router-link class="player-name" :to="`/players/${player.player_id}`">{{ player.player_name }}</router-link>
+              <player-link :player="new Player(player.player_id, player.player_name)" />
               <time>({{ player.last_used }})</time>
             </div>
           </div>
@@ -42,9 +42,7 @@
       <h1>Favorite Players</h1>
       <ul>
         <li v-for="player in favoritePlayers" :key="player.id">
-          <router-link :to="`/players/${player.id}`">
-            {{ player.name ? player.name : player.id }}
-          </router-link>
+          <player-link :player="player" :no-highlight="true" />
         </li>
       </ul>
     </div>
@@ -56,8 +54,12 @@ import { mapState } from 'vuex';
 
 import apiClient from '../api-client';
 import { isValidPlayerId, isEmptyString } from '../helper';
+import Player from '../player';
+
+import PlayerLink from '../components/PlayerLink.vue';
 
 export default {
+  components: { PlayerLink },
   name: 'Search',
   data() {
     return {
@@ -76,6 +78,7 @@ export default {
     this.searchPlayersByName(this.playerName);
   },
   methods: {
+    Player,
     searchPlayerById(playerId) {
       if (isValidPlayerId(playerId)) {
         this.$router.push(`/players/${playerId}`);
