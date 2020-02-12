@@ -279,7 +279,14 @@ export default {
     },
     weaponsUsedInLeague() {
       return Array.from(
-        unique(this.playerRankingHistory.league.map(record => record.weapon_id)),
+        unique(
+          this.playerRankingHistory.league
+            .filter(rankingEntry => this.getFilteredLeagueRankingEntryKeysSet(
+              this.playerRankingHistory.league,
+              this.leagueFiltersWithoutWeapons,
+            ).has(rankingEntry.key))
+            .map(record => record.weapon_id),
+        ),
       );
     },
     xRankingRecordsCount() {
