@@ -4,11 +4,13 @@
       Loading...
     </div>
     <div v-else-if="hasLoaded">
-      <h1 class="title">
+      <div class="title-container">
+        <h1 class="title">
+          <span class="player-name" v-if="latestName">{{ latestName }}</span>
+          <span v-else>ID: <span class="player-id">{{ fetchedPlayerId }}</span></span>
+        </h1>
         <favorite-player-button :id="fetchedPlayerId" :name="latestName" />
-        <span class="player-name" v-if="latestName">{{ latestName }}</span>
-        <span v-else>ID: <span class="player-id">{{ fetchedPlayerId }}</span></span>
-      </h1>
+      </div>
 
       <div v-if="chartData.length > 0">
         <h2 class="table-title">X Power</h2>
@@ -369,6 +371,11 @@ export default {
 
 <style lang="scss" scoped>
 @import '../assets/global-variables.scss';
+
+.title-container {
+  display: flex;
+  align-items: center;
+}
 
 .chart-container {
   height: 320px;

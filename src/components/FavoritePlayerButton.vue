@@ -1,19 +1,23 @@
 <template>
-  <span v-if="isFavorited" class="favorited" @click="toggleFavorite">
-    ★
+  <span class="button" v-if="isFavorited" @click="toggleFavorite">
+    <span :class="starClasses">★</span> Remove from Favorite Players
   </span>
-  <span v-else @click="toggleFavorite">
-    ☆
+  <span class="button" v-else @click="toggleFavorite">
+    <span :class="starClasses">☆</span> Add to Favorite Players
   </span>
 </template>
 
 <style lang="scss" scoped>
-span {
-  &.favorited {
-    color: #f1c40f;
-  }
-  &:not(.favorited) {
-  }
+@import '@/assets/global-variables.scss';
+
+.button {
+  margin-left: 1em;
+  padding: .25em 1em;
+  border-radius: 8px;
+  border: 1px solid $body-color;
+}
+.star.favorited {
+  color: #f1c40f;
 }
 </style>
 
@@ -34,6 +38,9 @@ export default {
     ...mapState(['favoritePlayers']),
     isFavorited() {
       return this.favoritePlayers.some(p => p.id === this.id);
+    },
+    starClasses() {
+      return { star: true, favorited: this.isFavorited };
     },
   },
   methods: {
