@@ -104,7 +104,7 @@
             </div>
             <div>
               <label class="label" for="min-league-rank-filter">Weapons</label>
-              <weapon-picker v-model="filters.league.weapons" :options="weaponsUsedInLeague" />
+              <weapon-picker v-model="filters.league.weapons" :options="weaponsUsedInLeague" :counts="leagueWeaponCounts" />
             </div>
           </div>
 
@@ -228,39 +228,15 @@ export default {
   },
   computed: {
     filteredLeagueRankingEntryKeysSet() {
-      const minPower = safeParseInt(this.filters.league.minPower);
-      const minRank = safeParseInt(this.filters.league.minRank);
-      const weapons = new Set(this.filters.league.weapons);
-
-      return new Set(
-        this.playerRankingHistory.league
-          .filter((rankingEntry) => {
-            if (this.filters.league.teamType === LeagueTeamTypes.team) {
-              if (rankingEntry.group_type !== 'T') {
-                return false;
-              }
-            } else if (this.filters.league.teamType === LeagueTeamTypes.pair) {
-              if (rankingEntry.group_type !== 'P') {
-                return false;
-              }
-            }
-
-            if (rankingEntry.rating < minPower) {
-              return false;
-            }
-
-            if (minRank && rankingEntry.rank > minRank) {
-              return false;
-            }
-
-            if (this.filters.league.weapons && !weapons.has(rankingEntry.weapon_id)) {
-              return false;
-            }
-
-            return this.filters.league.rules.includes(rankingEntry.rule_id);
-          })
-          .map(rankingEntry => rankingEntry.key),
-      );
+      return this.getFilteredLeagueRankingEntryKeysSet(this.playerRankingHistory.league, this.filters.league);
+    },
+    leagueFiltersWithoutWeapons() {
+      return {
+        minPower: this.filters.league.minPower,
+        minRank: this.filters.league.minRank,
+        rules: this.filters.league.rules,
+        teamType: this.filters.league.teamType,
+      };
     },
     groupedXRankingHistory() {
       const groupedXRankingHistory = [];
@@ -288,6 +264,19 @@ export default {
     latestName() {
       return this.knownNames[0] && this.knownNames[0].player_name;
     },
+    leagueWeaponCounts() {
+      const weaponIds = this.playerRankingHistory.league
+        .filter(rankingEntry => this.getFilteredLeagueRankingEntryKeysSet(
+          this.playerRankingHistory.league,
+          this.leagueFiltersWithoutWeapons,
+          true,
+        ).has(rankingEntry.key))
+        .map(rankingEntry => rankingEntry.weapon_id);
+
+      const counts = {};
+      weaponIds.forEach((weaponId) => { counts[weaponId] = counts[weaponId] ? counts[weaponId] + 1 : 1; });
+      return counts;
+    },
     weaponsUsedInLeague() {
       return Array.from(
         unique(this.playerRankingHistory.league.map(record => record.weapon_id)),
@@ -299,6 +288,41 @@ export default {
   },
   methods: {
     flatten,
+    getFilteredLeagueRankingEntryKeysSet(records, filters, isForWeaponCount = false) {
+      const minPower = safeParseInt(filters.minPower);
+      const minRank = safeParseInt(filters.minRank);
+      const weapons = new Set(filters.weapons);
+
+      return new Set(
+        records
+          .filter((rankingEntry) => {
+            if (filters.teamType === LeagueTeamTypes.team) {
+              if (rankingEntry.group_type !== 'T') {
+                return false;
+              }
+            } else if (filters.teamType === LeagueTeamTypes.pair) {
+              if (rankingEntry.group_type !== 'P') {
+                return false;
+              }
+            }
+
+            if (rankingEntry.rating < minPower) {
+              return false;
+            }
+
+            if (minRank && rankingEntry.rank > minRank) {
+              return false;
+            }
+
+            if (!isForWeaponCount && filters.weapons && !weapons.has(rankingEntry.weapon_id)) {
+              return false;
+            }
+
+            return filters.rules.includes(rankingEntry.rule_id);
+          })
+          .map(rankingEntry => rankingEntry.key),
+      );
+    },
     getPlayerRankingHistory(playerId) {
       if (!isValidPlayerId(playerId)
         || playerId === this.fetchedPlayerId) { // Skip if the ID was already fetched
