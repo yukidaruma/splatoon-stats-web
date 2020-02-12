@@ -19,27 +19,13 @@
                 <div v-if="rankingType === 'x' || rankingType === 'splatfest'">
                   <div class="weapon-name-container">
                     <img class="weapon-icon" :src="rankingEntry.icon">
-                    <router-link :to="`/players/${rankingEntry.player_id}`">
-                      <span class="player-name" v-if="'player_name' in rankingEntry">
-                        {{ rankingEntry.player_name }}
-                      </span>
-                      <span class="player-id" v-else>
-                        {{ rankingEntry.player_id }}
-                      </span>
-                    </router-link>
+                    <player-link :player="new Player(rankingEntry.player_id, rankingEntry.player_name)" />
                   </div>
                 </div>
                 <div class="league-members" v-if="rankingType === 'league'">
                   <div class="league-member weapon-name-container" v-for="member in rankingEntry.group_members" :key="member.player_id">
                     <img class="weapon-icon" :src="weaponIcon('weapons', member[1])">
-                    <router-link :to="`/players/${member[0]}`">
-                      <span class="player-name" v-if="member[2]">
-                        {{ member[2] }}
-                      </span>
-                      <span class="player-id" v-else>
-                        {{ member[0] }}
-                      </span>
-                    </router-link>
+                    <player-link :player="new Player(member[0], member[2])" />
                   </div>
                 </div>
               </td>
@@ -53,9 +39,13 @@
 
 <script>
 import { weaponIcon } from '../helper';
+import Player from '../player';
+
+import PlayerLink from '../components/PlayerLink.vue';
 
 export default {
   name: 'Ranking',
+  components: { PlayerLink },
   props: {
     isLoading: Boolean,
     ranking: Array,
@@ -66,7 +56,7 @@ export default {
     },
     weaponFilter: Array,
   },
-  methods: { weaponIcon },
+  methods: { Player, weaponIcon },
   computed: {
     filteredRanking() {
       if (!Array.isArray(this.weaponFilter)) return this.ranking;

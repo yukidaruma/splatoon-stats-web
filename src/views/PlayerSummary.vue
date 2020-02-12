@@ -5,6 +5,7 @@
     </div>
     <div v-else-if="hasLoaded">
       <h1 class="title">
+        <favorite-player-button :id="fetchedPlayerId" :name="latestName" />
         <span class="player-name" v-if="latestName">{{ latestName }}</span>
         <span v-else>ID: <span class="player-id">{{ fetchedPlayerId }}</span></span>
       </h1>
@@ -146,6 +147,7 @@ import {
   unique,
 } from '../helper';
 
+import FavoritePlayerButton from '../components/FavoritePlayerButton.vue';
 import LeagueTeamTypePicker, { LeagueTeamTypes } from '../components/LeagueTeamTypePicker.vue';
 import PlayerRankingEntry from '../components/PlayerRankingEntry.vue';
 import RankedRulePicker, { DefaultSelectedRules, RankedRulePickerTypes } from '../components/RankedRulePicker.vue';
@@ -169,6 +171,7 @@ export default {
   name: 'Players',
   props: ['initialPlayerId'],
   components: {
+    FavoritePlayerButton,
     LeagueTeamTypePicker,
     PlayerRankingEntry,
     RankedRulePicker,

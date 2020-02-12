@@ -11,12 +11,7 @@
         </div>
         <div class="league-member weapon-name-container" v-for="teammate in rankingEntry.teammates" :key="teammate.player_id">
           <img class="weapon-icon" :src="weaponIcon('weapons', teammate.weapon_id)">
-          <router-link v-if="teammate.player_name" :to="`/players/${teammate.player_id}`" class="player-name">
-            {{ teammate.player_name }}
-          </router-link>
-          <router-link v-else :to="`/players/${teammate.player_id}`" class="player-id">
-            {{ teammate.player_id }}
-          </router-link>
+          <player-link :player="new Player(teammate.player_id, teammate.player_name)" />
         </div>
       </div>
     </td>
@@ -48,8 +43,12 @@
 <script>
 import moment from 'moment';
 import { calculateEndTime, weaponIcon, findRuleKey } from '../helper';
+import Player from '../player';
+
+import PlayerLink from './PlayerLink.vue';
 
 export default {
+  components: { PlayerLink },
   name: 'PlayerRankingEntry',
   props: ['playerName', 'rankingEntry', 'rankingType'],
   filters: {
@@ -65,6 +64,7 @@ export default {
   methods: {
     calculateEndTime,
     findRuleKey,
+    Player,
     weaponIcon,
     rankingPath(rankingType, rankingEntry) {
       const startTime = moment.utc(rankingEntry.start_time);
