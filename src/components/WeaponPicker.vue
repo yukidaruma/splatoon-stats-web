@@ -84,7 +84,17 @@ export default {
       return this.allWeapons;
     },
   },
-  props: ['options', 'value', 'counts'],
+  props: {
+    options: Array,
+    value: {
+      type: Array,
+      default: () => [],
+    },
+    counts: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
       isOpen: false,
