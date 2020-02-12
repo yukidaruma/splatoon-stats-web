@@ -10,7 +10,7 @@
       </div>
       <div>
         <span class="label">Weapons</span>
-        <weapon-picker v-model="filters.weapons" :options="weaponsUsed" />
+        <weapon-picker v-model="filters.weapons" :options="weaponsUsed" :counts="weaponCounts" />
       </div>
     </div>
 
@@ -77,11 +77,19 @@ export default {
         return `/weapons/weapons/splatfest/${this.lastFetchedSplatfest.region}/${this.lastFetchedSplatfest.splatfest_id}`;
       }
     },
-    weaponsUsed() {
-      return unique(flatten(
+    weaponCounts() {
+      const counts = {};
+      this.weaponIds.forEach((weaponId) => { counts[weaponId] = counts[weaponId] ? counts[weaponId] + 1 : 1; });
+      return counts;
+    },
+    weaponIds() {
+      return flatten(
         // #30 Use flatMap()
         this.rankings.map(records => records.map(record => record.weapon_id)),
-      ));
+      );
+    },
+    weaponsUsed() {
+      return unique(this.weaponIds);
     },
   },
   methods: {

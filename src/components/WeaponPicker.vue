@@ -17,15 +17,15 @@
           <button class="red" @click="closeModal">Close</button>
         </div>
 
-        <span v-for="weapon in weapons" :key="weapon.weapon_id">
+        <div class="weapon-icon-container" v-for="weapon in weapons" :key="weapon.weapon_id" @click="toggleSelection(weapon.weapon_id)">
           <img
-            @click="toggleSelection(weapon.weapon_id)"
             :class="['weapon-icon', selectedWeapons.includes(weapon.weapon_id) ? 'is-selected' : '']"
             :alt="$t(`weapons.${weapon.weapon_id}.name`)"
             :title="$t(`weapons.${weapon.weapon_id}.name`)"
             :src="weaponIcon('weapons', weapon.weapon_id)"
           >
-        </span>
+          <span v-if="counts[weapon.weapon_id]" class="count">{{ counts[weapon.weapon_id] }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -37,12 +37,29 @@
   justify-content: space-between;
 }
 
-img {
+img:not(.is-selected) {
+  filter: grayscale(1);
+  opacity: .5;
+}
+
+.weapon-icon-container {
   margin: 8px;
-  &:not(.is-selected) {
-    filter: grayscale(1);
-    opacity: .5;
-  }
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  position: relative;
+}
+img {
+  position: static;
+}
+.count {
+  font-size: 80%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 0 .125em;
+  background-color: rgba(0,0,0,0.5);
+  color: white;
 }
 </style>
 
@@ -67,7 +84,17 @@ export default {
       return this.allWeapons;
     },
   },
-  props: ['options', 'value'],
+  props: {
+    options: Array,
+    value: {
+      type: Array,
+      default: () => [],
+    },
+    counts: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
       isOpen: false,

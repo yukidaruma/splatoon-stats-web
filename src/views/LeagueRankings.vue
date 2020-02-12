@@ -15,7 +15,7 @@
       </div>
       <div>
         <span class="label">Weapons</span>
-        <weapon-picker v-model="filters.weapons" :options="weaponsUsed" />
+        <weapon-picker v-model="filters.weapons" :options="weaponsUsed" :counts="weaponCounts" />
       </div>
     </div>
 
@@ -51,10 +51,18 @@ export default {
     groupType() {
       return teamTypeSymbols[this.groupTypeId];
     },
-    weaponsUsed() {
-      return unique(flatten(
+    weaponCounts() {
+      const counts = {};
+      this.weaponIds.forEach((weaponId) => { counts[weaponId] = counts[weaponId] ? counts[weaponId] + 1 : 1; });
+      return counts;
+    },
+    weaponIds() {
+      return flatten(
         this.ranking.map(team => team.group_members.map(member => parseInt(member[1], 10))),
-      ));
+      );
+    },
+    weaponsUsed() {
+      return unique(this.weaponIds);
     },
   },
   data() {
