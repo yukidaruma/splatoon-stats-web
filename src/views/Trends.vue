@@ -38,30 +38,17 @@
           <th>{{ result.oldDate.format(dateFormat) }}</th>
           <th>Diff.</th>
         </thead>
-        <tbody v-if="keyToShow === 'rank'">
-          <tr v-for="weapon in result.trends" :key="weapon.weapon_id">
-            <td>{{ weapon.current_month_rank }}</td>
+        <tbody>
+          <tr v-for="weapon in weaponRecords" :key="weapon.weapon_id">
+            <td>{{ weapon.current }}</td>
             <td>
               <div class="weapon-name-container">
                 <img class="weapon-icon" :src="weapon.icon">
                 {{ $t(weapon.localizationKey) }}
               </div>
             </td>
-            <td>{{ weapon.previous_month_rank }}</td>
-            <td>{{ weapon.previous_month_rank - weapon.current_month_rank | addSign }}</td>
-          </tr>
-        </tbody>
-        <tbody v-else-if="keyToShow === 'count'">
-          <tr v-for="weapon in result.trends" :key="weapon.weapon_id">
-            <td>{{ weapon.current_month_count }}</td>
-            <td>
-              <div class="weapon-name-container">
-                <img class="weapon-icon" :src="weapon.icon">
-                {{ $t(weapon.localizationKey) }}
-              </div>
-            </td>
-            <td>{{ weapon.previous_month_count }}</td>
-            <td>{{ weapon.current_month_count - weapon.previous_month_count | addSign }}</td>
+            <td>{{ weapon.prev }}</td>
+            <td>{{ weapon.diff | addSign }}</td>
           </tr>
         </tbody>
       </table>
@@ -98,10 +85,30 @@ export default {
   },
   filters: {
     addSign(number) {
-      if (number > 0) {
-        return '+' + number.toString();
-      }
-      return number;
+      return number > 0 ? `+${number}` : number;
+    },
+  },
+  computed: {
+    weaponRecords() {
+      return this.result.trends.map((weapon) => {
+        // eslint-disable-next-line default-case
+        switch (this.keyToShow) {
+          case 'rank':
+            return {
+              ...weapon,
+              current: weapon.current_month_rank,
+              prev: weapon.previous_month_rank,
+              diff: weapon.previous_month_rank - weapon.current_month_rank,
+            };
+          case 'count':
+            return {
+              ...weapon,
+              current: weapon.current_month_count,
+              prev: weapon.previous_month_count,
+              diff: weapon.current_month_count - weapon.previous_month_count,
+            };
+        }
+      });
     },
   },
   methods: {
