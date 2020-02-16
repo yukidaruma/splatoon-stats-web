@@ -56,7 +56,7 @@ img {
   font-size: 80%;
   position: absolute;
   bottom: 0;
-  right: 0;
+  left: 0;
   padding: 0 .125em;
   background-color: rgba(0,0,0,0.5);
   color: white;
