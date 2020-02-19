@@ -22,11 +22,22 @@
       </div>
 
       <div class="column is-4 about">
-        <timeline id="SplatoonStats" sourceType="profile" :options="{ theme: 'dark', tweetLimit: 1 }" />
+        <timeline class="timeline" id="SplatoonStats" sourceType="profile" :options="{ theme: 'dark', tweetLimit: 1 }" />
       </div>
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.about {
+  margin-top: 1em;
+  display: flex;
+  justify-content: center;
+  .timeline {
+    max-width: 320px;
+  }
+}
+</style>
 
 <script>
 import { Timeline } from 'vue-tweet-embed';
