@@ -13,10 +13,14 @@
           key: 'x-powers',
           label: 'X Power records',
         },
+        {
+          key: 'league-powers',
+          label: 'League Power records',
+        },
       ]"
     />
 
-    <div v-show="activeTab === 'x-weapons'" class="table-container">
+    <div v-show="activeTab === 'x-weapons'" class="table-container x-weapons">
       <table class="table is-hoverable is-striped is-fullwidth">
         <thead>
           <tr>
@@ -69,6 +73,29 @@
         </div>
       </template>
     </div>
+
+    <div class="league table-container" v-show="activeTab === 'league-powers'">
+      <div class="columns is-multiline" v-for="(groupTypeRecords, k) in leagueRecords">
+        <div class="column is-12">
+          <h2>{{$t(`ui.team_types.${k}`)}}</h2>
+
+          <template v-for="(groupRecords, i) in groupTypeRecords">
+            <h3>{{$t(`ui.rule_shortnames.${findRuleKey(i + 1)}`)}}</h3>
+            <table class="table is-hoverable is-striped is-fullwidth">
+              <tbody>
+                <template v-for="record in groupRecords">
+                  <player-ranking-entry
+                    rankingType="league"
+                    :as-records="true"
+                    :ranking-entry="mapLeagueRecord(record, i + 1)"
+                  />
+                </template>
+              </tbody>
+            </table>
+          </template>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -80,7 +107,7 @@
   .root-container {
     position: relative;
   }
-  .table-container {
+  .table-container.x-weapons {
     margin-left: 40px;
     th:nth-child(1) {
       padding: 0;
@@ -93,6 +120,17 @@
     }
   }
 }
+
+.league {
+  .controls div:first-of-type {
+    margin-top: 0;
+  }
+
+  tr {
+    display: grid;
+    grid-template-columns: 4em 1fr auto 12em;
+  }
+}
 </style>
 
 <script>
@@ -103,15 +141,17 @@ import { findRuleKey, formatRankingEntry } from '../helper';
 import Player from '../player';
 
 import PlayerLink from '../components/PlayerLink.vue';
+import PlayerRankingEntry from '../components/PlayerRankingEntry.vue';
 import TabSwitcher from '../components/TabSwitcher.vue';
 
 export default {
   name: 'Records',
-  components: { PlayerLink, TabSwitcher },
+  components: { PlayerLink, PlayerRankingEntry, TabSwitcher },
   data() {
     return {
       activeTab: 'x-weapons',
       xRecords: [],
+      leagueRecords: [],
       weapons: {},
     };
   },
@@ -120,6 +160,9 @@ export default {
     Player,
     formatTime(time) {
       return moment.utc(time).local().format('YYYY-MM');
+    },
+    formatTimeLeague(time) {
+      return moment.utc(time).local().format('YYYY-MM-DD HH:mm');
     },
     fetchWeaponsTopPlayers() {
       this.isLoading = true;
@@ -138,10 +181,22 @@ export default {
                 return record;
               }),
             );
+          this.leagueRecords = res.data.league_rating_records;
         })
         .finally(() => {
           this.isLoading = false;
         });
+    },
+    mapLeagueRecord(record, ruleId) {
+      return {
+        ...record,
+        rule_id: ruleId,
+        teammates: record.teammates.map(member => ({
+          player_id: member[0],
+          weapon_id: member[1],
+          player_name: member[2],
+        })),
+      }
     },
   },
   created() {
