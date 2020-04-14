@@ -1,12 +1,12 @@
 <template>
   <tr>
-    <td>#{{ rankingEntry.rank }}</td>
+    <td v-if="!asRecords">#{{ rankingEntry.rank }}</td>
     <td>{{ rankingEntry.rating }}</td>
 
     <!-- Weapon image -->
     <td v-if="rankingType === 'league'">
       <div class="league-members">
-        <div class="league-member weapon-name-container">
+        <div v-if="playerName" class="league-member weapon-name-container">
           <img class="weapon-icon" :src="rankingEntry.icon">{{ playerName }}
         </div>
         <div class="league-member weapon-name-container" v-for="teammate in rankingEntry.teammates" :key="teammate.player_id">
@@ -30,7 +30,7 @@
       </router-link>
     </td>
 
-    <td v-if="rankingType === 'league'">{{ $t(`ui.rule_shortnames.${findRuleKey(rankingEntry.rule_id)}`) }}</td>
+    <td v-if="rankingType === 'league' && !asRecords">{{ $t(`ui.rule_shortnames.${findRuleKey(rankingEntry.rule_id)}`) }}</td>
     <td v-if="rankingType === 'league'">
       <div class="stage-names">
         <p class="stage-name">{{ $t(`stages.${rankingEntry.stage_ids[0]}.name`) }}</p>
@@ -50,7 +50,7 @@ import PlayerLink from './PlayerLink.vue';
 export default {
   components: { PlayerLink },
   name: 'PlayerRankingEntry',
-  props: ['playerName', 'rankingEntry', 'rankingType'],
+  props: ['asRecords', 'playerName', 'rankingEntry', 'rankingType'],
   filters: {
     formatDate(time, rankingType) {
       const dateFormat = {

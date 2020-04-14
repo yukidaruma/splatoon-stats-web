@@ -122,10 +122,10 @@
             <tbody>
               <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league"
                 v-show="filteredLeagueRankingEntryKeysSet.has(rankingEntry.key)"
-                rankingType="league"
+                ranking-type="league"
                 :key="rankingEntry.key"
-                :rankingEntry="rankingEntry"
-                :playerName="latestName ? latestName : fetchedPlayerId" />
+                :ranking-entry="rankingEntry"
+                :player-name="latestName ? latestName : fetchedPlayerId" />
             </tbody>
           </table>
         </div>
