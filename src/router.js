@@ -26,28 +26,16 @@ export default new Router({
       component: Index,
     },
     {
-      path: '/weapons',
-      component: Weapons,
+      path: '/players',
+      redirect: '/players/search',
     },
     {
-      path: `/weapons/:weaponType(${weaponTypePattern})/:rankingType(x|league)/:year/:month/:rankedRule(${rulePattern})?`,
-      component: Weapons,
+      path: '/players/search',
+      component: Search,
     },
     {
-      path: `/weapons/:weaponType(${weaponTypePattern})/:rankingType(splatfest)/:region/:splatfestId`,
-      component: Weapons,
-    },
-    {
-      path: '/records',
-      component: Records,
-    },
-    {
-      path: '/rankings/x',
-      component: XRankings,
-    },
-    {
-      path: `/rankings/x/:initialYear(\\d{4})/:initialMonth([1-9]|1[0-2])/:initialRankedRule(${rulePattern})`,
-      component: XRankings,
+      path: '/players/:initialPlayerId?',
+      component: PlayerSummary,
       props: true,
     },
     {
@@ -64,17 +52,17 @@ export default new Router({
       component: SplatfestRankings,
     },
     {
-      path: '/players',
-      redirect: '/players/search',
+      path: '/rankings/x',
+      component: XRankings,
     },
     {
-      path: '/players/search',
-      component: Search,
-    },
-    {
-      path: '/players/:initialPlayerId?',
-      component: PlayerSummary,
+      path: `/rankings/x/:initialYear(\\d{4})/:initialMonth([1-9]|1[0-2])/:initialRankedRule(${rulePattern})`,
+      component: XRankings,
       props: true,
+    },
+    {
+      path: '/records',
+      component: Records,
     },
     {
       path: '/trends',
@@ -89,9 +77,20 @@ export default new Router({
       path: `/trends/:weaponType(${weaponTypePattern})/:rankingType(x)/:rankedRule(${rulePattern})?`,
       component: Trends,
     },
+    {
+      path: '/weapons',
+      component: Weapons,
+    },
+    {
+      path: `/weapons/:weaponType(${weaponTypePattern})/:rankingType(x|league)/:year/:month/:rankedRule(${rulePattern})?`,
+      component: Weapons,
+    },
+    {
+      path: `/weapons/:weaponType(${weaponTypePattern})/:rankingType(splatfest)/:region/:splatfestId`,
+      component: Weapons,
+    },
     { // Fallback route
       path: '*',
-      component: Index,
       redirect: '/',
     },
   ],
