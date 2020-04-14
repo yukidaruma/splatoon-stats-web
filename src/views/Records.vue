@@ -75,25 +75,23 @@
     </div>
 
     <div class="league table-container" v-show="activeTab === 'league-powers'">
-      <div class="columns is-multiline" v-for="(groupTypeRecords, k) in leagueRecords">
-        <div class="column is-12">
-          <h2>{{$t(`ui.team_types.${k}`)}}</h2>
+      <div v-for="(groupTypeRecords, k) in leagueRecords">
+        <h2>{{$t(`ui.team_types.${k}`)}}</h2>
 
-          <template v-for="(groupRecords, i) in groupTypeRecords">
-            <h3>{{$t(`ui.rule_shortnames.${findRuleKey(i + 1)}`)}}</h3>
-            <table class="table is-hoverable is-striped is-fullwidth">
-              <tbody>
-                <template v-for="record in groupRecords">
-                  <player-ranking-entry
-                    rankingType="league"
-                    :as-records="true"
-                    :ranking-entry="mapLeagueRecord(record, i + 1)"
-                  />
-                </template>
-              </tbody>
-            </table>
-          </template>
-        </div>
+        <template v-for="(groupRecords, i) in groupTypeRecords">
+          <h3>{{$t(`ui.rule_shortnames.${findRuleKey(i + 1)}`)}}</h3>
+          <table class="table is-hoverable is-striped is-fullwidth">
+            <tbody>
+              <template v-for="record in groupRecords">
+                <player-ranking-entry
+                  rankingType="league"
+                  :as-records="true"
+                  :ranking-entry="mapLeagueRecord(record, i + 1)"
+                />
+              </template>
+            </tbody>
+          </table>
+        </template>
       </div>
     </div>
   </div>
@@ -103,6 +101,13 @@
 .weapon-icon {
   max-width: inherit;
 }
+
+@media screen and (min-width: 769px) {
+  thead th:first-child {
+    padding-left: 32px;
+  }
+}
+
 @media screen and (max-width: 768px) {
   .root-container {
     position: relative;
@@ -128,7 +133,7 @@
 
   tr {
     display: grid;
-    grid-template-columns: 4em 1fr auto 12em;
+    grid-template-columns: 4em 1fr auto 13em;
   }
 }
 </style>
@@ -196,7 +201,7 @@ export default {
           weapon_id: member[1],
           player_name: member[2],
         })),
-      }
+      };
     },
   },
   created() {
@@ -205,10 +210,3 @@ export default {
 };
 </script>
 
-<style scoped>
-@media screen and (min-width: 769px) {
-  thead th:first-child {
-    padding-left: 32px;
-  }
-}
-</style>
