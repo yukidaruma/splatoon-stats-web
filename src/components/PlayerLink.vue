@@ -1,5 +1,9 @@
 <template>
-  <span :class="!noHighlight && isFavorited && 'favorited'">
+  <span
+    @mouseover="setFocusedPlayerId(player.id)"
+    @mouseleave="unsetFocusedPlayerId"
+    :class="spanClasses"
+  >
     <router-link v-if="player.name" :to="`/players/${player.id}`" class="player-name">
       {{ player.name }}
     </router-link>
@@ -10,13 +14,17 @@
 </template>
 
 <style lang="scss" scoped>
-.favorited {
-  background-color: #f1c40f30;
+.is-favorited {
+  background-color: #f1c40f40;
+}
+
+.has-highlight {
+  background-color: #f2660f40;
 }
 </style>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'PlayerLink',
@@ -31,9 +39,31 @@ export default {
     },
   },
   computed: {
-    ...mapState(['favoritePlayers']),
+    ...mapState(['favoritePlayers', 'focusedPlayerId']),
     isFavorited() {
       return this.favoritePlayers.some(p => p.id === this.player.id);
+    },
+    spanClasses() {
+      const classNames = [];
+
+      if (!this.noHighlight && this.isFavorited) {
+        classNames.push('is-favorited');
+      }
+
+      if (this.focusedPlayerId === this.player.id) {
+        classNames.push('has-highlight');
+      }
+
+      return classNames;
+    },
+  },
+  methods: {
+    ...mapActions(['setFocusedPlayerId', 'unsetFocusedPlayerId']),
+    getClasses(className) {
+      return [
+        className,
+        this.player.id === this.focusedPlayerId ? 'has-highlight' : '',
+      ];
     },
   },
 };
