@@ -63,5 +63,10 @@ export default {
         }
     }
   },
+  watch: {
+    value() {
+      this.selectedRules = this.value;
+    },
+  },
 };
 </script>

@@ -1,11 +1,13 @@
-import { Line } from 'vue-chartjs';
 import moment from 'moment';
+import { Line } from 'vue-chartjs';
 import { findRuleKey } from '../helper';
+
+const RULE_COUNT = 4;
 
 export default {
   name: 'PlayerSummaryXRankedChart',
   extends: Line,
-  props: ['chartType', 'data', 'options', 'showLine'],
+  props: ['chartType', 'data', 'options', 'ruleFilters', 'showLine'],
   computed: {
     chartData() {
       this.showXPowerChart = true;
@@ -13,7 +15,7 @@ export default {
       const firstAppeared = moment(this.data[this.data.length - 1].start_time);
       const lastAppeared = moment(this.data[0].start_time);
       const months = 1 + lastAppeared.diff(firstAppeared, 'month');
-      const datasets = new Array(4).fill(null).map((_v, i) => {
+      const datasets = new Array(RULE_COUNT).fill(null).map((_v, i) => {
         const dataset = {};
         const ruleId = i + 1;
         dataset.fill = false;
@@ -21,6 +23,7 @@ export default {
         dataset.borderColor = chartColors[i];
         dataset.backgroundColor = chartColors[i];
         dataset.showLine = this.showLine;
+        dataset.hidden = !this.ruleFilters.includes(i + 1);
         if (this.data.some(row => ruleId === row.rule_id)) {
           dataset.data = new Array(months).fill(null);
         }
@@ -48,8 +51,25 @@ export default {
       return chartData;
     },
     chartOptions() {
+      const defaultLegendClickHandler = Chart.defaults.global.legend.onClick;
+      const component = this;
+      const toggleItem = (arr, item) => (arr.includes(item) ? arr.filter(i => i !== item) : [...arr, item]);
+      const customLegendClickHandler = function _(e, legendItem) {
+        const ruleId = legendItem.datasetIndex + 1;
+        defaultLegendClickHandler.call(this, e, legendItem);
+        component.$emit('update:rule-filters', toggleItem(component.ruleFilters, ruleId));
+      };
+
+      const options = {
+        ...this.options,
+        legend: {
+          onClick: customLegendClickHandler,
+        },
+      };
+
       if (this.chartType === 'rank') {
-        return Object.assign({
+        return {
+          ...options,
           scales: {
             yAxes: [{
               ticks: {
@@ -57,9 +77,9 @@ export default {
               },
             }],
           },
-        }, this.options);
+        };
       }
-      return this.options;
+      return options;
     },
   },
   methods: {
@@ -73,5 +93,10 @@ export default {
       () => [this.chartType, this.data, this.options, this.showLine],
       this.updateChart,
     );
+  },
+  watch: {
+    ruleFilters() {
+      this.updateChart();
+    },
   },
 };

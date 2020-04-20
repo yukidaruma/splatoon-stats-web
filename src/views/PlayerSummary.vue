@@ -22,7 +22,7 @@
       <div v-if="chartData.length > 0">
         <h2 class="table-title">X Power</h2>
         <div class="chart-container">
-          <x-ranked-chart :height="320" :chart-type="chartType" :data="chartData" :options="chartOptions" :show-line="isLineVisible" />
+          <x-ranked-chart :height="320" :chart-type="chartType" :data="chartData" :options="chartOptions" :rule-filters.sync="filters.x.rules" :show-line="isLineVisible" />
         </div>
         <div class="chart-controls">
           <label><input type="radio" v-model="chartType" value="power"> Power</label>
