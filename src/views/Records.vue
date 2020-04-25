@@ -7,15 +7,19 @@
       :tabs="[
         {
           key: 'x-weapons',
-          label: 'X Weapon records',
+          label: 'X Weapon',
         },
         {
           key: 'x-powers',
-          label: 'X Power records',
+          label: 'X Power',
         },
         {
           key: 'league-powers',
-          label: 'League Power records',
+          label: 'League Power',
+        },
+        {
+          key: 'monthly-league-battles',
+          label: 'Monthly League Battles',
         },
       ]"
     />
@@ -94,6 +98,22 @@
         </template>
       </div>
     </div>
+
+    <div class="table-container" v-show="activeTab === 'monthly-league-battles'">
+      <table class="table is-hoverable is-striped is-fullwidth">
+        <tbody>
+          <tr v-for="record in monthlyLeagueBattlesRecords">
+            <td>
+              <router-link :to="`/rankings/league/${leagueId(record.start_time)}${record.group_type}`">
+                {{ formatTime(record.start_time) }}
+              </router-link>
+            </td>
+            <td>{{ record.rating }}</td>
+            <td>{{ $t(`ui.rule_shortnames.${findRuleKey(record.rule_id)}`) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -155,14 +175,18 @@ export default {
   data() {
     return {
       activeTab: 'x-weapons',
-      xRecords: [],
+      monthlyLeagueBattlesRecords: [],
       leagueRecords: [],
       weapons: {},
+      xRecords: [],
     };
   },
   methods: {
     findRuleKey,
     Player,
+    leagueId(time) {
+      return moment(time).format('YYMMDDHH');
+    },
     formatTime(time) {
       return moment.utc(time).local().format('YYYY-MM');
     },
@@ -175,6 +199,8 @@ export default {
       apiClient
         .get('/records')
         .then((res) => {
+          this.leagueRecords = res.data.league_rating_records;
+          this.monthlyLeagueBattlesRecords = res.data.monthly_league_battles_records;
           this.weapons = res.data.weapons_top_players.map(weapon => formatRankingEntry(weapon, 'weapons'));
           this.xRecords = res.data.x_ranked_rating_records
             .map(ruleRecords => ruleRecords
@@ -186,7 +212,6 @@ export default {
                 return record;
               }),
             );
-          this.leagueRecords = res.data.league_rating_records;
         })
         .finally(() => {
           this.isLoading = false;
@@ -209,4 +234,3 @@ export default {
   },
 };
 </script>
-
