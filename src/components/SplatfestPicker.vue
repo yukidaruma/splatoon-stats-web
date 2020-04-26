@@ -1,10 +1,18 @@
 <template>
-  <select @change="emitSplatfestChange()" v-model="selectedSplatfest">
-    <option :value="null">-</option>
-    <option v-for="f in splatfests" :key="f.key" :value="f">
-      {{ titleizeSplatfest(f) }}
-    </option>
-  </select>
+  <div>
+    <select v-model="regionFilter">
+      <option :value="null">All regions</option>
+      <option value="jp">JP</option>
+      <option value="na">NA</option>
+      <option value="eu">EU</option>
+    </select>
+    <select @change="emitSplatfestChange()" v-model="selectedSplatfest">
+      <option :value="null">-</option>
+      <option v-for="f in splatfestOptions" :key="f.key" :value="f">
+        {{ titleizeSplatfest(f) }}
+      </option>
+    </select>
+  </div>
 </template>
 
 <script>
@@ -16,6 +24,7 @@ export default {
   name: 'SplatfestPicker',
   data() {
     return {
+      regionFilter: null,
       splatfests: [],
       selectedSplatfest: null,
     };
@@ -38,10 +47,27 @@ export default {
         }
       });
   },
+  computed: {
+    splatfestOptions() {
+      if (this.regionFilter) {
+        return this.splatfests.filter(splatfest => splatfest.region === this.regionFilter);
+      }
+
+      return this.splatfests;
+    },
+  },
   methods: {
     titleizeSplatfest,
     emitSplatfestChange(updateRanking = false) {
       this.$emit('splatfest-change', this.selectedSplatfest, updateRanking);
+    },
+  },
+  watch: {
+    regionFilter() {
+      // Unselect if option is unavailable
+      if (!this.splatfestOptions.includes(this.selectedSplatfest)) {
+        this.selectedSplatfest = null;
+      }
     },
   },
 };
