@@ -97,7 +97,9 @@ const getDatePickerOptions = (starting, ending, year, month, date) => {
       const iterator = {
         next() {
           hourOption += 2;
-          if (moment.utc({ year, month, date, hour: hourOption }) > ending || hourOption >= 24) {
+          if (moment.utc({
+            year, month, date, hour: hourOption,
+          }) > ending || hourOption >= 24) {
             return { value: undefined, done: true };
           }
           return { value: hourOption, done: false };
@@ -172,7 +174,8 @@ export default {
       this.$emit('input', this.time);
     },
     updateDatePicker(newRankingType) {
-      let startingYear, startingMonth, startingDate, ending;
+      let startingYear; let startingMonth; let startingDate; let
+        ending;
       const now = moment.utc();
 
       if (newRankingType) {
@@ -203,7 +206,7 @@ export default {
       let newSelectedDate;
 
       // Update selected date to latest available date if not available
-      if (!monthOptions.some(monthOption => monthOption.value === this.month)) {
+      if (!monthOptions.some((monthOption) => monthOption.value === this.month)) {
         newSelectedDate = moment.utc({
           year: this.year,
           month: monthOptions[monthOptions.length - 1].value,

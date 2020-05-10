@@ -149,12 +149,7 @@ import flatten from 'array.prototype.flat';
 import moment from 'moment';
 
 import apiClient from '../api-client';
-import {
-  formatRankingEntry,
-  isValidPlayerId,
-  safeParseInt,
-  unique,
-} from '../helper';
+import { formatRankingEntry, isValidPlayerId, safeParseInt, unique } from '../helper';
 
 import FavoritePlayerButton from '../components/FavoritePlayerButton.vue';
 import LeagueTeamTypePicker, { LeagueTeamTypes } from '../components/LeagueTeamTypePicker.vue';
@@ -171,9 +166,7 @@ const getInitialFilterState = () => ({
     teamType: LeagueTeamTypes.all,
     weapons: null,
   },
-  x: {
-    rules: DefaultSelectedRules.all,
-  },
+  x: { rules: DefaultSelectedRules.all },
 });
 
 export default {
@@ -208,11 +201,7 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         spanGaps: true,
-        elements: {
-          line: {
-            tension: 0,
-          },
-        },
+        elements: { line: { tension: 0 } },
       },
       isLineVisible: false,
       RankedRulePickerTypes,
@@ -278,12 +267,12 @@ export default {
     },
     leagueWeaponCounts() {
       const weaponIds = this.playerRankingHistory.league
-        .filter(rankingEntry => this.getFilteredLeagueRankingEntryKeysSet(
+        .filter((rankingEntry) => this.getFilteredLeagueRankingEntryKeysSet(
           this.playerRankingHistory.league,
           this.leagueFiltersWithoutWeapons,
           true,
         ).has(rankingEntry.key))
-        .map(rankingEntry => rankingEntry.weapon_id);
+        .map((rankingEntry) => rankingEntry.weapon_id);
 
       const counts = {};
       weaponIds.forEach((weaponId) => { counts[weaponId] = counts[weaponId] ? counts[weaponId] + 1 : 1; });
@@ -293,16 +282,16 @@ export default {
       return Array.from(
         unique(
           this.playerRankingHistory.league
-            .filter(rankingEntry => this.getFilteredLeagueRankingEntryKeysSet(
+            .filter((rankingEntry) => this.getFilteredLeagueRankingEntryKeysSet(
               this.playerRankingHistory.league,
               this.leagueFiltersWithoutWeapons,
             ).has(rankingEntry.key))
-            .map(record => record.weapon_id),
+            .map((record) => record.weapon_id),
         ),
       );
     },
     xRankingRecordsCount() {
-      return flatten(this.groupedXRankingHistory.map(g => g.rankingEntries), 2).length;
+      return flatten(this.groupedXRankingHistory.map((g) => g.rankingEntries), 2).length;
     },
   },
   methods: {
@@ -339,7 +328,7 @@ export default {
 
             return filters.rules.includes(rankingEntry.rule_id);
           })
-          .map(rankingEntry => rankingEntry.key),
+          .map((rankingEntry) => rankingEntry.key),
       );
     },
     getPlayerRankingHistory(playerId) {
@@ -355,8 +344,8 @@ export default {
       Promise.all([
         apiClient.get(`/players/${playerId}/known_names`)
           .then((res) => { this.knownNames = res.data; }),
-        ...['x', 'league', 'splatfest'].map(rankingType => apiClient.get(`/players/${playerId}/rankings/${rankingType}`).then((res) => {
-          this.playerRankingHistory[rankingType] = res.data.map(rankingEntry => formatRankingEntry(rankingEntry, 'weapons', rankingType));
+        ...['x', 'league', 'splatfest'].map((rankingType) => apiClient.get(`/players/${playerId}/rankings/${rankingType}`).then((res) => {
+          this.playerRankingHistory[rankingType] = res.data.map((rankingEntry) => formatRankingEntry(rankingEntry, 'weapons', rankingType));
 
           if (rankingType === 'x') {
             this.chartData = res.data;

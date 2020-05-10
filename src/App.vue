@@ -49,15 +49,13 @@ export default {
   name: 'app',
   components: { GlobalFooter },
   data() {
-    return {
-      isBurgerMenuOpen: false,
-    };
+    return { isBurgerMenuOpen: false };
   },
   methods: {
     toggleBurgerMenu() {
       this.isBurgerMenuOpen = !this.isBurgerMenuOpen;
     },
-  }
+  },
 };
 </script>
 

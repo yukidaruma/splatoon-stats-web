@@ -24,7 +24,7 @@ export default {
         dataset.backgroundColor = chartColors[i];
         dataset.showLine = this.showLine;
         dataset.hidden = !this.ruleFilters.includes(i + 1);
-        if (this.data.some(row => ruleId === row.rule_id)) {
+        if (this.data.some((row) => ruleId === row.rule_id)) {
           dataset.data = new Array(months).fill(null);
         }
         return dataset;
@@ -53,7 +53,7 @@ export default {
     chartOptions() {
       const defaultLegendClickHandler = Chart.defaults.global.legend.onClick;
       const component = this;
-      const toggleItem = (arr, item) => (arr.includes(item) ? arr.filter(i => i !== item) : [...arr, item]);
+      const toggleItem = (arr, item) => (arr.includes(item) ? arr.filter((i) => i !== item) : [...arr, item]);
       const customLegendClickHandler = function _(e, legendItem) {
         const ruleId = legendItem.datasetIndex + 1;
         defaultLegendClickHandler.call(this, e, legendItem);
@@ -62,21 +62,13 @@ export default {
 
       const options = {
         ...this.options,
-        legend: {
-          onClick: customLegendClickHandler,
-        },
+        legend: { onClick: customLegendClickHandler },
       };
 
       if (this.chartType === 'rank') {
         return {
           ...options,
-          scales: {
-            yAxes: [{
-              ticks: {
-                reverse: true,
-              },
-            }],
-          },
+          scales: { yAxes: [{ ticks: { reverse: true } }] },
         };
       }
       return options;

@@ -113,7 +113,7 @@ export default {
   },
   methods: {
     applyRouteParams() {
-      const { weaponType, /*rankingType,*/ rankedRule } = this.$route.params;
+      const { weaponType, /* rankingType, */ rankedRule } = this.$route.params;
       const newDate = moment.utc(this.$route.query.current_month, this.dateFormat);
       const oldDate = moment.utc(this.$route.query.previous_month, this.dateFormat);
 

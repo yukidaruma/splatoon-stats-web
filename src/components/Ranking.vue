@@ -41,7 +41,7 @@
 import { weaponIcon } from '../helper';
 import Player from '../player';
 
-import PlayerLink from '../components/PlayerLink.vue';
+import PlayerLink from './PlayerLink.vue';
 
 export default {
   name: 'Ranking',
@@ -62,11 +62,11 @@ export default {
       if (!Array.isArray(this.weaponFilter)) return this.ranking;
 
       if (this.rankingType === 'league') {
-        return this.ranking.filter(team => team.group_members
-          .some(member => this.weaponFilter.includes(parseInt(member[1], 10))));
+        return this.ranking.filter((team) => team.group_members
+          .some((member) => this.weaponFilter.includes(parseInt(member[1], 10))));
       }
 
-      return this.ranking.filter(record => this.weaponFilter.includes(record.weapon_id));
+      return this.ranking.filter((record) => this.weaponFilter.includes(record.weapon_id));
     },
   },
 };

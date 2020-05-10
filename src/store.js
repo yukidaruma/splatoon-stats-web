@@ -42,7 +42,7 @@ const store = new Vuex.Store({
       context.commit('SET_FOCUSED_PLAYER_ID', '');
     },
     removeFavoritePlayer(context, playerToRemove) {
-      const i = favoritePlayers.findIndex(playerId => playerId === playerToRemove.id);
+      const i = favoritePlayers.findIndex((playerId) => playerId === playerToRemove.id);
       favoritePlayers.splice(i, 1);
 
       saveFavoritePlayers();

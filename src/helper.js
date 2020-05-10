@@ -6,14 +6,14 @@ const weaponIcon = (weaponType, weaponId) => {
   return `${VUE_APP_API_URL}/static/images/${singularWeaponType}/${weaponId}.png`;
 };
 
-const capitalizeFirstLetters = string => string.split(/ +/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+const capitalizeFirstLetters = (string) => string.split(/ +/).map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
 const isValidPlayerId = (playerId) => {
   const validPlayerIdPattern = /^[\da-fA-Z]{16}$/;
   return validPlayerIdPattern.test(playerId);
 };
 
-const isEmptyString = str => !str || /^\s*$/.test(str);
+const isEmptyString = (str) => !str || /^\s*$/.test(str);
 
 const rankedRules = [
   { id: 1, key: 'splat_zones' },
@@ -21,7 +21,7 @@ const rankedRules = [
   { id: 3, key: 'rainmaker' },
   { id: 4, key: 'clam_blitz' },
 ];
-const findRuleKey = rankedRuleId => rankedRules.find(rule => rule.id === rankedRuleId).key;
+const findRuleKey = (rankedRuleId) => rankedRules.find((rule) => rule.id === rankedRuleId).key;
 
 const formatRankingEntry = (rankingEntry, weaponType, rankingType) => {
   if (weaponType === 'mains') {
@@ -81,9 +81,9 @@ const safeParseInt = (numString) => {
     : num;
 };
 
-const titleizeSplatfest = splatfest => `[${splatfest.region.toUpperCase()}] ${splatfest.team_names.join(' VS ')}`;
+const titleizeSplatfest = (splatfest) => `[${splatfest.region.toUpperCase()}] ${splatfest.team_names.join(' VS ')}`;
 
-const unique = iterable => Array.from(new Set(iterable));
+const unique = (iterable) => Array.from(new Set(iterable));
 
 export {
   weaponIcon,

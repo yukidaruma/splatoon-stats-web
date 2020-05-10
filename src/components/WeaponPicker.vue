@@ -79,7 +79,7 @@ export default {
     },
     weapons() {
       if (this.options) {
-        return this.allWeapons.filter(w => this.options.includes(w.weapon_id));
+        return this.allWeapons.filter((w) => this.options.includes(w.weapon_id));
       }
       return this.allWeapons;
     },
@@ -110,11 +110,11 @@ export default {
       this.isOpen = true;
     },
     selectAll() {
-      this.selectedWeapons = this.weapons.map(w => w.weapon_id);
+      this.selectedWeapons = this.weapons.map((w) => w.weapon_id);
     },
     toggleSelection(weaponId) {
       if (this.selectedWeapons.includes(weaponId)) {
-        this.selectedWeapons = this.selectedWeapons.filter(w => w !== weaponId);
+        this.selectedWeapons = this.selectedWeapons.filter((w) => w !== weaponId);
         return;
       }
       this.selectedWeapons.push(weaponId);

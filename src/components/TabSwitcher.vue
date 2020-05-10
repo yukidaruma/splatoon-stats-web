@@ -17,9 +17,7 @@
 export default {
   props: ['tabs'],
   data() {
-    return {
-      activeTab: this.value || this.tabs[0].key,
-    };
+    return { activeTab: this.value || this.tabs[0].key };
   },
   methods: {
     onClick(newTabKey) {

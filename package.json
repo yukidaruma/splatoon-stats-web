@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "cross-env NODE_ENV=build vue-cli-service serve",
     "build": "cross-env NODE_ENV=production vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint --no-fix",
+    "lint:fix": "vue-cli-service lint"
   },
   "dependencies": {
     "array.prototype.flat": "^1.2.3",

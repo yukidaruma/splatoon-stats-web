@@ -41,7 +41,7 @@ export default {
   computed: {
     ...mapState(['favoritePlayers', 'focusedPlayerId']),
     isFavorited() {
-      return this.favoritePlayers.some(p => p.id === this.player.id);
+      return this.favoritePlayers.some((p) => p.id === this.player.id);
     },
     spanClasses() {
       const classNames = [];

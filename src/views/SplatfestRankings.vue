@@ -67,9 +67,7 @@ export default {
       lastFetchedSplatfest: null,
       currentRankingKey: '',
       isLoading: false,
-      filters: {
-        weapons: null,
-      },
+      filters: { weapons: null },
     };
   },
   computed: {
@@ -87,7 +85,7 @@ export default {
     weaponIds() {
       return flatten(
         // #30 Use flatMap()
-        this.rankings.map(records => records.map(record => record.weapon_id)),
+        this.rankings.map((records) => records.map((record) => record.weapon_id)),
       );
     },
     weaponsUsed() {
@@ -118,8 +116,8 @@ export default {
           this.rankings = new Array(2);
           [0, 1].forEach((teamId) => {
             this.rankings[teamId] = rankings
-              .filter(rankingEntry => rankingEntry.team_id === teamId)
-              .map(rankingEntry => formatRankingEntry(rankingEntry, 'weapons'));
+              .filter((rankingEntry) => rankingEntry.team_id === teamId)
+              .map((rankingEntry) => formatRankingEntry(rankingEntry, 'weapons'));
           });
 
           this.lastFetchedSplatfest = this.selectedSplatfest;

@@ -14,9 +14,7 @@ export default {
   name: 'WeaponTypePicker',
   props: ['value'],
   data() {
-    return {
-      weaponType: null,
-    };
+    return { weaponType: null };
   },
   created() {
     if (this.value) {

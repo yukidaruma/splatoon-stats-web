@@ -30,14 +30,12 @@ export default {
       type: String,
       required: true,
     },
-    name: {
-      type: String,
-    },
+    name: { type: String },
   },
   computed: {
     ...mapState(['favoritePlayers']),
     isFavorited() {
-      return this.favoritePlayers.some(p => p.id === this.id);
+      return this.favoritePlayers.some((p) => p.id === this.id);
     },
     starClasses() {
       return { star: true, favorited: this.isFavorited };
@@ -57,5 +55,5 @@ export default {
       );
     },
   },
-}
+};
 </script>

@@ -7,9 +7,7 @@ module.exports = {
 
     if (process.env.NODE_ENV === 'production') {
       plugins = [
-        new webpack.DefinePlugin({
-          VUE_APP_API_URL: JSON.stringify('https://splatoon-stats-api.yuki.games'),
-        }),
+        new webpack.DefinePlugin({ VUE_APP_API_URL: JSON.stringify('https://splatoon-stats-api.yuki.games') }),
       ];
     } else {
       plugins = [

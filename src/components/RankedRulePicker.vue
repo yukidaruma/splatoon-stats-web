@@ -18,9 +18,7 @@
 <script>
 import { rankedRules } from '../helper';
 
-export const DefaultSelectedRules = {
-  all: rankedRules.map(rule => rule.id),
-};
+export const DefaultSelectedRules = { all: rankedRules.map((rule) => rule.id) };
 
 export const RankedRulePickerTypes = {
   select: 1, // default

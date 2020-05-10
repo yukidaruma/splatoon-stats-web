@@ -70,9 +70,7 @@ export default {
       searchResults: [],
     };
   },
-  computed: {
-    ...mapState(['favoritePlayers']),
-  },
+  computed: { ...mapState(['favoritePlayers']) },
   created() {
     this.playerName = this.$route.query.name;
     this.searchPlayersByName(this.playerName);

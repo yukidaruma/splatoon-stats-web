@@ -89,7 +89,7 @@
 import moment from 'moment';
 
 import apiClient from '../api-client';
-import { capitalizeFirstLetters, formatRankingEntry, titleizeSplatfest } from '../helper';
+import { capitalizeFirstLetters, formatRankingEntry, titleizeSplatfest, rankedRules } from '../helper';
 
 import DatePicker from '../components/DatePicker.vue';
 import RankedRulePicker from '../components/RankedRulePicker.vue';
@@ -183,9 +183,9 @@ export default {
           // Add "Bomb Launchers combined" row
           if (this.weaponType === 'specials') {
             const combinedBombLauncherPercentage = res.data
-              .filter(specialWeapon => 2 <= specialWeapon.special_weapon_id && specialWeapon.special_weapon_id <= 6)
+              .filter((specialWeapon) => specialWeapon.special_weapon_id >= 2 && specialWeapon.special_weapon_id <= 6)
               .reduce((sum, specialWeapon) => sum + specialWeapon.percentage, 0);
-            const indexToInsert = res.data.findIndex(specialWeapon => specialWeapon.percentage < combinedBombLauncherPercentage);
+            const indexToInsert = res.data.findIndex((specialWeapon) => specialWeapon.percentage < combinedBombLauncherPercentage);
 
             res.data.splice(indexToInsert, 0, {
               hasNoIcon: true,
@@ -207,9 +207,7 @@ export default {
         });
     },
     getWeaponRankingRoute(weaponId) {
-      const {
-        rankingType, rankedRule, year, month,
-      } = this.$route.params;
+      const { rankingType, rankedRule, year, month } = this.$route.params;
 
       if (rankingType === 'x') {
         return {
@@ -219,9 +217,7 @@ export default {
             initialMonth: month,
             initialRankedRule: rankedRule || rankedRules[0].key,
           },
-          query: {
-            weapons: weaponId,
-          },
+          query: { weapons: weaponId },
         };
       }
 
@@ -229,12 +225,8 @@ export default {
 
       return {
         name: 'rankingsSplatfest',
-        params: {
-          splatfestId,
-        },
-        query: {
-          weapons: weaponId,
-        },
+        params: { splatfestId },
+        query: { weapons: weaponId },
       };
     },
   },

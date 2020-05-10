@@ -48,9 +48,7 @@ export default {
   components: { Timeline },
   name: 'Index',
   data() {
-    return {
-      stats: {},
-    };
+    return { stats: {} };
   },
   created() {
     apiClient.get('/stats')

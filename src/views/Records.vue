@@ -201,17 +201,16 @@ export default {
         .then((res) => {
           this.leagueRecords = res.data.league_rating_records;
           this.monthlyLeagueBattlesRecords = res.data.monthly_league_battles_records;
-          this.weapons = res.data.weapons_top_players.map(weapon => formatRankingEntry(weapon, 'weapons'));
+          this.weapons = res.data.weapons_top_players.map((weapon) => formatRankingEntry(weapon, 'weapons'));
           this.xRecords = res.data.x_ranked_rating_records
-            .map(ruleRecords => ruleRecords
-              .map(record => formatRankingEntry(record, 'weapons', 'x'))
+            .map((ruleRecords) => ruleRecords
+              .map((record) => formatRankingEntry(record, 'weapons', 'x'))
               .map((record) => {
                 const startTime = moment.utc(record.start_time);
                 record.year = startTime.year();
                 record.month = startTime.month() + 1;
                 return record;
-              }),
-            );
+              }));
         })
         .finally(() => {
           this.isLoading = false;
@@ -221,7 +220,7 @@ export default {
       return {
         ...record,
         rule_id: ruleId,
-        teammates: record.teammates.map(member => ({
+        teammates: record.teammates.map((member) => ({
           player_id: member[0],
           weapon_id: member[1],
           player_name: member[2],

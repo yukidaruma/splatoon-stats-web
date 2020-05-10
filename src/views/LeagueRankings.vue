@@ -45,7 +45,9 @@ const teamTypeSymbols = {
 
 export default {
   name: 'LeagueRankings',
-  components: { DatePicker, LeagueTeamTypePicker, Ranking, WeaponPicker },
+  components: {
+    DatePicker, LeagueTeamTypePicker, Ranking, WeaponPicker,
+  },
   props: ['initialLeagueId'],
   computed: {
     groupType() {
@@ -58,7 +60,7 @@ export default {
     },
     weaponIds() {
       return flatten(
-        this.ranking.map(team => team.group_members.map(member => parseInt(member[1], 10))),
+        this.ranking.map((team) => team.group_members.map((member) => parseInt(member[1], 10))),
       );
     },
     weaponsUsed() {
@@ -72,14 +74,12 @@ export default {
       time: undefined,
       groupTypeId: LeagueTeamTypes.team,
       title: null,
-      filters: {
-        weapons: null,
-      },
+      filters: { weapons: null },
     };
   },
   methods: {
     fetchLeagueRanking() {
-      const time = this.time;
+      const { time } = this;
       const leagueId = time.format('YYMMDDHH') + this.groupType;
       const path = `/rankings/league/${leagueId}`;
 
@@ -89,12 +89,10 @@ export default {
 
       apiClient.get(path)
         .then((res) => {
-          this.ranking = res.data.map(rankingEntry => formatRankingEntry(rankingEntry, 'weapons'));
+          this.ranking = res.data.map((rankingEntry) => formatRankingEntry(rankingEntry, 'weapons'));
         })
         .finally(() => {
-          this.title = {
-            time: time.clone().local().format('YYYY/MM/DD HH:mm'),
-          };
+          this.title = { time: time.clone().local().format('YYYY/MM/DD HH:mm') };
           this.isLoading = false;
         });
     },

@@ -41,17 +41,14 @@ import DatePicker from '../components/DatePicker.vue';
 import RankedRulePicker from '../components/RankedRulePicker.vue';
 import Ranking from '../components/Ranking.vue';
 import WeaponPicker from '../components/WeaponPicker.vue';
-import {
-  capitalizeFirstLetters,
-  findRuleKey,
-  formatRankingEntry,
-  unique,
-} from '../helper';
+import { capitalizeFirstLetters, findRuleKey, formatRankingEntry, unique } from '../helper';
 
 export default {
   mixins: [weaponFilterQueryParamMixin],
   name: 'XRankings',
-  components: { DatePicker, RankedRulePicker, Ranking, WeaponPicker },
+  components: {
+    DatePicker, RankedRulePicker, Ranking, WeaponPicker,
+  },
   props: ['initialYear', 'initialMonth', 'initialRankedRule'],
   data() {
     return {
@@ -60,9 +57,7 @@ export default {
       time: null,
       rankedRule: undefined,
       title: null,
-      filters: {
-        weapons: null,
-      },
+      filters: { weapons: null },
     };
   },
   computed: {
@@ -83,7 +78,7 @@ export default {
       return counts;
     },
     weaponIds() {
-      return this.ranking.map(record => record.weapon_id);
+      return this.ranking.map((record) => record.weapon_id);
     },
     weaponsUsed() {
       return unique(this.weaponIds);
@@ -103,7 +98,7 @@ export default {
 
       apiClient.get(path)
         .then((res) => {
-          this.ranking = res.data.map(rankingEntry => formatRankingEntry(rankingEntry, 'weapons'));
+          this.ranking = res.data.map((rankingEntry) => formatRankingEntry(rankingEntry, 'weapons'));
           this.title = {
             rankedRule: this.rankedRule,
             year: this.year,
