@@ -114,7 +114,7 @@
             </div>
             <div>
               <label class="label" for="min-league-rank-filter">Weapons</label>
-              <weapon-picker v-model="filters.league.weapons" :options="weaponsUsedInLeague" :counts="leagueWeaponCounts" />
+              <weapon-picker :value.sync="filters.league.weapons" :options="weaponsUsedInLeague" :counts="leagueWeaponCounts" />
             </div>
           </div>
 

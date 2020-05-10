@@ -14,7 +14,7 @@
       </div>
       <div>
         <span class="label">Weapons</span>
-        <weapon-picker v-model="filters.weapons" :options="weaponsUsed" :counts="weaponCounts" />
+        <weapon-picker :value.sync="filters.weapons" :options="weaponsUsed" :counts="weaponCounts" />
       </div>
     </div>
 
@@ -35,6 +35,7 @@
 <script>
 import moment from 'moment';
 
+import { weaponFilterQueryParamMixin } from './mixins';
 import apiClient from '../api-client';
 import DatePicker from '../components/DatePicker.vue';
 import RankedRulePicker from '../components/RankedRulePicker.vue';
@@ -48,6 +49,7 @@ import {
 } from '../helper';
 
 export default {
+  mixins: [weaponFilterQueryParamMixin],
   name: 'XRankings',
   components: { DatePicker, RankedRulePicker, Ranking, WeaponPicker },
   props: ['initialYear', 'initialMonth', 'initialRankedRule'],
@@ -90,7 +92,10 @@ export default {
   methods: {
     capitalizeFirstLetters,
     fetchXRanking() {
-      const path = `/rankings/x/${this.year}/${this.month + 1}/${this.rankedRule}`;
+      let path = `/rankings/x/${this.year}/${this.month + 1}/${this.rankedRule}`;
+      if (this.filters.weapons) {
+        path += `?weapons=${this.filters.weapons.join(',')}`;
+      }
 
       this.title = null;
       this.isLoading = true;

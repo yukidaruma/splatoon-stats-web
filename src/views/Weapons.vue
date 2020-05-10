@@ -65,8 +65,16 @@
             <td>{{ weapon.rank }}</td>
             <td>
               <div class="weapon-name-container">
-                <img class="weapon-icon" :src="weapon.icon" v-if="!weapon.hasNoIcon">
-                {{ $t(weapon.localizationKey) }}
+                <template v-if="shouldLinkWeapon">
+                  <router-link :to="getWeaponRankingRoute(weapon.weapon_id)" class="is-flex">
+                    <img class="weapon-icon" :src="weapon.icon" v-if="!weapon.hasNoIcon">
+                    {{ $t(weapon.localizationKey) }}
+                  </router-link>
+                </template>
+                <template v-else>
+                  <img class="weapon-icon" :src="weapon.icon" v-if="!weapon.hasNoIcon">
+                  {{ $t(weapon.localizationKey) }}
+                </template>
               </div>
             </td>
             <td class="bar-chart-container">{{ weapon.percentage | formatPercentage }}<span class="bar-chart" :style="`width: ${weapon.relativePercentage}%`"></span></td>
@@ -123,7 +131,11 @@ export default {
     },
     month() {
       return this.time.month();
-    }
+    },
+    shouldLinkWeapon() {
+      const { rankingType } = this;
+      return rankingType === 'x' || rankingType === 'splatfest';
+    },
   },
   methods: {
     capitalizeFirstLetters,
@@ -193,6 +205,37 @@ export default {
         .finally(() => {
           this.isLoading = false;
         });
+    },
+    getWeaponRankingRoute(weaponId) {
+      const {
+        rankingType, rankedRule, year, month,
+      } = this.$route.params;
+
+      if (rankingType === 'x') {
+        return {
+          name: 'rankingsX',
+          params: {
+            initialYear: year,
+            initialMonth: month,
+            initialRankedRule: rankedRule || rankedRules[0].key,
+          },
+          query: {
+            weapons: weaponId,
+          },
+        };
+      }
+
+      const { splatfestId } = this.$route.params;
+
+      return {
+        name: 'rankingsSplatfest',
+        params: {
+          splatfestId,
+        },
+        query: {
+          weapons: weaponId,
+        },
+      };
     },
   },
   created() {

@@ -15,7 +15,7 @@ import { rankedRules } from './helper';
 Vue.use(Router);
 
 const weaponTypePattern = ['weapons', 'mains', 'specials', 'subs'].join('|');
-const rulePattern = rankedRules.map(rule => rule.key).join('|');
+const rulePattern = rankedRules.map((rule) => rule.key).join('|');
 
 export default new Router({
   linkActiveClass: 'is-active',
@@ -49,6 +49,7 @@ export default new Router({
     },
     {
       path: '/rankings/splatfest/:region(na|eu|jp)/:splatfestId(\\d+)',
+      name: 'rankingsSplatfest',
       component: SplatfestRankings,
     },
     {
@@ -57,6 +58,7 @@ export default new Router({
     },
     {
       path: `/rankings/x/:initialYear(\\d{4})/:initialMonth([1-9]|1[0-2])/:initialRankedRule(${rulePattern})`,
+      name: 'rankingsX',
       component: XRankings,
       props: true,
     },

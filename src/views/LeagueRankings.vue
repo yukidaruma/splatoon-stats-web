@@ -15,7 +15,7 @@
       </div>
       <div>
         <span class="label">Weapons</span>
-        <weapon-picker v-model="filters.weapons" :options="weaponsUsed" :counts="weaponCounts" />
+        <weapon-picker :value.sync="filters.weapons" :options="weaponsUsed" :counts="weaponCounts" />
       </div>
     </div>
 

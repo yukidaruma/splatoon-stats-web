@@ -120,6 +120,11 @@ export default {
       this.selectedWeapons.push(weaponId);
     },
     initialize() {
+      if (Array.isArray(this.value)) {
+        this.selectedWeapons = this.value;
+        return;
+      }
+
       this.selectAll();
     },
     unselectAll() {
@@ -130,10 +135,10 @@ export default {
     selectedWeapons() {
       if (this.isAllSelected) {
         // Emits null instead of full array for faster filtering.
-        this.$emit('input', null);
+        this.$emit('update:value', null);
         return;
       }
-      this.$emit('input', this.selectedWeapons);
+      this.$emit('update:value', this.selectedWeapons);
     },
     options() {
       this.initialize();

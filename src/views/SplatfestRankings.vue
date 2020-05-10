@@ -10,7 +10,7 @@
       </div>
       <div>
         <span class="label">Weapons</span>
-        <weapon-picker v-model="filters.weapons" :options="weaponsUsed" :counts="weaponCounts" />
+        <weapon-picker :value.sync="filters.weapons" :options="weaponsUsed" :counts="weaponCounts" />
       </div>
     </div>
 
@@ -51,11 +51,13 @@ import flatten from 'array.prototype.flat';
 
 import apiClient from '../api-client';
 import { formatRankingEntry, titleizeSplatfest, unique } from '../helper';
+import { weaponFilterQueryParamMixin } from './mixins';
 import Ranking from '../components/Ranking.vue';
 import SplatfestPicker from '../components/SplatfestPicker.vue';
 import WeaponPicker from '../components/WeaponPicker.vue';
 
 export default {
+  mixins: [weaponFilterQueryParamMixin],
   name: 'SplatfestRankings',
   components: { Ranking, SplatfestPicker, WeaponPicker },
   data() {
@@ -101,7 +103,10 @@ export default {
       }
     },
     fetchSplatfestRanking(region, splatfestId) {
-      const path = `/rankings/splatfest/${region}/${splatfestId}`;
+      let path = `/rankings/splatfest/${region}/${splatfestId}`;
+      if (this.filters.weapons) {
+        path += `?weapons=${this.filters.weapons.join(',')}`;
+      }
       this.isLoading = true;
       this.$router.push(path);
 
