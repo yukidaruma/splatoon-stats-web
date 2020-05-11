@@ -65,8 +65,8 @@
             <td>{{ weapon.rank }}</td>
             <td>
               <div class="weapon-name-container">
-                <template v-if="shouldLinkWeapon">
-                  <router-link :to="getWeaponRankingRoute(weapon.weapon_id)" class="is-flex">
+                <template v-if="shouldLinkWeapon && !weapon.hasNoIcon">
+                  <router-link :to="getWeaponRankingRoute(weapon.weapon_id || weapon.sub_weapon_id || weapon.special_weapon_id || 0)" class="is-flex">
                     <img class="weapon-icon" :src="weapon.icon" v-if="!weapon.hasNoIcon">
                     {{ $t(weapon.localizationKey) }}
                   </router-link>
@@ -90,6 +90,7 @@ import moment from 'moment';
 
 import apiClient from '../api-client';
 import { capitalizeFirstLetters, formatRankingEntry, titleizeSplatfest, rankedRules } from '../helper';
+import weaponTable from '../weapon-table.json';
 
 import DatePicker from '../components/DatePicker.vue';
 import RankedRulePicker from '../components/RankedRulePicker.vue';
@@ -207,7 +208,12 @@ export default {
         });
     },
     getWeaponRankingRoute(weaponId) {
-      const { rankingType, rankedRule, year, month } = this.$route.params;
+      const { rankingType, rankedRule, year, month, weaponType } = this.$route.params;
+      let weaponIds = weaponId.toString();
+
+      if (weaponType !== 'weapons') {
+        weaponIds = weaponTable[weaponType][weaponId].join(',');
+      }
 
       if (rankingType === 'x') {
         return {
@@ -217,7 +223,7 @@ export default {
             initialMonth: month,
             initialRankedRule: rankedRule || rankedRules[0].key,
           },
-          query: { weapons: weaponId },
+          query: { weapons: weaponIds },
         };
       }
 
@@ -226,7 +232,7 @@ export default {
       return {
         name: 'rankingsSplatfest',
         params: { splatfestId },
-        query: { weapons: weaponId },
+        query: { weapons: weaponIds },
       };
     },
   },
