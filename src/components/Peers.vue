@@ -1,0 +1,107 @@
+<template>
+  <table class="table is-fullwidth is-striped is-hoverable">
+    <tbody>
+      <tr v-for="peer in peers" :key="peer.playerId">
+        <td>
+          <player-link :player="peer" />
+        </td>
+        <td>{{ peer.maxRatings.team }}</td>
+        <td>{{ peer.maxRatings.pair }}</td>
+        <td>
+          <span v-for="(peerWeapon, i) in peer.weapons">
+            <img class="weapon-icon" :src="weaponIcon(peerWeapon[0])">
+            {{ peerWeapon[1] }}
+          </span>
+          <span v-if="peer.hasOmittedWeapons">
+            ...
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</template>
+
+<script>
+import PlayerLink from './PlayerLink.vue';
+import { weaponIcon } from '../helper';
+
+const stringCollator = new Intl.Collator(undefined).compare;
+const WEAPONS_LIMIT = 5;
+const groupTypeTable = { P: 'pair', T: 'team' };
+
+export const aggregateLeagueEntries = (leagueEntries) => {
+  const aggregation = {};
+  const setMaxRating = (playerAggregation, groupType, rating) => {
+    if (rating > (playerAggregation.maxRatings[groupType] ?? 0)) {
+      playerAggregation.maxRatings[groupType] = rating;
+    }
+  };
+
+  leagueEntries.forEach((entry) => {
+    entry.teammates.forEach((teammate) => {
+      const { player_id: id, weapon_id: weaponId, player_name: name } = teammate;
+      if (!(id in aggregation)) {
+        aggregation[id] = {
+          name,
+          id,
+          count: 0,
+          weapons: {},
+          groupTypes: { pair: 0, team: 0 },
+          maxRatings: { pair: null, team: null },
+        };
+      }
+
+      aggregation[id].count += 1;
+      aggregation[id].weapons[weaponId] = (aggregation[id].weapons[weaponId] ? aggregation[id].weapons[weaponId] : 0) + 1;
+
+      setMaxRating(aggregation[id], groupTypeTable[entry.group_type], entry.rating);
+
+      if (entry.group_type === 'P') {
+        aggregation[id].groupTypes.pair += 1;
+      } else {
+        aggregation[id].groupTypes.team += 1;
+      }
+    });
+  });
+
+  const peers = Object.entries(aggregation).map(([_, peer]) => {
+    const weapons = Object.entries(peer.weapons).map(([weaponId, count]) => [weaponId, count]);
+    // ORDER BY count DESC, weapon_id ASC
+    // LIMIT WEAPONS_LIMIT
+    weapons.sort((a, b) => b[1] - a[1] || a[0] - b[0]);
+
+    if (weapons.length > WEAPONS_LIMIT) {
+      peer.hasOmittedWeapons = true;
+    }
+
+    return {
+      ...peer,
+      weapons: weapons.slice(0, WEAPONS_LIMIT),
+    };
+  });
+
+  // = ORDER BY count DESC, id ASC
+  peers.sort((a, b) => b.count - a.count || stringCollator(a.id, b.id));
+
+  return peers;
+};
+
+export default {
+  components: { PlayerLink },
+  props: {
+    peers: {
+      type: Array,
+      required: true,
+    },
+  },
+  methods: {
+    weaponIcon: (weaponId) => weaponIcon('weapons', weaponId),
+  },
+};
+</script>
+
+<style scoped>
+td {
+  vertical-align: middle !important;
+}
+</style>

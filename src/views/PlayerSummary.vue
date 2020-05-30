@@ -117,8 +117,9 @@
               <weapon-picker :value.sync="filters.league.weapons" :options="weaponsUsedInLeague" :counts="leagueWeaponCounts" />
             </div>
           </div>
+        </div>
 
-          <table class="table is-hoverable is-striped is-fullwidth">
+          <table class="is-marginless table is-hoverable is-striped is-fullwidth">
             <tbody>
               <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league"
                 v-show="filteredLeagueRankingEntryKeysSet.has(rankingEntry.key)"
@@ -130,6 +131,9 @@
           </table>
         </div>
       </div>
+
+      <h2 class="table-title">Peers ({{ peers.length }})</h2>
+      <peers :peers="peers" />
 
       <h2 class="table-title">Known Names</h2>
       <div v-if="knownNames.length === 0">
@@ -153,6 +157,7 @@ import { formatRankingEntry, isValidPlayerId, safeParseInt, unique } from '../he
 
 import FavoritePlayerButton from '../components/FavoritePlayerButton.vue';
 import LeagueTeamTypePicker, { LeagueTeamTypes } from '../components/LeagueTeamTypePicker.vue';
+import Peers, { aggregateLeagueEntries } from '../components/Peers.vue';
 import PlayerRankingEntry from '../components/PlayerRankingEntry.vue';
 import RankedRulePicker, { DefaultSelectedRules, RankedRulePickerTypes } from '../components/RankedRulePicker.vue';
 import WeaponPicker from '../components/WeaponPicker.vue';
@@ -175,6 +180,7 @@ export default {
   components: {
     FavoritePlayerButton,
     LeagueTeamTypePicker,
+    Peers,
     PlayerRankingEntry,
     RankedRulePicker,
     WeaponPicker,
@@ -277,6 +283,9 @@ export default {
       const counts = {};
       weaponIds.forEach((weaponId) => { counts[weaponId] = counts[weaponId] ? counts[weaponId] + 1 : 1; });
       return counts;
+    },
+    peers() {
+      return aggregateLeagueEntries(this.playerRankingHistory.league);
     },
     weaponsUsedInLeague() {
       return Array.from(
