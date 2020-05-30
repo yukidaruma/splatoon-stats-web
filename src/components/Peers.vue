@@ -8,10 +8,12 @@
         <td>{{ peer.maxRatings.team }}</td>
         <td>{{ peer.maxRatings.pair }}</td>
         <td>
-          <span v-for="(peerWeapon, i) in peer.weapons">
-            <img class="weapon-icon" :src="weaponIcon(peerWeapon[0])">
-            {{ peerWeapon[1] }}
-          </span>
+          <weapon-icon-count
+            v-for="weapon in peer.weapons"
+            :key="weapon[0]"
+            :weapon-id="weapon[0]"
+            :count="weapon[1]"
+          />
           <span v-if="peer.hasOmittedWeapons">
             ...
           </span>
@@ -23,7 +25,7 @@
 
 <script>
 import PlayerLink from './PlayerLink.vue';
-import { weaponIcon } from '../helper';
+import WeaponIconCount from './WeaponIconCount.vue';
 
 const stringCollator = new Intl.Collator(undefined).compare;
 const WEAPONS_LIMIT = 5;
@@ -65,7 +67,7 @@ export const aggregateLeagueEntries = (leagueEntries) => {
   });
 
   const peers = Object.entries(aggregation).map(([_, peer]) => {
-    const weapons = Object.entries(peer.weapons).map(([weaponId, count]) => [weaponId, count]);
+    const weapons = Object.entries(peer.weapons).map(([weaponId, count]) => [Number(weaponId), count]);
     // ORDER BY count DESC, weapon_id ASC
     // LIMIT WEAPONS_LIMIT
     weapons.sort((a, b) => b[1] - a[1] || a[0] - b[0]);
@@ -87,15 +89,12 @@ export const aggregateLeagueEntries = (leagueEntries) => {
 };
 
 export default {
-  components: { PlayerLink },
+  components: { PlayerLink, WeaponIconCount },
   props: {
     peers: {
       type: Array,
       required: true,
     },
-  },
-  methods: {
-    weaponIcon: (weaponId) => weaponIcon('weapons', weaponId),
   },
 };
 </script>

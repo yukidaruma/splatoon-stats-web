@@ -17,57 +17,32 @@
           <button class="red" @click="closeModal">Close</button>
         </div>
 
-        <div class="weapon-icon-container" v-for="weapon in weapons" :key="weapon.weapon_id" @click="toggleSelection(weapon.weapon_id)">
-          <img
-            :class="['weapon-icon', selectedWeapons.includes(weapon.weapon_id) ? 'is-selected' : '']"
-            :alt="$t(`weapons.${weapon.weapon_id}.name`)"
-            :title="$t(`weapons.${weapon.weapon_id}.name`)"
-            :src="weaponIcon('weapons', weapon.weapon_id)"
-          >
-          <span v-if="counts[weapon.weapon_id]" class="count">{{ counts[weapon.weapon_id] }}</span>
-        </div>
+        <weapon-icon-count
+          v-for="weapon in weapons"
+          @click.native="toggleSelection(weapon.weapon_id)"
+          :is-active="selectedWeapons.includes(weapon.weapon_id)"
+          :key="weapon.weapon_id"
+          :weapon-id="weapon.weapon_id"
+          :count="counts[weapon.weapon_id]"
+        />
       </div>
     </div>
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .modal-controls {
   display: flex;
   justify-content: space-between;
-}
-
-img:not(.is-selected) {
-  filter: grayscale(1);
-  opacity: .5;
-}
-
-.weapon-icon-container {
-  margin: 8px;
-  width: 32px;
-  height: 32px;
-  display: inline-block;
-  position: relative;
-}
-img {
-  position: static;
-}
-.count {
-  font-size: 80%;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  padding: 0 .125em;
-  background-color: rgba(0,0,0,0.5);
-  color: white;
 }
 </style>
 
 <script>
 import { mapState } from 'vuex';
-import { weaponIcon } from '../helper';
+import WeaponIconCount from './WeaponIconCount.vue';
 
 export default {
+  components: { WeaponIconCount },
   computed: {
     ...mapState({
       allWeapons(state) {
@@ -102,7 +77,6 @@ export default {
     };
   },
   methods: {
-    weaponIcon,
     closeModal() {
       this.isOpen = false;
     },
