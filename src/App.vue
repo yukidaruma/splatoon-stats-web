@@ -29,6 +29,12 @@
             <router-link class="navbar-item" to="/players">Players</router-link>
             <router-link class="navbar-item" to="/records">Records</router-link>
           </div>
+          <div class="navbar-end">
+            <div class="navbar-item">
+              <input @keydown.enter="smartSearch" v-model="query" type="text" placeholder="Search player by name or ID" maxlength="16">
+              <button @click="smartSearch">Search</button>
+            </div>
+          </div>
         </div>
       </nav>
     </header>
@@ -44,14 +50,30 @@
 <script>
 import './assets/bulma.scss';
 import GlobalFooter from './components/GlobalFooter.vue';
+import { isValidPlayerId } from './helper';
 
 export default {
   name: 'app',
   components: { GlobalFooter },
   data() {
-    return { isBurgerMenuOpen: false };
+    return {
+      isBurgerMenuOpen: false,
+      query: '',
+    };
   },
   methods: {
+    smartSearch(e) {
+      const { query } = this;
+
+      if (isValidPlayerId(query)) {
+        this.$router.push(`/players/${query}`);
+      } else {
+        this.$router.push(`/players/search?name=${query}`);
+      }
+
+      e.target.blur();
+      this.query = '';
+    },
     toggleBurgerMenu() {
       this.isBurgerMenuOpen = !this.isBurgerMenuOpen;
     },
@@ -193,5 +215,14 @@ td.bar-chart-container {
 
 .section:not(:first-child) {
   margin-top: 1.5em;
+}
+
+@media screen and (max-width: 1024px) {
+  .navbar-end .navbar-item {
+    display: flex;
+  }
+  .navbar-end .navbar-item :first-child {
+    flex: 1;
+  }
 }
 </style>

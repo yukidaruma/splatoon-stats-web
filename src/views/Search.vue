@@ -72,11 +72,15 @@ export default {
   },
   computed: { ...mapState(['favoritePlayers']) },
   created() {
-    this.playerName = this.$route.query.name;
-    this.searchPlayersByName(this.playerName);
+    this.onRouteChange();
   },
+  watch: { '$route.query'() { this.onRouteChange(); } },
   methods: {
     Player,
+    onRouteChange() {
+      this.playerName = this.$route.query.name;
+      this.searchPlayersByName(this.playerName, false);
+    },
     searchPlayerById(playerId) {
       if (isValidPlayerId(playerId)) {
         this.$router.push(`/players/${playerId}`);
@@ -84,12 +88,15 @@ export default {
         alert('Player ID must be 16-digit hexadecimal number.');
       }
     },
-    searchPlayersByName(name) {
+    searchPlayersByName(name, shouldUpdateRoute = true) {
       if (!isEmptyString(name)) {
         this.isLoading = true;
         this.searchedName = name;
 
-        this.$router.push(`/players/search?name=${name}`);
+        if (shouldUpdateRoute) {
+          this.$router.push(`/players/search?name=${name}`);
+        }
+
         apiClient.get(`/players/search?name=${name}`)
           .then((res) => {
             this.searchResults = res.data;
