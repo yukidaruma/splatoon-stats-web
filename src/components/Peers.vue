@@ -1,12 +1,18 @@
 <template>
   <table class="table is-fullwidth is-striped is-hoverable">
     <tbody>
+      <tr>
+        <th>Name</th>
+        <th>{{ $t('ui.team_types.team') }}</th>
+        <th>{{ $t('ui.team_types.pair') }}</th>
+        <th>{{ $t('ui.weapon_types.weapons') }}</th>
+      </tr>
       <tr v-for="peer in peers" :key="peer.playerId">
         <td>
           <player-link :player="peer" />
         </td>
-        <td>{{ peer.maxRatings.team }}</td>
-        <td>{{ peer.maxRatings.pair }}</td>
+        <td><router-link :to="`/rankings/league/${peer.maxRatingLeagueIds.team}T`">{{ peer.maxRatings.team }}</router-link></td>
+        <td><router-link :to="`/rankings/league/${peer.maxRatingLeagueIds.pair}P`">{{ peer.maxRatings.pair }}</router-link></td>
         <td>
           <weapon-icon-count
             v-for="weapon in peer.weapons"
@@ -24,6 +30,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import PlayerLink from './PlayerLink.vue';
 import WeaponIconCount from './WeaponIconCount.vue';
 
@@ -33,9 +40,10 @@ const groupTypeTable = { P: 'pair', T: 'team' };
 
 export const aggregateLeagueEntries = (leagueEntries) => {
   const aggregation = {};
-  const setMaxRating = (playerAggregation, groupType, rating) => {
+  const setMaxRating = (playerAggregation, groupType, rating, leagueId) => {
     if (rating > (playerAggregation.maxRatings[groupType] ?? 0)) {
       playerAggregation.maxRatings[groupType] = rating;
+      playerAggregation.maxRatingLeagueIds[groupType] = leagueId;
     }
   };
 
@@ -50,13 +58,14 @@ export const aggregateLeagueEntries = (leagueEntries) => {
           weapons: {},
           groupTypes: { pair: 0, team: 0 },
           maxRatings: { pair: null, team: null },
+          maxRatingLeagueIds: { pair: null, team: null },
         };
       }
 
       aggregation[id].count += 1;
       aggregation[id].weapons[weaponId] = (aggregation[id].weapons[weaponId] ? aggregation[id].weapons[weaponId] : 0) + 1;
 
-      setMaxRating(aggregation[id], groupTypeTable[entry.group_type], entry.rating);
+      setMaxRating(aggregation[id], groupTypeTable[entry.group_type], entry.rating, moment.utc(entry.start_time).format('YYMMDDHH'));
 
       if (entry.group_type === 'P') {
         aggregation[id].groupTypes.pair += 1;
