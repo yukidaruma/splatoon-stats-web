@@ -22,6 +22,12 @@ module.exports = {
         ]
       }
     ],
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ],
     "object-curly-newline": ["warn", {
       "ObjectExpression": { "multiline": true, "minProperties": 4 },
       "ObjectPattern": "never",
