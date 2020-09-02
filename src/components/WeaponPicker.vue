@@ -23,7 +23,7 @@
           :is-active="selectedWeapons.includes(weapon.weapon_id)"
           :key="weapon.weapon_id"
           :weapon-id="weapon.weapon_id"
-          :count="counts[weapon.weapon_id]"
+          :count="getCountFor(weapon.weapon_id)"
         />
       </div>
     </div>
@@ -40,6 +40,7 @@
 <script>
 import { mapState } from 'vuex';
 import WeaponIconCount from './WeaponIconCount.vue';
+import { weaponReskins } from '../constants';
 
 export default {
   components: { WeaponIconCount },
@@ -52,10 +53,20 @@ export default {
     isAllSelected() {
       return this.selectedWeapons.length === this.weapons.length;
     },
-    weapons() {
-      if (this.options) {
-        return this.allWeapons.filter((w) => this.options.includes(w.weapon_id));
+    normalizedOptions() {
+      if (!this.options) {
+        return null;
       }
+
+      const normalizeWeaponVariant = (weaponId) => (weaponId in weaponReskins ? weaponReskins[weaponId] : weaponId);
+
+      return this.options.map(normalizeWeaponVariant);
+    },
+    weapons() {
+      if (this.normalizedOptions) {
+        return this.allWeapons.filter((w) => this.normalizedOptions.includes(w.weapon_id));
+      }
+
       return this.allWeapons;
     },
   },
@@ -77,6 +88,13 @@ export default {
     };
   },
   methods: {
+    getCountFor(weaponId) {
+      const variantsCount = Object.entries(weaponReskins)
+        .filter(([_, originalWeaponId]) => originalWeaponId === weaponId)
+        .reduce((sum, [id, _]) => sum + (this.counts[id] ?? 0), 0);
+
+      return (this.counts[weaponId] ?? 0) + variantsCount;
+    },
     closeModal() {
       this.isOpen = false;
     },
