@@ -40,6 +40,7 @@
 <script>
 import { weaponIcon } from '../helper';
 import Player from '../player';
+import { weaponReskins } from '../constants';
 
 import PlayerLink from './PlayerLink.vue';
 
@@ -59,14 +60,20 @@ export default {
   methods: { Player, weaponIcon },
   computed: {
     filteredRanking() {
-      if (!Array.isArray(this.weaponFilter)) return this.ranking;
+      let { weaponFilter: filters } = this;
+      if (!Array.isArray(filters)) return this.ranking;
+
+      const reskins = Object.entries(weaponReskins)
+        .filter(([_, original]) => filters.includes(original))
+        .map(([reskin, _]) => Number(reskin));
+      filters = filters.flatMap((weaponId) => [weaponId, ...reskins]);
 
       if (this.rankingType === 'league') {
         return this.ranking.filter((team) => team.group_members
-          .some((member) => this.weaponFilter.includes(parseInt(member[1], 10))));
+          .some((member) => filters.includes(parseInt(member[1], 10))));
       }
 
-      return this.ranking.filter((record) => this.weaponFilter.includes(record.weapon_id));
+      return this.ranking.filter((record) => filters.includes(record.weapon_id));
     },
   },
 };
