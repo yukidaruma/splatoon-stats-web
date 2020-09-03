@@ -153,7 +153,7 @@ import flatten from 'array.prototype.flat';
 import moment from 'moment';
 
 import apiClient from '../api-client';
-import { formatRankingEntry, isValidPlayerId, safeParseInt, unique } from '../helper';
+import { formatRankingEntry, isValidPlayerId, safeParseInt, unique, weaponIdsWithReskins } from '../helper';
 
 import FavoritePlayerButton from '../components/FavoritePlayerButton.vue';
 import LeagueTeamTypePicker, { LeagueTeamTypes } from '../components/LeagueTeamTypePicker.vue';
@@ -308,7 +308,7 @@ export default {
     getFilteredLeagueRankingEntryKeysSet(records, filters, isForWeaponCount = false) {
       const minPower = safeParseInt(filters.minPower);
       const minRank = safeParseInt(filters.minRank);
-      const weapons = new Set(filters.weapons);
+      const weapons = filters.weapons ? new Set(weaponIdsWithReskins(filters.weapons)) : null;
 
       return new Set(
         records

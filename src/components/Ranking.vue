@@ -38,9 +38,8 @@
 </template>
 
 <script>
-import { weaponIcon } from '../helper';
+import { weaponIcon, weaponIdsWithReskins } from '../helper';
 import Player from '../player';
-import { weaponReskins } from '../constants';
 
 import PlayerLink from './PlayerLink.vue';
 
@@ -63,10 +62,7 @@ export default {
       let { weaponFilter: filters } = this;
       if (!Array.isArray(filters)) return this.ranking;
 
-      const reskins = Object.entries(weaponReskins)
-        .filter(([_, original]) => filters.includes(original))
-        .map(([reskin, _]) => Number(reskin));
-      filters = filters.flatMap((weaponId) => [weaponId, ...reskins]);
+      filters = weaponIdsWithReskins(filters);
 
       if (this.rankingType === 'league') {
         return this.ranking.filter((team) => team.group_members

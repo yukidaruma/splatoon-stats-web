@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { weaponReskins } from './constants';
 
 const weaponIcon = (weaponType, weaponId) => {
   const singularWeaponType = weaponType.substring(0, weaponType.length - 1);
@@ -85,8 +86,19 @@ const titleizeSplatfest = (splatfest) => `[${splatfest.region.toUpperCase()}] ${
 
 const unique = (iterable) => Array.from(new Set(iterable));
 
+const weaponIdsWithReskins = (weaponIds) => {
+  if (!Array.isArray(weaponIds)) {
+    weaponIds = [weaponIds];
+  }
+
+  const reskins = Object.entries(weaponReskins)
+    .filter(([_, original]) => weaponIds.includes(original))
+    .map(([reskin, _]) => Number(reskin));
+
+  return [...weaponIds, ...reskins];
+};
+
 export {
-  weaponIcon,
   capitalizeFirstLetters,
   isValidPlayerId,
   isEmptyString,
@@ -97,4 +109,6 @@ export {
   safeParseInt,
   titleizeSplatfest,
   unique,
+  weaponIcon,
+  weaponIdsWithReskins,
 };

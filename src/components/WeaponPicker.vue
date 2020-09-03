@@ -40,7 +40,7 @@
 <script>
 import { mapState } from 'vuex';
 import WeaponIconCount from './WeaponIconCount.vue';
-import { weaponReskins } from '../constants';
+import { weaponIdsWithReskins } from '../helper';
 
 export default {
   components: { WeaponIconCount },
@@ -58,9 +58,7 @@ export default {
         return null;
       }
 
-      const normalizeWeaponVariant = (weaponId) => (weaponId in weaponReskins ? weaponReskins[weaponId] : weaponId);
-
-      return this.options.map(normalizeWeaponVariant);
+      return this.options.flatMap(weaponIdsWithReskins);
     },
     weapons() {
       if (this.normalizedOptions) {
@@ -89,11 +87,9 @@ export default {
   },
   methods: {
     getCountFor(weaponId) {
-      const variantsCount = Object.entries(weaponReskins)
-        .filter(([_, originalWeaponId]) => originalWeaponId === weaponId)
-        .reduce((sum, [id, _]) => sum + (this.counts[id] ?? 0), 0);
-
-      return (this.counts[weaponId] ?? 0) + variantsCount;
+      return weaponIdsWithReskins(weaponId)
+        .map((id) => this.counts[id] ?? 0)
+        .reduce((sum, value) => sum + value, 0);
     },
     closeModal() {
       this.isOpen = false;
