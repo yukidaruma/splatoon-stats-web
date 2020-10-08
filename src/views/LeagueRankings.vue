@@ -34,14 +34,9 @@ import apiClient from '../api-client';
 import { formatRankingEntry, unique } from '../helper';
 
 import DatePicker from '../components/DatePicker.vue';
-import LeagueTeamTypePicker, { LeagueTeamTypes } from '../components/LeagueTeamTypePicker.vue';
+import LeagueTeamTypePicker, { LeagueTeamTypes, teamTypeSymbols } from '../components/LeagueTeamTypePicker.vue';
 import Ranking from '../components/Ranking.vue';
 import WeaponPicker from '../components/WeaponPicker.vue';
-
-const teamTypeSymbols = {
-  [LeagueTeamTypes.team]: 'T',
-  [LeagueTeamTypes.pair]: 'P',
-};
 
 export default {
   name: 'LeagueRankings',
