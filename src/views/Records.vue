@@ -86,10 +86,13 @@
       <div class="is-flex" style="align-items: center">
         <league-team-type-picker v-model="leagueWeaponRecordsGroupType" :no-all="true" />
         <weapon-picker style="margin-left: 1em" :value.sync="leagueWeapon" open-button-label="Select Weapon" single />
-        <button @click="fetchLeagueWeaponRecords(leagueWeapon)">Go</button>
+        <button @click="fetchLeagueWeaponRecords(leagueWeapon)" :disabled="isLoadingLeagueWeaponsRecords">Go</button>
       </div>
 
-      <div v-for="(records, ruleId) in leagueWeaponRecords">
+      <div v-if="isLoadingLeagueWeaponsRecords">
+        Loading...
+      </div>
+      <div v-else v-for="(records, ruleId) in leagueWeaponRecords">
         <h2>{{ $t(`rules.${findRuleKey(ruleId)}.name`) }}</h2>
         <table class="table is-hoverable is-striped is-fullwidth">
           <tbody>
@@ -217,6 +220,7 @@ export default {
     return {
       activeTab: 'x-weapons',
       monthlyLeagueBattlesRecords: [],
+      isLoadingLeagueWeaponsRecords: true,
       leagueWeapon: 0,
       leagueWeaponRecordsGroupType: LeagueTeamTypes.team,
       leagueWeaponRecords: null,
@@ -238,6 +242,7 @@ export default {
       return moment.utc(time).local().format('YYYY-MM-DD HH:mm');
     },
     async fetchLeagueWeaponRecords() {
+      this.isLoadingLeagueWeaponsRecords = true;
       const { data } = await apiClient.get(
         '/records/league-weapon',
         {
@@ -248,6 +253,7 @@ export default {
         },
       );
 
+      this.isLoadingLeagueWeaponsRecords = false;
       this.leagueWeaponRecords = Object.fromEntries(Object.entries(data).map(([ruleId, ruleRecords]) => [
         ruleId,
         ruleRecords.map((record) => ({
