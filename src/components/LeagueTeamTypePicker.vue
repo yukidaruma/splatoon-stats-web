@@ -17,6 +17,11 @@ export const LeagueTeamTypes = {
   pair: 3,
 };
 
+export const teamTypeSymbols = {
+  [LeagueTeamTypes.team]: 'T',
+  [LeagueTeamTypes.pair]: 'P',
+};
+
 export default {
   name: 'LeagueTeamTypePicker',
   props: ['noAll', 'value'],

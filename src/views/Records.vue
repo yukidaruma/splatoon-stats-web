@@ -14,6 +14,10 @@
           label: 'X Power',
         },
         {
+          key: 'league-weapons',
+          label: 'League Weapon',
+        },
+        {
           key: 'league-powers',
           label: 'League Power',
         },
@@ -78,7 +82,33 @@
       </template>
     </div>
 
-    <div class="league table-container" v-show="activeTab === 'league-powers'">
+    <div v-show="activeTab === 'league-weapons'" class="league-weapons table-container">
+      <div class="is-flex" style="align-items: center">
+        <league-team-type-picker v-model="leagueWeaponRecordsGroupType" :no-all="true" />
+        <weapon-picker style="margin-left: 1em" :value.sync="leagueWeapon" open-button-label="Select Weapon" single />
+        <button @click="fetchLeagueWeaponRecords(leagueWeapon)" :disabled="isLoadingLeagueWeaponsRecords">Go</button>
+      </div>
+
+      <div v-if="isLoadingLeagueWeaponsRecords">
+        Loading...
+      </div>
+      <div v-else v-for="(records, ruleId) in leagueWeaponRecords">
+        <h2>{{ $t(`rules.${findRuleKey(ruleId)}.name`) }}</h2>
+        <table class="table is-hoverable is-striped is-fullwidth">
+          <tbody>
+            <template v-for="record in records">
+              <player-ranking-entry
+                rankingType="league"
+                :as-records="true"
+                :ranking-entry="record"
+              />
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div v-show="activeTab === 'league-powers'" class="league table-container">
       <div v-for="(groupTypeRecords, k) in leagueRecords">
         <h2>{{$t(`ui.team_types.${k}`)}}</h2>
 
@@ -156,6 +186,10 @@
     grid-template-columns: 4em 1fr auto 13em;
   }
 }
+
+.league-weapons > div:not(:first-child) {
+  margin-top: 1em;
+}
 </style>
 
 <script>
@@ -165,17 +199,31 @@ import apiClient from '../api-client';
 import { findRuleKey, formatRankingEntry } from '../helper';
 import Player from '../player';
 
+import LeagueTeamTypePicker, { LeagueTeamTypes, teamTypeSymbols } from '../components/LeagueTeamTypePicker.vue';
 import PlayerLink from '../components/PlayerLink.vue';
 import PlayerRankingEntry from '../components/PlayerRankingEntry.vue';
 import TabSwitcher from '../components/TabSwitcher.vue';
+import WeaponPicker from '../components/WeaponPicker.vue';
+
+const mapTeammates = (member) => ({
+  player_id: member[0],
+  weapon_id: member[1],
+  player_name: member[2],
+});
 
 export default {
   name: 'Records',
-  components: { PlayerLink, PlayerRankingEntry, TabSwitcher },
+  components: {
+    LeagueTeamTypePicker, PlayerLink, PlayerRankingEntry, TabSwitcher, WeaponPicker,
+  },
   data() {
     return {
       activeTab: 'x-weapons',
       monthlyLeagueBattlesRecords: [],
+      isLoadingLeagueWeaponsRecords: true,
+      leagueWeapon: 0,
+      leagueWeaponRecordsGroupType: LeagueTeamTypes.team,
+      leagueWeaponRecords: null,
       leagueRecords: [],
       weapons: {},
       xRecords: [],
@@ -192,6 +240,27 @@ export default {
     },
     formatTimeLeague(time) {
       return moment.utc(time).local().format('YYYY-MM-DD HH:mm');
+    },
+    async fetchLeagueWeaponRecords() {
+      this.isLoadingLeagueWeaponsRecords = true;
+      const { data } = await apiClient.get(
+        '/records/league-weapon',
+        {
+          params: {
+            weapon_id: this.leagueWeapon,
+            group_type: teamTypeSymbols[this.leagueWeaponRecordsGroupType],
+          },
+        },
+      );
+
+      this.isLoadingLeagueWeaponsRecords = false;
+      this.leagueWeaponRecords = Object.fromEntries(Object.entries(data).map(([ruleId, ruleRecords]) => [
+        ruleId,
+        ruleRecords.map((record) => ({
+          ...record,
+          teammates: record.teammates.map(mapTeammates),
+        })),
+      ]));
     },
     fetchWeaponsTopPlayers() {
       this.isLoading = true;
@@ -220,16 +289,13 @@ export default {
       return {
         ...record,
         rule_id: ruleId,
-        teammates: record.teammates.map((member) => ({
-          player_id: member[0],
-          weapon_id: member[1],
-          player_name: member[2],
-        })),
+        teammates: record.teammates.map(mapTeammates),
       };
     },
   },
   created() {
     this.fetchWeaponsTopPlayers();
+    this.fetchLeagueWeaponRecords(this.leagueWeapon);
   },
 };
 </script>

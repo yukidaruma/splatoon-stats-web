@@ -22,7 +22,7 @@ const rankedRules = [
   { id: 3, key: 'rainmaker' },
   { id: 4, key: 'clam_blitz' },
 ];
-const findRuleKey = (rankedRuleId) => rankedRules.find((rule) => rule.id === rankedRuleId).key;
+const findRuleKey = (rankedRuleId) => rankedRules.find((rule) => rule.id === Number(rankedRuleId)).key;
 
 const formatRankingEntry = (rankingEntry, weaponType, rankingType) => {
   if (weaponType === 'mains') {

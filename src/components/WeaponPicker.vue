@@ -1,26 +1,35 @@
 <template>
   <div>
     <template v-if="weapons.length === 0">
-      <button @click="openModal" disabled>Open</button>
+      <button @click="openModal" disabled>{{ openButtonLabel || 'Open' }}</button>
     </template>
     <template v-else>
-      <button @click="openModal">Open</button>
-      ({{selectedWeapons.length}}/{{weapons.length}})
+      <div class="is-flex" style="align-items: center;">
+        <button @click="openModal">{{ openButtonLabel || 'Open' }}</button>
+        <span v-if="single">
+          <weapon-icon-count v-if="selectedWeapons.length" :weapon-id="selectedWeapons[0]" />
+        </span>
+        <span v-else>
+          ({{selectedWeapons.length}}/{{weapons.length}})
+        </span>
+      </div>
     </template>
 
     <div :class="['modal', isOpen ? 'is-active' : '']">
       <div class="modal-background" @click="closeModal"></div>
       <div class="modal-content">
         <div class="modal-controls">
-          <button v-if="!isAllSelected" @click="selectAll">Select All</button>
-          <button v-else @click="unselectAll">Unselect All</button>
+          <template v-if="!single">
+            <button v-if="!isAllSelected" @click="selectAll">Select All</button>
+            <button v-else @click="unselectAll">Unselect All</button>
+          </template>
           <button class="red" @click="closeModal">Close</button>
         </div>
 
         <weapon-icon-count
           v-for="weapon in weapons"
           @click.native="toggleSelection(weapon.weapon_id)"
-          :is-active="selectedWeapons.includes(weapon.weapon_id)"
+          :is-active="single || selectedWeapons.includes(weapon.weapon_id)"
           :key="weapon.weapon_id"
           :weapon-id="weapon.weapon_id"
           :count="getCountFor(weapon.weapon_id)"
@@ -34,6 +43,9 @@
 .modal-controls {
   display: flex;
   justify-content: space-between;
+}
+.modal-controls .red {
+  margin-left: auto;
 }
 </style>
 
@@ -71,13 +83,15 @@ export default {
   props: {
     options: Array,
     value: {
-      type: Array,
+      type: [Array, Number],
       default: () => [],
     },
     counts: {
       type: Object,
       default: () => ({}),
     },
+    single: Boolean,
+    openButtonLabel: String,
   },
   data() {
     return {
@@ -101,6 +115,12 @@ export default {
       this.selectedWeapons = this.weapons.map((w) => w.weapon_id);
     },
     toggleSelection(weaponId) {
+      if (this.single) {
+        this.selectedWeapons = [weaponId];
+        this.closeModal();
+        return;
+      }
+
       if (this.selectedWeapons.includes(weaponId)) {
         this.selectedWeapons = this.selectedWeapons.filter((w) => w !== weaponId);
         return;
@@ -108,6 +128,11 @@ export default {
       this.selectedWeapons.push(weaponId);
     },
     initialize() {
+      if (this.single) {
+        this.selectedWeapons = Array.isArray(this.value) ? this.value : [this.value];
+        return;
+      }
+
       if (Array.isArray(this.value)) {
         this.selectedWeapons = this.value;
         return;
@@ -121,6 +146,11 @@ export default {
   },
   watch: {
     selectedWeapons() {
+      if (this.single) {
+        this.$emit('update:value', this.selectedWeapons[0]);
+        return;
+      }
+
       if (this.isAllSelected) {
         // Emits null instead of full array for faster filtering.
         this.$emit('update:value', null);

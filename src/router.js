@@ -1,16 +1,15 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-
+import { rankedRules } from './helper';
 import Index from './views/Index.vue';
-import Weapons from './views/Weapons.vue';
+import LeagueRankings from './views/LeagueRankings.vue';
+import PlayerSummary from './views/PlayerSummary.vue';
 import Records from './views/Records.vue';
 import Search from './views/Search.vue';
-import PlayerSummary from './views/PlayerSummary.vue';
-import XRankings from './views/XRankings.vue';
-import LeagueRankings from './views/LeagueRankings.vue';
 import SplatfestRankings from './views/SplatfestRankings.vue';
 import Trends from './views/Trends.vue';
-import { rankedRules } from './helper';
+import Weapons from './views/Weapons.vue';
+import XRankings from './views/XRankings.vue';
 
 Vue.use(Router);
 
