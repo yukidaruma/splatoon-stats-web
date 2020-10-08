@@ -1,15 +1,18 @@
 <template>
   <table class="table is-fullwidth is-striped is-hoverable">
-    <tbody>
+    <thead>
       <tr>
         <th>Name</th>
         <th>{{ $t('ui.team_types.team') }}</th>
         <th>{{ $t('ui.team_types.pair') }}</th>
         <th>{{ $t('ui.weapon_types.weapons') }}</th>
       </tr>
+    </thead>
+    <tbody>
       <tr v-for="peer in peers" :key="peer.playerId">
         <td>
           <player-link :player="peer" />
+          <small>({{ peer.count }})</small>
         </td>
         <td><router-link :to="`/rankings/league/${peer.maxRatingLeagueIds.team}T`">{{ peer.maxRatings.team }}</router-link></td>
         <td><router-link :to="`/rankings/league/${peer.maxRatingLeagueIds.pair}P`">{{ peer.maxRatings.pair }}</router-link></td>
