@@ -223,7 +223,7 @@ export default {
   },
   data() {
     return {
-      activeTab: 'x-weapons',
+      activeTab: 'x-weapons-all',
       monthlyLeagueBattlesRecords: [],
       leagueWeapon: {
         id: 0,
