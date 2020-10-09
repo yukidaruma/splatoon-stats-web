@@ -27,3 +27,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@media screen and (max-width: 768px) {
+  .tabs ul {
+    flex-direction: column;
+  }
+
+  .tabs ul li {
+    width: 100%;
+  }
+}
+</style>
