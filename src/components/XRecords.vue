@@ -2,6 +2,7 @@
   <table class="table is-hoverable is-striped is-fullwidth">
     <tbody>
       <tr v-for="(record, i) in records" :key="i">
+        <td>#{{ i + 1 }}</td>
         <td>{{ record.rating }}</td>
         <td>
           <div class="weapon-name-container">

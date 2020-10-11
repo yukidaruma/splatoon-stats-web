@@ -82,7 +82,7 @@
     <div v-show="activeTab === 'x-powers'" class="columns is-multiline">
       <div v-for="(records, i) in xRecords" class="column is-6" :key="i">
         <h3>{{$t(`ui.rule_shortnames.${findRuleKey(i + 1)}`)}}</h3>
-        <x-records :records="records" :rule-id="i + 1" />
+        <x-records :records="records" :order="i" :rule-id="i + 1" />
       </div>
     </div>
 
@@ -100,10 +100,11 @@
         <h2>{{ $t(`rules.${findRuleKey(ruleId)}.name`) }}</h2>
         <table class="table is-hoverable is-striped is-fullwidth">
           <tbody>
-            <template v-for="record in records">
+            <template v-for="(record, rank) in records">
               <player-ranking-entry
                 rankingType="league"
                 :as-records="true"
+                :rank="rank + 1"
                 :ranking-entry="record"
               />
             </template>
@@ -113,17 +114,18 @@
     </div>
 
     <div v-show="activeTab === 'league-powers'" class="league table-container">
-      <div v-for="(groupTypeRecords, k) in leagueRecords">
-        <h2>{{$t(`ui.team_types.${k}`)}}</h2>
+      <league-team-type-picker v-model="leaguePowersActiveTab" :no-all="true" />
 
+      <div v-for="(groupTypeRecords, k) in leagueRecords" v-show="leaguePowersActiveTab === LeagueTeamTypes[k]" :key="k">
         <template v-for="(groupRecords, i) in groupTypeRecords">
           <h3>{{$t(`ui.rule_shortnames.${findRuleKey(i + 1)}`)}}</h3>
           <table class="table is-hoverable is-striped is-fullwidth">
             <tbody>
-              <template v-for="record in groupRecords">
+              <template v-for="(record, rank) in groupRecords">
                 <player-ranking-entry
                   rankingType="league"
                   :as-records="true"
+                  :rank="rank + 1"
                   :ranking-entry="mapLeagueRecord(record, i + 1)"
                 />
               </template>
@@ -223,8 +225,10 @@ export default {
   },
   data() {
     return {
+      LeagueTeamTypes,
       activeTab: 'x-weapons-all',
       monthlyLeagueBattlesRecords: [],
+      leaguePowersActiveTab: LeagueTeamTypes.team,
       leagueWeapon: {
         id: 0,
         isLoading: true,

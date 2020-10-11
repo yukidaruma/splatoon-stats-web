@@ -1,7 +1,7 @@
 <template>
   <tr>
     <td v-if="!asRecords">#{{ rankingEntry.rank }}</td>
-    <td>{{ rankingEntry.rating }}</td>
+    <td><span v-if="asRecords">#{{ rank }} </span>{{ rankingEntry.rating }}</td>
 
     <!-- Weapon image -->
     <td v-if="rankingType === 'league'">
@@ -50,7 +50,7 @@ import PlayerLink from './PlayerLink.vue';
 export default {
   components: { PlayerLink },
   name: 'PlayerRankingEntry',
-  props: ['asRecords', 'playerName', 'rankingEntry', 'rankingType'],
+  props: ['asRecords', 'playerName', 'rank', 'rankingEntry', 'rankingType'],
   filters: {
     formatDate(time, rankingType) {
       const dateFormat = {
