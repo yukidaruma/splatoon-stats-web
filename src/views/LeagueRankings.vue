@@ -37,8 +37,10 @@ import DatePicker from '../components/DatePicker.vue';
 import LeagueTeamTypePicker, { LeagueTeamTypes, teamTypeSymbols } from '../components/LeagueTeamTypePicker.vue';
 import Ranking from '../components/Ranking.vue';
 import WeaponPicker from '../components/WeaponPicker.vue';
+import { weaponFilterQueryParamMixin } from './mixins';
 
 export default {
+  mixins: [weaponFilterQueryParamMixin],
   name: 'LeagueRankings',
   components: {
     DatePicker, LeagueTeamTypePicker, Ranking, WeaponPicker,
@@ -77,10 +79,14 @@ export default {
       const { time } = this;
       const leagueId = time.format('YYMMDDHH') + this.groupType;
       const path = `/rankings/league/${leagueId}`;
+      let routePath = path;
+      if (this.filters.weapons) {
+        routePath += `?weapons=${this.filters.weapons.join(',')}`;
+      }
 
       this.title = null;
       this.isLoading = true;
-      this.$router.push(path);
+      this.$router.push(routePath);
 
       apiClient.get(path)
         .then((res) => {

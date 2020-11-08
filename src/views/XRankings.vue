@@ -87,14 +87,15 @@ export default {
   methods: {
     capitalizeFirstLetters,
     fetchXRanking() {
-      let path = `/rankings/x/${this.year}/${this.month + 1}/${this.rankedRule}`;
+      const path = `/rankings/x/${this.year}/${this.month + 1}/${this.rankedRule}`;
+      let routePath = path;
       if (this.filters.weapons) {
-        path += `?weapons=${this.filters.weapons.join(',')}`;
+        routePath += `?weapons=${this.filters.weapons.join(',')}`;
       }
 
       this.title = null;
       this.isLoading = true;
-      this.$router.push(path);
+      this.$router.push(routePath);
 
       apiClient.get(path)
         .then((res) => {

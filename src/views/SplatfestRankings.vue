@@ -101,12 +101,14 @@ export default {
       }
     },
     fetchSplatfestRanking(region, splatfestId) {
-      let path = `/rankings/splatfest/${region}/${splatfestId}`;
+      const path = `/rankings/splatfest/${region}/${splatfestId}`;
+      let routePath = path;
       if (this.filters.weapons) {
-        path += `?weapons=${this.filters.weapons.join(',')}`;
+        routePath += `?weapons=${this.filters.weapons.join(',')}`;
       }
+
       this.isLoading = true;
-      this.$router.push(path);
+      this.$router.push(routePath);
 
       apiClient.get(path)
         .then((res) => {
