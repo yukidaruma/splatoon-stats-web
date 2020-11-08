@@ -104,6 +104,7 @@ export default {
       const path = `/rankings/splatfest/${region}/${splatfestId}`;
 
       this.isLoading = true;
+      this.rankings = [[], []];
       this.$router.push(this.normalizeRoutePath(path));
 
       apiClient.get(path)
@@ -117,11 +118,10 @@ export default {
               .filter((rankingEntry) => rankingEntry.team_id === teamId)
               .map((rankingEntry) => formatRankingEntry(rankingEntry, 'weapons'));
           });
-
-          this.lastFetchedSplatfest = this.selectedSplatfest;
         })
         .finally(() => {
           this.isLoading = false;
+          this.lastFetchedSplatfest = this.selectedSplatfest;
         });
     },
   },

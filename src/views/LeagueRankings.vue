@@ -82,6 +82,7 @@ export default {
 
       this.title = null;
       this.isLoading = true;
+      this.ranking = [];
       this.$router.push(this.normalizeRoutePath(path));
 
       apiClient.get(path)

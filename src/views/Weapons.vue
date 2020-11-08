@@ -161,6 +161,7 @@ export default {
 
       this.title = null;
       this.isLoading = true;
+      this.weapons = [];
       this.$router.push(path);
       apiClient
         .get(path)
@@ -177,7 +178,6 @@ export default {
           }
 
           if (res.data.length === 0) {
-            this.weapons = [];
             return;
           }
 

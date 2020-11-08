@@ -30,28 +30,36 @@
       </div>
     </div>
 
-    <div v-if="result">
-      <table class="table is-hoverable is-striped is-fullwidth">
-        <thead>
-          <th>{{ result.newDate.format(dateFormat) }}</th>
-          <th>Weapon</th>
-          <th>{{ result.oldDate.format(dateFormat) }}</th>
-          <th>Diff.</th>
-        </thead>
-        <tbody>
-          <tr v-for="weapon in weaponRecords" :key="weapon.weapon_id">
-            <td>{{ weapon.current }}</td>
-            <td>
-              <div class="weapon-name-container">
-                <img class="weapon-icon" :src="weapon.icon">
-                {{ $t(weapon.localizationKey) }}
-              </div>
-            </td>
-            <td>{{ weapon.prev }}</td>
-            <td>{{ weapon.diff | addSign }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div v-if="isLoading">
+      Loading...
+    </div>
+    <div v-else>
+      <div v-if="result">
+        <table class="table is-hoverable is-striped is-fullwidth">
+          <thead>
+            <th>{{ result.newDate.format(dateFormat) }}</th>
+            <th>Weapon</th>
+            <th>{{ result.oldDate.format(dateFormat) }}</th>
+            <th>Diff.</th>
+          </thead>
+          <tbody>
+            <tr v-for="weapon in weaponRecords" :key="weapon.weapon_id">
+              <td>{{ weapon.current }}</td>
+              <td>
+                <div class="weapon-name-container">
+                  <img class="weapon-icon" :src="weapon.icon">
+                  {{ $t(weapon.localizationKey) }}
+                </div>
+              </td>
+              <td>{{ weapon.prev }}</td>
+              <td>{{ weapon.diff | addSign }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div v-else>
+        No data found.
+      </div>
     </div>
   </div>
 </template>
@@ -149,6 +157,7 @@ export default {
       }
     },
     fetchTrends() {
+      this.isLoading = true;
       this.result = null;
 
       apiClient
@@ -172,6 +181,9 @@ export default {
             oldDate: this.oldDate,
             trends,
           };
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
     },
   },
