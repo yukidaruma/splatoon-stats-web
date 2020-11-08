@@ -79,14 +79,10 @@ export default {
       const { time } = this;
       const leagueId = time.format('YYMMDDHH') + this.groupType;
       const path = `/rankings/league/${leagueId}`;
-      let routePath = path;
-      if (this.filters.weapons) {
-        routePath += `?weapons=${this.filters.weapons.join(',')}`;
-      }
 
       this.title = null;
       this.isLoading = true;
-      this.$router.push(routePath);
+      this.$router.push(this.normalizeRoutePath(path));
 
       apiClient.get(path)
         .then((res) => {
