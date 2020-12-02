@@ -28,7 +28,7 @@
         Filter by power
       -->
       <div>
-        <div style="display: inline;" v-if="rankingType === 'splatfest'">
+        <div style="display: flex;" v-if="rankingType === 'splatfest'">
           <span class="label">Splatfest</span>
           <splatfest-picker @splatfest-change="onSplatfestChange" />
         </div>
@@ -36,6 +36,8 @@
           <span class="label">Date</span>
           <date-picker ref="datePicker" :initialRankingType="rankingType" v-model="time" />
         </div>
+      </div>
+      <div style="margin-left: 8em">
         <button @click="fetchWeaponRanking" :disabled="isLoading">Go</button>
       </div>
     </div>

@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div style="display: flex;">
     <select v-model="regionFilter">
       <option :value="null">All regions</option>
       <option value="jp">JP</option>
       <option value="na">NA</option>
       <option value="eu">EU</option>
     </select>
-    <select @change="emitSplatfestChange()" v-model="selectedSplatfest">
+    <select style="width: 100%" @change="emitSplatfestChange()" v-model="selectedSplatfest">
       <option :value="null">-</option>
       <option v-for="f in splatfestOptions" :key="f.key" :value="f">
         {{ titleizeSplatfest(f) }}

@@ -71,13 +71,16 @@ import { formatRankingEntry } from '../helper';
 import DatePicker from '../components/DatePicker.vue';
 import RankedRulePicker from '../components/RankedRulePicker.vue';
 import WeaponTypePicker from '../components/WeaponTypePicker.vue';
+import WeaponIconCount from '../components/WeaponIconCount.vue';
 
 const defaultNewDate = moment().utc().add({ month: -1 });
 const defaultOldDate = moment().utc().add({ month: -2 });
 
 export default {
   name: 'Trends',
-  components: { DatePicker, RankedRulePicker, WeaponTypePicker },
+  components: {
+    DatePicker, RankedRulePicker, WeaponTypePicker, WeaponIconCount,
+  },
   data() {
     return {
       isLoading: false,
