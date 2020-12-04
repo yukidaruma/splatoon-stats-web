@@ -145,6 +145,9 @@ export default {
     },
   },
   watch: {
+    value(_) {
+      this.selectedWeapons = Array.isArray(this.value) ? this.value : [this.value];
+    },
     selectedWeapons() {
       if (this.single) {
         this.$emit('update:value', this.selectedWeapons[0]);

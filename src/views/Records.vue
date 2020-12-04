@@ -205,7 +205,7 @@ import apiClient from '../api-client';
 import { findRuleKey, formatRankingEntry } from '../helper';
 import Player from '../player';
 
-import LeagueTeamTypePicker, { LeagueTeamTypes, teamTypeSymbols } from '../components/LeagueTeamTypePicker.vue';
+import LeagueTeamTypePicker, { LeagueTeamTypes, LeagueTeamTypesTable, teamTypeSymbols } from '../components/LeagueTeamTypePicker.vue';
 import PlayerLink from '../components/PlayerLink.vue';
 import PlayerRankingEntry from '../components/PlayerRankingEntry.vue';
 import TabSwitcher from '../components/TabSwitcher.vue';
@@ -222,6 +222,32 @@ export default {
   name: 'Records',
   components: {
     LeagueTeamTypePicker, PlayerLink, PlayerRankingEntry, TabSwitcher, WeaponPicker, XRecords,
+  },
+  mounted() {
+    const hash = this.$route.hash.replace('#', '');
+    if (!hash) { return; }
+
+    const [activeTab, data] = hash.split(';');
+    this.activeTab = activeTab;
+    switch (activeTab) {
+      case 'x-weapons':
+        this.xWeapon.id = Number.parseInt(data, 10);
+        break;
+      case 'league-weapons': {
+        const [teamType, ...weaponId] = data;
+        this.leagueWeapon.groupType = LeagueTeamTypesTable[teamType];
+        this.leagueWeapon.id = Number.parseInt(weaponId.join('', ''), 10);
+        break;
+      }
+      case 'league-powers':
+        this.leaguePowersActiveTab = LeagueTeamTypesTable[data];
+        break;
+      default:
+    }
+
+    this.fetchWeaponsTopPlayers();
+    this.fetchXWeaponRecords();
+    this.fetchLeagueWeaponRecords();
   },
   data() {
     return {
@@ -244,6 +270,34 @@ export default {
       weapons: {},
       xRecords: [],
     };
+  },
+  computed: {
+    hash() {
+      const hash = `${this.activeTab}`;
+      let data = null;
+
+      switch (this.activeTab) {
+        case 'x-weapons':
+          data = this.xWeapon.id;
+          break;
+        case 'league-weapons':
+          data = teamTypeSymbols[this.leagueWeapon.groupType] + this.leagueWeapon.id;
+          break;
+        case 'league-powers':
+          data = teamTypeSymbols[this.leaguePowersActiveTab];
+          break;
+        default:
+      }
+
+      return data ? `${hash};${data}` : hash;
+    },
+  },
+  watch: {
+    hash(value) {
+      if (value && this.$route.hash !== `#${value}`) {
+        this.$router.push({ hash: value });
+      }
+    },
   },
   methods: {
     findRuleKey,
@@ -318,11 +372,6 @@ export default {
         teammates: record.teammates.map(mapTeammates),
       };
     },
-  },
-  created() {
-    this.fetchWeaponsTopPlayers();
-    this.fetchXWeaponRecords();
-    this.fetchLeagueWeaponRecords();
   },
 };
 </script>
