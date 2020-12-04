@@ -17,6 +17,12 @@ export const LeagueTeamTypes = {
   pair: 3,
 };
 
+export const LeagueTeamTypesTable = {
+  ...LeagueTeamTypes,
+  T: 2,
+  P: 3,
+};
+
 export const teamTypeSymbols = {
   [LeagueTeamTypes.team]: 'T',
   [LeagueTeamTypes.pair]: 'P',
@@ -25,6 +31,11 @@ export const teamTypeSymbols = {
 export default {
   name: 'LeagueTeamTypePicker',
   props: ['noAll', 'value'],
+  watch: {
+    value() {
+      this.teamType = this.value;
+    },
+  },
   computed: {
     leagueTeamTypeOptions() {
       if (this.noAll) {

@@ -15,9 +15,14 @@
 
 <script>
 export default {
-  props: ['tabs'],
+  props: ['tabs', 'value'],
   data() {
     return { activeTab: this.value || this.tabs[0].key };
+  },
+  watch: {
+    value(value) {
+      this.activeTab = value;
+    },
   },
   methods: {
     onClick(newTabKey) {
