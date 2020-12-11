@@ -23,6 +23,11 @@ export const LeagueTeamTypesTable = {
   P: 3,
 };
 
+export const leagueTeamTypeMemers = {
+  [LeagueTeamTypes.team]: 4,
+  [LeagueTeamTypes.pair]: 2,
+};
+
 export const teamTypeSymbols = {
   [LeagueTeamTypes.team]: 'T',
   [LeagueTeamTypes.pair]: 'P',

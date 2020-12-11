@@ -22,6 +22,10 @@
           label: 'League Weapon',
         },
         {
+          key: 'league-weapon-combinations',
+          label: 'League Weapons',
+        },
+        {
           key: 'league-powers',
           label: 'League Power',
         },
@@ -97,6 +101,33 @@
         Loading...
       </div>
       <div v-else v-for="(records, ruleId) in leagueWeapon.records">
+        <h2>{{ $t(`rules.${findRuleKey(ruleId)}.name`) }}</h2>
+        <table class="table is-hoverable is-striped is-fullwidth">
+          <tbody>
+            <template v-for="(record, rank) in records">
+              <player-ranking-entry
+                rankingType="league"
+                :as-records="true"
+                :rank="rank + 1"
+                :ranking-entry="record"
+              />
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div v-show="activeTab === 'league-weapon-combinations'" class="league-weapon-combinations table-container">
+      <div class="is-flex" style="align-items: center">
+        <league-team-type-picker v-model="leagueWeapons.groupType" :no-all="true" />
+        <multi-weapon-picker :length="leagueTeamTypeMemers[leagueWeapons.groupType]" :value.sync="leagueWeapons.ids" open-button-label="Select Weapons" />
+        <button @click="fetchLeagueWeaponRecords(true)" :disabled="leagueWeapons.isLoading || !leagueWeapons.ids || leagueWeapons.ids.some((id) => typeof id !== 'number')">Go</button>
+      </div>
+
+      <div v-if="leagueWeapons.isLoading">
+        Loading...
+      </div>
+      <div v-else v-for="(records, ruleId) in leagueWeapons.records">
         <h2>{{ $t(`rules.${findRuleKey(ruleId)}.name`) }}</h2>
         <table class="table is-hoverable is-striped is-fullwidth">
           <tbody>
@@ -193,7 +224,7 @@
   }
 }
 
-.league-weapons > div:not(:first-child) {
+.league-weapons > div:not(:first-child), .league-weapon-combinations > div:not(:first-child) {
   margin-top: 1em;
 }
 </style>
@@ -205,11 +236,12 @@ import apiClient from '../api-client';
 import { findRuleKey, formatRankingEntry } from '../helper';
 import Player from '../player';
 
-import LeagueTeamTypePicker, { LeagueTeamTypes, LeagueTeamTypesTable, teamTypeSymbols } from '../components/LeagueTeamTypePicker.vue';
+import LeagueTeamTypePicker, { LeagueTeamTypes, LeagueTeamTypesTable, teamTypeSymbols, leagueTeamTypeMemers } from '../components/LeagueTeamTypePicker.vue';
 import PlayerLink from '../components/PlayerLink.vue';
 import PlayerRankingEntry from '../components/PlayerRankingEntry.vue';
 import TabSwitcher from '../components/TabSwitcher.vue';
 import WeaponPicker from '../components/WeaponPicker.vue';
+import MultiWeaponPicker from '../components/MultiWeaponPicker.vue';
 import XRecords from '../components/XRecords.vue';
 
 const mapTeammates = (member) => ({
@@ -221,9 +253,9 @@ const mapTeammates = (member) => ({
 export default {
   name: 'Records',
   components: {
-    LeagueTeamTypePicker, PlayerLink, PlayerRankingEntry, TabSwitcher, WeaponPicker, XRecords,
+    LeagueTeamTypePicker, PlayerLink, PlayerRankingEntry, TabSwitcher, WeaponPicker, MultiWeaponPicker, XRecords,
   },
-  mounted() {
+  created() {
     const hash = this.$route.hash.replace('#', '');
     if (!hash) { return; }
 
@@ -239,6 +271,13 @@ export default {
         this.leagueWeapon.id = Number.parseInt(weaponId.join('', ''), 10);
         break;
       }
+      case 'league-weapon-combinations': {
+        const [teamType, ...weaponIds] = data;
+        this.leagueWeapons.groupType = LeagueTeamTypesTable[teamType];
+        this.leagueWeapons.ids = weaponIds.join('').split(',').map((id) => Number.parseInt(id, 10));
+        this.fetchLeagueWeaponRecords(true);
+        break;
+      }
       case 'league-powers':
         this.leaguePowersActiveTab = LeagueTeamTypesTable[data];
         break;
@@ -252,12 +291,19 @@ export default {
   data() {
     return {
       LeagueTeamTypes,
+      leagueTeamTypeMemers,
       activeTab: 'x-weapons-all',
       monthlyLeagueBattlesRecords: [],
       leaguePowersActiveTab: LeagueTeamTypes.team,
       leagueWeapon: {
         id: 0,
         isLoading: true,
+        groupType: LeagueTeamTypes.team,
+        records: null,
+      },
+      leagueWeapons: {
+        ids: null,
+        isLoading: false,
         groupType: LeagueTeamTypes.team,
         records: null,
       },
@@ -282,6 +328,9 @@ export default {
           break;
         case 'league-weapons':
           data = teamTypeSymbols[this.leagueWeapon.groupType] + this.leagueWeapon.id;
+          break;
+        case 'league-weapon-combinations':
+          data = teamTypeSymbols[this.leagueWeapons.groupType] + this.leagueWeapons.ids.join(',');
           break;
         case 'league-powers':
           data = teamTypeSymbols[this.leaguePowersActiveTab];
@@ -311,20 +360,23 @@ export default {
     formatTimeLeague(time) {
       return moment.utc(time).local().format('YYYY-MM-DD HH:mm');
     },
-    async fetchLeagueWeaponRecords() {
-      this.leagueWeapon.isLoading = true;
+    async fetchLeagueWeaponRecords(isWeapons = false) {
+      const ranking = isWeapons ? this.leagueWeapons : this.leagueWeapon;
+      const params = { group_type: teamTypeSymbols[ranking.groupType] };
+      if (isWeapons) {
+        params.weapon_ids = ranking.ids.join(',');
+      } else {
+        params.weapon_id = ranking.id;
+      }
+
+      ranking.isLoading = true;
       const { data } = await apiClient.get(
         '/records/league-weapon',
-        {
-          params: {
-            weapon_id: this.leagueWeapon.id,
-            group_type: teamTypeSymbols[this.leagueWeapon.groupType],
-          },
-        },
+        { params },
       );
 
-      this.leagueWeapon.isLoading = false;
-      this.leagueWeapon.records = Object.fromEntries(Object.entries(data).map(([ruleId, ruleRecords]) => [
+      ranking.isLoading = false;
+      ranking.records = Object.fromEntries(Object.entries(data).map(([ruleId, ruleRecords]) => [
         ruleId,
         ruleRecords.map((record) => ({
           ...record,
