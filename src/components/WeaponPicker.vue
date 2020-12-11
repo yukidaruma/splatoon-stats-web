@@ -1,15 +1,15 @@
 <template>
-  <div>
-    <template v-if="weapons.length === 0">
+  <div class="weapon-picker">
+    <template v-if="weapons.length === 0 && !hideButton">
       <button @click="openModal" disabled>{{ openButtonLabel || 'Open' }}</button>
     </template>
     <template v-else>
       <div class="is-flex" style="align-items: center;">
-        <button @click="openModal">{{ openButtonLabel || 'Open' }}</button>
-        <span v-if="single">
+        <button v-if="!hideButton" @click="openModal">{{ openButtonLabel || 'Open' }}</button>
+        <span v-if="single" @click="openModal">
           <weapon-icon-count v-if="selectedWeapons.length" :weapon-id="selectedWeapons[0]" />
         </span>
-        <span v-else>
+        <span v-else-if="!hideCounter">
           ({{selectedWeapons.length}}/{{weapons.length}})
         </span>
       </div>
@@ -90,6 +90,8 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    hideButton: Boolean,
+    hideCounter: Boolean,
     single: Boolean,
     openButtonLabel: String,
   },
@@ -102,7 +104,7 @@ export default {
   methods: {
     getCountFor(weaponId) {
       return weaponIdsWithReskins(weaponId)
-        .map((id) => this.counts[id] ?? 0)
+        .map((id) => this.counts[id] || 0)
         .reduce((sum, value) => sum + value, 0);
     },
     closeModal() {
