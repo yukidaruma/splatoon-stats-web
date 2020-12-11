@@ -264,11 +264,13 @@ export default {
     switch (activeTab) {
       case 'x-weapons':
         this.xWeapon.id = Number.parseInt(data, 10);
+        this.fetchXWeaponRecords();
         break;
       case 'league-weapons': {
         const [teamType, ...weaponId] = data;
         this.leagueWeapon.groupType = LeagueTeamTypesTable[teamType];
         this.leagueWeapon.id = Number.parseInt(weaponId.join('', ''), 10);
+        this.fetchLeagueWeaponRecords();
         break;
       }
       case 'league-weapon-combinations': {
@@ -285,8 +287,6 @@ export default {
     }
 
     this.fetchWeaponsTopPlayers();
-    this.fetchXWeaponRecords();
-    this.fetchLeagueWeaponRecords();
   },
   data() {
     return {
@@ -297,7 +297,7 @@ export default {
       leaguePowersActiveTab: LeagueTeamTypes.team,
       leagueWeapon: {
         id: 0,
-        isLoading: true,
+        isLoading: false,
         groupType: LeagueTeamTypes.team,
         records: null,
       },
@@ -309,7 +309,7 @@ export default {
       },
       xWeapon: {
         id: 0,
-        isLoading: true,
+        isLoading: false,
         records: null,
       },
       leagueRecords: [],
