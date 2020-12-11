@@ -338,7 +338,7 @@ export default {
         default:
       }
 
-      return data ? `${hash};${data}` : hash;
+      return data !== null ? `${hash};${data}` : hash;
     },
   },
   watch: {
