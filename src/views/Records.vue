@@ -257,33 +257,34 @@ export default {
   },
   created() {
     const hash = this.$route.hash.replace('#', '');
-    if (!hash) { return; }
 
-    const [activeTab, data] = hash.split(';');
-    this.activeTab = activeTab;
-    switch (activeTab) {
-      case 'x-weapons':
-        this.xWeapon.id = Number.parseInt(data, 10);
-        this.fetchXWeaponRecords();
-        break;
-      case 'league-weapons': {
-        const [teamType, ...weaponId] = data;
-        this.leagueWeapon.groupType = LeagueTeamTypesTable[teamType];
-        this.leagueWeapon.id = Number.parseInt(weaponId.join('', ''), 10);
-        this.fetchLeagueWeaponRecords();
-        break;
+    if (hash) {
+      const [activeTab, data] = hash.split(';');
+      this.activeTab = activeTab;
+      switch (activeTab) {
+        case 'x-weapons':
+          this.xWeapon.id = Number.parseInt(data, 10);
+          this.fetchXWeaponRecords();
+          break;
+        case 'league-weapons': {
+          const [teamType, ...weaponId] = data;
+          this.leagueWeapon.groupType = LeagueTeamTypesTable[teamType];
+          this.leagueWeapon.id = Number.parseInt(weaponId.join('', ''), 10);
+          this.fetchLeagueWeaponRecords();
+          break;
+        }
+        case 'league-weapon-combinations': {
+          const [teamType, ...weaponIds] = data;
+          this.leagueWeapons.groupType = LeagueTeamTypesTable[teamType];
+          this.leagueWeapons.ids = weaponIds.join('').split(',').map((id) => Number.parseInt(id, 10));
+          this.fetchLeagueWeaponRecords(true);
+          break;
+        }
+        case 'league-powers':
+          this.leaguePowersActiveTab = LeagueTeamTypesTable[data];
+          break;
+        default:
       }
-      case 'league-weapon-combinations': {
-        const [teamType, ...weaponIds] = data;
-        this.leagueWeapons.groupType = LeagueTeamTypesTable[teamType];
-        this.leagueWeapons.ids = weaponIds.join('').split(',').map((id) => Number.parseInt(id, 10));
-        this.fetchLeagueWeaponRecords(true);
-        break;
-      }
-      case 'league-powers':
-        this.leaguePowersActiveTab = LeagueTeamTypesTable[data];
-        break;
-      default:
     }
 
     this.fetchWeaponsTopPlayers();
@@ -295,6 +296,7 @@ export default {
       activeTab: 'x-weapons-all',
       monthlyLeagueBattlesRecords: [],
       leaguePowersActiveTab: LeagueTeamTypes.team,
+      isLoading: false,
       leagueWeapon: {
         id: 0,
         isLoading: false,
@@ -395,8 +397,6 @@ export default {
       this.xWeapon.records = data;
     },
     fetchWeaponsTopPlayers() {
-      this.isLoading = true;
-
       apiClient
         .get('/records')
         .then((res) => {
@@ -412,9 +412,6 @@ export default {
                 record.month = startTime.month() + 1;
                 return record;
               }));
-        })
-        .finally(() => {
-          this.isLoading = false;
         });
     },
     mapLeagueRecord(record, ruleId) {
