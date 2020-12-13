@@ -1,11 +1,11 @@
 // This code is based on @kazupon's vue-i18n sample code (Released under the MIT License)
 // https://kazupon.github.io/vue-i18n/guide/lazy-loading.html
 
+import Axios from 'axios';
+import store from 'store';
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
-import store from 'store';
 
-import apiClient from './api-client';
 
 Vue.use(VueI18n);
 
@@ -39,7 +39,7 @@ export function loadLanguageAsync(lang, forceLoad = false) {
         i18n.setLocaleMessage(lang, cachedLocale);
       }
 
-      apiClient.get(`/static/locale/${lang}.json`).then((res) => {
+      Axios.get(`/locale/${lang}.json`).then((res) => {
         i18n.setLocaleMessage(lang, res.data);
         store.set(cacheKey, res.data);
         loadedLanguages.push(lang);

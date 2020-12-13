@@ -1,10 +1,10 @@
-import Vue from 'vue';
 import Chart from 'chart.js';
-
+import Vue from 'vue';
 import App from './App.vue';
+import { i18n, loadLanguageAsync } from './i18n';
 import router from './router';
 import store from './store';
-import { i18n, loadLanguageAsync } from './i18n-setup';
+
 
 Vue.config.productionTip = false;
 Chart.defaults.global.defaultFontColor = '#bdc3c7';

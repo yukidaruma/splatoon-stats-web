@@ -34,7 +34,7 @@ const optimizeTranslation = (translation) => {
 };
 
 const entrypoint = async () => {
-  const cacheDir = 'cache/locale';
+  const cacheDir = 'public/locale';
   if (!fs.existsSync(cacheDir)) {
     fs.mkdirSync(cacheDir, { recursive: true });
   }
