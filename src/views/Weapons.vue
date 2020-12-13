@@ -18,7 +18,7 @@
       <div>
         <span class="label">Rule</span>
         <div v-if="rankingType === 'splatfest'">
-          <select class="l" disabled><option>{{ $t('rules.turf_war.name') }}</option></select>
+          <select class="l" disabled><option>{{ $t('rules.turf_war') }}</option></select>
         </div>
         <div v-else>
           <ranked-rule-picker class="l" v-model="rankedRule" />
@@ -53,7 +53,7 @@
         <span v-if="title.splatfestName">in Splatfest: {{ title.splatfestName }}</span>
         <span v-else>
           in {{ title.rankingType }}
-          <span v-if="title.rankedRule">{{ $t(`rules.${title.rankedRule}.name`) }}</span>
+          <span v-if="title.rankedRule">{{ $t(`rules.${title.rankedRule}`) }}</span>
           in {{ title.time }}
         </span>
       </h2>

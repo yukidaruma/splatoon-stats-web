@@ -19,7 +19,7 @@ export default {
         const dataset = {};
         const ruleId = i + 1;
         dataset.fill = false;
-        dataset.label = this.$t(`rules.${findRuleKey(ruleId)}.name`);
+        dataset.label = this.$t(`rules.${findRuleKey(ruleId)}`);
         dataset.borderColor = chartColors[i];
         dataset.backgroundColor = chartColors[i];
         dataset.showLine = this.showLine;

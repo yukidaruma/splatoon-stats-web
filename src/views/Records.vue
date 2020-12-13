@@ -41,10 +41,10 @@
         <thead>
           <tr>
             <th><span class="is-hidden-mobile">Weapon</span></th>
-            <th>{{ $t('rules.splat_zones.name') }}</th>
-            <th>{{ $t('rules.tower_control.name') }}</th>
-            <th>{{ $t('rules.rainmaker.name') }}</th>
-            <th>{{ $t('rules.clam_blitz.name') }}</th>
+            <th>{{ $t('rules.splat_zones') }}</th>
+            <th>{{ $t('rules.tower_control') }}</th>
+            <th>{{ $t('rules.rainmaker') }}</th>
+            <th>{{ $t('rules.clam_blitz') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -77,7 +77,7 @@
       </div>
       <div v-else class="columns is-multiline">
         <div v-for="({ count, records }, ruleId) in xWeapon.records" class="column is-6" :key="ruleId">
-          <h2>{{ $t(`rules.${findRuleKey(ruleId)}.name`) }} <small>({{ count }})</small></h2>
+          <h2>{{ $t(`rules.${findRuleKey(ruleId)}`) }} <small>({{ count }})</small></h2>
           <x-records :records="records" :rule-id="Number(ruleId)" />
         </div>
       </div>
@@ -101,7 +101,7 @@
         Loading...
       </div>
       <div v-else v-for="(records, ruleId) in leagueWeapon.records">
-        <h2>{{ $t(`rules.${findRuleKey(ruleId)}.name`) }}</h2>
+        <h2>{{ $t(`rules.${findRuleKey(ruleId)}`) }}</h2>
         <table class="table is-hoverable is-striped is-fullwidth">
           <tbody>
             <template v-for="(record, rank) in records">
@@ -128,7 +128,7 @@
         Loading...
       </div>
       <div v-else v-for="(records, ruleId) in leagueWeapons.records">
-        <h2>{{ $t(`rules.${findRuleKey(ruleId)}.name`) }}</h2>
+        <h2>{{ $t(`rules.${findRuleKey(ruleId)}`) }}</h2>
         <table class="table is-hoverable is-striped is-fullwidth">
           <tbody>
             <template v-for="(record, rank) in records">

@@ -2,8 +2,8 @@
   <div>
     <img
       :class="['weapon-icon', isActive ? 'is-active' : '']"
-      :alt="$t(`weapons.${weaponId}.name`)"
-      :title="$t(`weapons.${weaponId}.name`)"
+      :alt="$t(`weapons.${weaponId}`)"
+      :title="$t(`weapons.${weaponId}`)"
       :src="weaponIcon('weapons', weaponId)"
     />
     <span v-if="count" class="count">{{ count }}</span>

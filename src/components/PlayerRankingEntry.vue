@@ -18,7 +18,7 @@
     <td v-else>
       <div class="weapon-name-container">
         <img class="weapon-icon" :src="rankingEntry.icon">
-        <span class="weapon-name">{{ $t(`weapons.${rankingEntry.weapon_id}.name`) }}</span>
+        <span class="weapon-name">{{ $t(`weapons.${rankingEntry.weapon_id}`) }}</span>
       </div>
     </td>
 
@@ -33,8 +33,8 @@
     <td v-if="rankingType === 'league' && !asRecords">{{ $t(`ui.rule_shortnames.${findRuleKey(rankingEntry.rule_id)}`) }}</td>
     <td v-if="rankingType === 'league'">
       <div class="stage-names">
-        <p class="stage-name">{{ $t(`stages.${rankingEntry.stage_ids[0]}.name`) }}</p>
-        <p class="stage-name">{{ $t(`stages.${rankingEntry.stage_ids[1]}.name`) }}</p>
+        <p class="stage-name">{{ $t(`stages.${rankingEntry.stage_ids[0]}`) }}</p>
+        <p class="stage-name">{{ $t(`stages.${rankingEntry.stage_ids[1]}`) }}</p>
       </div>
     </td>
   </tr>

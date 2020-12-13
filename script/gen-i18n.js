@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+/* eslint-disable no-return-assign, no-param-reassign */
 
 const axios = require('axios');
 const fs = require('fs');
@@ -11,6 +12,25 @@ const downloadWeapons = async () => {
   const res = await client.get('https://stat.ink/api/v2/weapon');
   const statInkWeapons = res.data;
   return statInkWeapons;
+};
+
+const optimizeTranslation = (translation) => {
+  /** @type Record<string, Record<any, { name: string; }>> */
+  const value = { ...translation };
+  delete value.coop_special_weapons;
+  delete value.coop_stages;
+  delete value.festivals;
+
+  return Object.entries(value).reduce(
+    (result, [key, category]) => {
+      result[key] = Object.entries(category).reduce(
+        (map, [id, { name }]) => { map[id] = name; return map; },
+        {},
+      );
+      return result;
+    },
+    {},
+  );
 };
 
 const entrypoint = async () => {
@@ -28,15 +48,15 @@ const entrypoint = async () => {
       const res = await client.get(`https://splatoon2.ink/data/locale/${lang}.json`);
       const localeData = res.data;
 
-      // Find and complete missing translations
-      statInkWeapons
-        .filter((weapon) => !localeData.weapons[weapon.splatnet])
-        .forEach((weapon) => {
-          localeData.weapons[weapon.splatnet] = { name: weapon.name[locale] };
-        });
+      // locale data from splatoon2.ink has missing weapons, so we use stat.ink data instead.
+      const weapons = Object.fromEntries(
+        statInkWeapons
+          .map((weapon) => [weapon.splatnet, { name: weapon.name[locale] }]),
+      );
+      localeData.weapons = weapons;
 
       fs.writeFileSync(cachePath, JSON.stringify({
-        ...localeData,
+        ...optimizeTranslation(localeData),
         ui: uiLocalization[lang],
       }));
 

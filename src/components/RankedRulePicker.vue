@@ -11,7 +11,7 @@
   <select v-else v-model="rankedRule" @input="$emit('input', $event.target.value)">
     <!-- Todo: disable and show "Turf wan" when splatfest -->
     <option :value="null" v-if="!noAllRules">All</option>
-    <option v-for="r in rankedRules" :key="r.id" :value="r.key">{{ $t(`rules.${r.key}.name`) }}</option>
+    <option v-for="r in rankedRules" :key="r.id" :value="r.key">{{ $t(`rules.${r.key}`) }}</option>
   </select>
 </template>
 
