@@ -25,6 +25,7 @@ module.exports = {
   root: true,
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     'jsx-a11y/anchor-is-valid': [
       'error',
       {
