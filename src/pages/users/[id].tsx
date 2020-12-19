@@ -10,7 +10,7 @@ type Props = {
   item?: User;
 };
 
-const StaticPropsDetail = ({ errors, item }: Props) => {
+const StaticPropsDetail = ({ errors, item }: Props): React.ReactElement => {
   if (errors) {
     return (
       <Layout title="Error | Next.js + TypeScript Example">
