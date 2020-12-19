@@ -1,9 +1,8 @@
+import Layout from '@/components/Layout';
+import ListDetail from '@/components/ListDetail';
+import { User } from '@/interfaces';
+import { sampleUserData } from '@/utils/sample-data';
 import { GetStaticPaths, GetStaticProps } from 'next';
-
-import Layout from '../../components/Layout';
-import ListDetail from '../../components/ListDetail';
-import { User } from '../../interfaces';
-import { sampleUserData } from '../../utils/sample-data';
 
 type Props = {
   errors?: string;

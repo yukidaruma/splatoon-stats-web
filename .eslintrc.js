@@ -34,6 +34,7 @@ module.exports = {
         specialLink: ['hrefLeft', 'hrefRight'],
       },
     ],
+    'no-restricted-imports': ['error', { patterns: ['./', '../'] }],
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off',
     'sort-destructure-keys/sort-destructure-keys': 'error',
