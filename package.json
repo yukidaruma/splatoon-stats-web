@@ -8,7 +8,7 @@
     "url": "https://github.com/yukidaruma"
   },
   "scripts": {
-    "postinstall": "husky install",
+    "postinstall": "is-ci || husky install",
     "dev": "next",
     "build": "next build",
     "gen:i18n": "node script/gen-i18n.js",
@@ -55,6 +55,7 @@
     "eslint-plugin-typescript-sort-keys": "^1.5.0",
     "husky": "^5.0.6",
     "import-sort-style-module": "^6.0.0",
+    "is-ci": "^2.0.0",
     "lint-staged": "^10.5.3",
     "prettier": "^2.2.1",
     "prettier-plugin-import-sort": "^0.0.6",
