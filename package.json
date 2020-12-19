@@ -11,13 +11,16 @@
     "postinstall": "husky install",
     "dev": "next",
     "build": "next build",
+    "gen:i18n": "node script/gen-i18n.js",
     "lint": "eslint --fix . --ignore-path .gitignore",
     "lint:fix": "npm run lint -- --fix",
     "start": "next start",
     "type-check": "tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
+    "axios": "^0.21.0",
     "next": "latest",
+    "next-translate": "^1.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   },

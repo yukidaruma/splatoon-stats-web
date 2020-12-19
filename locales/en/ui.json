@@ -1,0 +1,23 @@
+{
+  "bomb_launchers_combined": "Bomb launchers combined",
+  "group_type": "Group Type",
+  "min_power": "Min Power",
+  "min_rank": "Min Rank",
+  "rule_shortnames": {
+    "clam_blitz": "CB",
+    "rainmaker": "RM",
+    "splat_zones": "SZ",
+    "tower_control": "TC"
+  },
+  "team_types": {
+    "all": "チーム+ペア",
+    "pair": "ペア",
+    "team": "チーム"
+  },
+  "weapon_types": {
+    "mains": "Main Weapons",
+    "specials": "Special Weapons",
+    "subs": "Sub Weapons",
+    "weapons": "Weapons"
+  }
+}

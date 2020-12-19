@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 /* eslint-disable no-return-assign, no-param-reassign */
+/* eslint-disable @typescript-eslint/no-var-requires */
 
 const axios = require('axios');
 const fs = require('fs');
-const uiLocalization = require('../locales');
 
 const USER_AGENT = `https://github.com/yukidaruma/splatoon-stats-api/${process.env.npm_package_version}`;
 const client = axios.create({ headers: { 'User-Agent': USER_AGENT } });
@@ -21,44 +21,37 @@ const optimizeTranslation = (translation) => {
   delete value.coop_stages;
   delete value.festivals;
 
-  return Object.entries(value).reduce(
-    (result, [key, category]) => {
-      result[key] = Object.entries(category).reduce(
-        (map, [id, { name }]) => { map[id] = name; return map; },
-        {},
-      );
-      return result;
-    },
-    {},
-  );
+  return Object.entries(value).reduce((result, [key, category]) => {
+    result[key] = Object.entries(category).reduce((map, [id, { name }]) => {
+      map[id] = name;
+      return map;
+    }, {});
+    return result;
+  }, {});
 };
 
 const entrypoint = async () => {
-  const cacheDir = 'public/locale';
-  if (!fs.existsSync(cacheDir)) {
-    fs.mkdirSync(cacheDir, { recursive: true });
-  }
-
   const statInkWeapons = await downloadWeapons();
 
-  const locales = { ja: 'ja_JP', en: 'en_US' };
+  const locales = { en: 'en_US', ja: 'ja_JP' };
   await Promise.all(
     Object.entries(locales).map(async ([lang, locale]) => {
-      const cachePath = `${cacheDir}/${lang}.json`;
+      const cachePath = `locales/${lang}/splatoon.json`;
       const res = await client.get(`https://splatoon2.ink/data/locale/${lang}.json`);
       const localeData = res.data;
 
       // locale data from splatoon2.ink has missing weapons, so we use stat.ink data instead.
       const weapons = Object.fromEntries(
-        statInkWeapons
-          .map((weapon) => [weapon.splatnet, { name: weapon.name[locale] }]),
+        statInkWeapons.map((weapon) => [weapon.splatnet, { name: weapon.name[locale] }]),
       );
       localeData.weapons = weapons;
 
-      fs.writeFileSync(cachePath, JSON.stringify({
-        ...optimizeTranslation(localeData),
-        ui: uiLocalization[lang],
-      }));
+      fs.writeFileSync(
+        cachePath,
+        JSON.stringify({
+          ...optimizeTranslation(localeData),
+        }) + '\n',
+      );
 
       console.log(`Generated ${cachePath}.`);
     }),
