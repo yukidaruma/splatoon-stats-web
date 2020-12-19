@@ -35,6 +35,7 @@ module.exports = {
       },
     ],
     'no-restricted-imports': ['error', { patterns: ['./', '../'] }],
+    'object-shorthand': 'error',
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off',
     'sort-destructure-keys/sort-destructure-keys': 'error',
