@@ -20,8 +20,12 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@chakra-ui/react": "^1.0.4",
+    "@emotion/react": "^11.1.2",
+    "@emotion/styled": "^10.0.27",
     "axios": "^0.21.0",
     "chakra-ui": "^0.3.9",
+    "framer-motion": "^3.1.1",
     "next": "latest",
     "next-translate": "^1.0.0",
     "react": "^17.0.1",
