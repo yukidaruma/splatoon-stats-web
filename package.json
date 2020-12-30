@@ -7,6 +7,10 @@
     "name": "yukidaruma",
     "url": "https://github.com/yukidaruma"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yukidaruma/splatoon-stats-web.git"
+  },
   "scripts": {
     "postinstall": "is-ci || husky install",
     "dev": "next",
