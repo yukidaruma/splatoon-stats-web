@@ -5,3 +5,5 @@ declare namespace NodeJS {
     SPLATOON_STATS_API_URL?: string;
   }
 }
+
+type Nullable<T> = null | T;

@@ -3,6 +3,7 @@
   "group_type": "Group Type",
   "min_power": "Min Power",
   "min_rank": "Min Rank",
+  "search_result": "Search result",
   "rule_shortnames": {
     "clam_blitz": "CB",
     "rainmaker": "RM",
@@ -10,9 +11,12 @@
     "tower_control": "TC"
   },
   "team_types": {
-    "all": "チーム+ペア",
-    "pair": "ペア",
-    "team": "チーム"
+    "all": "Team+Pair",
+    "pair": "Pair",
+    "team": "Team"
+  },
+  "title": {
+    "/search": "Search players"
   },
   "weapon_types": {
     "mains": "Main Weapons",

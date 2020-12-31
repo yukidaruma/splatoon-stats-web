@@ -1,4 +1,5 @@
 import { AppDrawer } from '@/components/AppDrawer';
+import useEnterKey from '@/hooks/useEnterKey';
 import {
   Box,
   Container,
@@ -15,14 +16,17 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react';
+import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
 import NextLink from 'next/link';
-import React, { ReactNode } from 'react';
+import { useRouter } from 'next/router';
+import React, { ReactNode, useEffect, useRef } from 'react';
 import { FaBars, FaGithub, FaSearch, FaTwitter } from 'react-icons/fa';
 
 type Props = {
   children?: ReactNode;
-  title: string;
+  headerTitle?: Nullable<string>;
+  title?: Nullable<string>;
 };
 
 const MenuItem: React.FC = ({ children }) => <Text>{children}</Text>;
@@ -35,23 +39,44 @@ const menuItems: Array<{ title: string; to: string }> = [
 ];
 
 const HeaderSearchField: React.FC = () => {
+  const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null) as React.MutableRefObject<HTMLInputElement>;
+
+  useEffect(() => {
+    inputRef.current.value = ((router.query.q as string) ?? '').trim();
+  });
+
+  const openSearchResult = () => {
+    const query = inputRef.current.value.trim();
+    if (query && query !== router.query.q) {
+      router.push({
+        pathname: '/search',
+        query: { q: query },
+      });
+    }
+  };
+  useEnterKey(openSearchResult, inputRef);
+
   return (
     <InputGroup size="sm">
       <InputLeftElement>
         <Icon as={FaSearch} />
       </InputLeftElement>
-      <Input borderRadius="0" placeholder="Search by player name" />
+      <Input ref={inputRef} placeholder="Search by player name" />
     </InputGroup>
   );
 };
 
-const Layout = ({ children, title }: Props): React.ReactElement => {
+const Layout = ({ children, headerTitle, title }: Props): React.ReactElement => {
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const route = useRouter();
+  const { t } = useTranslation('ui');
 
-  let headTitle = process.env.APP_NAME;
+  let headTitle = t(`title.${route.pathname}`);
   if (title) {
-    headTitle += ` - ${title}`;
+    headTitle = `${title} - ${headTitle}`;
   }
+  headTitle += ` - ${process.env.APP_NAME}`;
 
   const NavigationItems = menuItems.map((item, i) => (
     <NextLink key={i} href={item.to}>
@@ -102,12 +127,12 @@ const Layout = ({ children, title }: Props): React.ReactElement => {
       <Container maxW="1280px" centerContent>
         <VStack alignItems="start" w="100%" spacing="3">
           <Heading mt="6" as="h2" fontSize="22px">
-            {title}
+            {headerTitle ?? title}
           </Heading>
-          <div>{children}</div>
+          <Box w="100%">{children}</Box>
         </VStack>
 
-        <VStack mt="6" as="footer">
+        <VStack mt="6" py="4" as="footer">
           <HStack spacing="3">
             <Link isExternal href="https://twitter.com/SplatoonStats">
               <Icon boxSize="18px" as={FaTwitter} color="#1da1f2" />

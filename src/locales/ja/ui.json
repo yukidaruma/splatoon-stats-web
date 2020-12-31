@@ -3,6 +3,7 @@
   "group_type": "チーム種別",
   "min_power": "最小パワー",
   "min_rank": "最小順位",
+  "search_result": "検索結果",
   "rule_shortnames": {
     "splat_zones": "エリア",
     "tower_control": "ヤグラ",
@@ -13,6 +14,9 @@
     "all": "チーム+ペア",
     "team": "チーム",
     "pair": "ペア"
+  },
+  "titles": {
+    "/search": "検索"
   },
   "weapon_types": {
     "weapons": "ブキ",
