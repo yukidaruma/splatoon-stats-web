@@ -14,6 +14,7 @@
   "scripts": {
     "postinstall": "is-ci || husky install",
     "dev": "next",
+    "debug": "cross-env NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "gen:i18n": "node script/gen-i18n.js",
     "lint": "eslint --fix . --ignore-path .gitignore",
