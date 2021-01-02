@@ -21,7 +21,7 @@
     "paths": {
       "@/*": ["./*"]
     },
-    "target": "esnext"
+    "target": "ES2019"
   },
   "exclude": ["node_modules"],
   "include": ["**/*.ts", "**/*.tsx"]

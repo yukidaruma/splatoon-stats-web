@@ -9,6 +9,6 @@ module.exports = {
     APP_NAME: 'Splatoon Stats',
     REPO_URL: packageJson.repository.url,
     SPLATOON_STATS_API_URL:
-      process.env.SPLATOON_STATS_API_URL ?? 'https://splatoon-stats-api.yuki.games',
+      process.env.SPLATOON_STATS_API_URL || 'https://splatoon-stats-api.yuki.games',
   },
 };
