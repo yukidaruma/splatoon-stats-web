@@ -9,8 +9,9 @@ export default class Player {
   public name!: Nullable<string>;
   public lastUsed?: Date;
   public xPower?: number;
+  public weaponId?: Nullable<number>;
 
-  public constructor(player: Pick<Player, 'id' | 'name' | 'lastUsed' | 'xPower'>) {
+  public constructor(player: Pick<Player, 'id' | 'name' | 'lastUsed' | 'weaponId' | 'xPower'>) {
     Object.assign(this, player);
   }
 
@@ -18,6 +19,7 @@ export default class Player {
     const data: ConstructorParameters<typeof Player>[0] = {
       id: player.player_id,
       name: player.player_name ?? null,
+      weaponId: player.weapon_id ?? null,
     };
 
     if (isRawPlayerSearchResult(player)) {

@@ -3,6 +3,7 @@ import NumericColumnFilter, {
   NumericColumnFilterOptions,
 } from '@/components/filters/NumericColumnFilter';
 import Layout from '@/components/Layout';
+import PlayerLink from '@/components/PlayerLink';
 import PlayerName from '@/components/PlayerName';
 import Weapon from '@/components/Weapon';
 import { Player, RawPlayer } from '@/interfaces';
@@ -96,12 +97,16 @@ const PlayerPage: NextPage<Props> = ({ league, player }) => {
         Cell({ cell }) {
           return (
             <>
-              {cell.value.map((teammate) => (
-                <HStack key={teammate.player_id}>
-                  <Weapon weaponId={teammate.weapon_id} />
-                  <PlayerName player={Player.fromRawPlayer(teammate)} />
-                </HStack>
-              ))}
+              {cell.value.map(Player.fromRawPlayer).map((teammate) => {
+                return (
+                  <HStack key={teammate.id}>
+                    <PlayerLink player={teammate}>
+                      <Weapon weaponId={teammate.weaponId!} />
+                      <PlayerName player={teammate} />
+                    </PlayerLink>
+                  </HStack>
+                );
+              })}
             </>
           );
         },

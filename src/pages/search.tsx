@@ -1,4 +1,5 @@
 import Layout from '@/components/Layout';
+import PlayerLink from '@/components/PlayerLink';
 import PlayerName from '@/components/PlayerName';
 import { Player, RawPlayerSearchResult } from '@/interfaces';
 import client from '@/utils/api-client';
@@ -6,7 +7,6 @@ import { Box, SimpleGrid, Text } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import { NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
-import NextLink from 'next/link';
 
 type Props = {
   errors?: string;
@@ -29,7 +29,7 @@ const Search: NextPage<Props> = (props): React.ReactElement => {
         <>
           <SimpleGrid minChildWidth="300px" gap={[4, null, 6]}>
             {players.map((player, i) => (
-              <NextLink key={i} href={`/players/${player.id}`}>
+              <PlayerLink key={i} player={player}>
                 <Box p="12px" bg="gray.700" className="clickable">
                   <p>
                     <Text as="span" mr="2" size="lg" fontWeight="bold">
@@ -39,7 +39,7 @@ const Search: NextPage<Props> = (props): React.ReactElement => {
                   </p>
                   {format(player.lastUsed!, 'yyyy-MM-dd')}
                 </Box>
-              </NextLink>
+              </PlayerLink>
             ))}
           </SimpleGrid>
         </>
