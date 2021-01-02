@@ -3,7 +3,7 @@
     <div v-if="isLoading">
       Loading...
     </div>
-    <div v-else-if="hasLoaded">
+    <div v-else>
       <div class="title-container is-hidden-mobile">
         <h1 class="title">
           <span class="player-name" v-if="latestName">{{ latestName }}</span>
@@ -119,17 +119,16 @@
           </div>
         </div>
 
-          <table class="is-marginless table is-hoverable is-striped is-fullwidth">
-            <tbody>
-              <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league"
-                v-show="filteredLeagueRankingEntryKeysSet.has(rankingEntry.key)"
-                ranking-type="league"
-                :key="rankingEntry.key"
-                :ranking-entry="rankingEntry"
-                :player-name="latestName ? latestName : fetchedPlayerId" />
-            </tbody>
-          </table>
-        </div>
+        <table class="is-marginless table is-hoverable is-striped is-fullwidth">
+          <tbody>
+            <player-ranking-entry v-for="rankingEntry in playerRankingHistory.league"
+              v-show="filteredLeagueRankingEntryKeysSet.has(rankingEntry.key)"
+              ranking-type="league"
+              :key="rankingEntry.key"
+              :ranking-entry="rankingEntry"
+              :player-name="latestName ? latestName : fetchedPlayerId" />
+          </tbody>
+        </table>
       </div>
 
       <h2 class="table-title">Peers ({{ peers.length }})</h2>
@@ -190,7 +189,6 @@ export default {
     return {
       playerId: '',
       fetchedPlayerId: '',
-      hasLoaded: false,
       isLoading: false,
       playerRankingHistory: {
         x: [],
@@ -227,8 +225,6 @@ export default {
         if (playerId) {
           this.filters = getInitialFilterState();
           this.getPlayerRankingHistory(playerId);
-        } else {
-          this.hasLoaded = false;
         }
       },
     },
@@ -340,35 +336,25 @@ export default {
           .map((rankingEntry) => rankingEntry.key),
       );
     },
-    getPlayerRankingHistory(playerId) {
-      if (!isValidPlayerId(playerId)
-        || playerId === this.fetchedPlayerId) { // Skip if the ID was already fetched
+    async getPlayerRankingHistory(playerId) {
+      if (!isValidPlayerId(playerId) || playerId === this.fetchedPlayerId) {
+        // Skip if the ID was already fetched
         return;
       }
 
       this.playerId = playerId;
       this.isLoading = true;
-      this.hasLoaded = false;
 
-      Promise.all([
-        apiClient.get(`/players/${playerId}/known_names`)
-          .then((res) => { this.knownNames = res.data; }),
-        ...['x', 'league', 'splatfest'].map((rankingType) => apiClient.get(`/players/${playerId}/rankings/${rankingType}`).then((res) => {
-          this.playerRankingHistory[rankingType] = res.data.map((rankingEntry) => formatRankingEntry(rankingEntry, 'weapons', rankingType));
+      const { data } = await apiClient.get(`/v2/players/${playerId}`);
+      this.knownNames = data.names;
+      Object.entries(data.rankings).forEach(([rankingType, rankings]) => {
+        this.playerRankingHistory[rankingType] = rankings.map((rankingEntry) => formatRankingEntry(rankingEntry, 'weapons', rankingType));
+      });
+      this.chartData = data.rankings.x;
 
-          if (rankingType === 'x') {
-            this.chartData = res.data;
-          }
-        })),
-      ])
-        .then(() => {
-          this.hasLoaded = true;
-        })
-        .finally(() => {
-          this.$router.push(`/players/${playerId}`);
-          this.fetchedPlayerId = this.playerId;
-          this.isLoading = false;
-        });
+      this.$router.push(`/players/${playerId}`);
+      this.fetchedPlayerId = this.playerId;
+      this.isLoading = false;
     },
   },
 };
