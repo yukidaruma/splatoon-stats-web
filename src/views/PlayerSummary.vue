@@ -175,7 +175,7 @@ const getInitialFilterState = () => ({
 
 export default {
   name: 'Players',
-  props: ['initialPlayerId'],
+  props: ['playerId'],
   components: {
     FavoritePlayerButton,
     LeagueTeamTypePicker,
@@ -187,7 +187,6 @@ export default {
   },
   data() {
     return {
-      playerId: '',
       fetchedPlayerId: '',
       isLoading: false,
       playerRankingHistory: {
@@ -213,14 +212,14 @@ export default {
     };
   },
   created() {
-    if (isValidPlayerId(this.initialPlayerId)) {
-      this.getPlayerRankingHistory(this.initialPlayerId);
+    if (isValidPlayerId(this.playerId)) {
+      this.getPlayerRankingHistory(this.playerId);
     } else {
       this.$router.push('/players');
     }
   },
   watch: {
-    '$route.params.initialPlayerId': {
+    '$route.params.playerId': {
       handler(playerId) {
         if (playerId) {
           this.filters = getInitialFilterState();
@@ -352,7 +351,6 @@ export default {
       });
       this.chartData = data.rankings.x;
 
-      this.$router.push(`/players/${playerId}`);
       this.fetchedPlayerId = this.playerId;
       this.isLoading = false;
     },

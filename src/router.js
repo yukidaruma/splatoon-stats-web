@@ -33,7 +33,7 @@ export default new Router({
       component: Search,
     },
     {
-      path: '/players/:initialPlayerId?',
+      path: '/players/:playerId',
       component: PlayerSummary,
       props: true,
     },
