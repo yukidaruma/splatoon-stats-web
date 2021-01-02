@@ -344,7 +344,7 @@ export default {
       this.playerId = playerId;
       this.isLoading = true;
 
-      const { data } = await apiClient.get(`/v2/players/${playerId}`);
+      const { data } = await apiClient.get(`/players/${playerId}`);
       this.knownNames = data.names;
       Object.entries(data.rankings).forEach(([rankingType, rankings]) => {
         this.playerRankingHistory[rankingType] = rankings.map((rankingEntry) => formatRankingEntry(rankingEntry, 'weapons', rankingType));
