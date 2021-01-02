@@ -2,7 +2,7 @@ import Player from '@/interfaces/player';
 
 export type RawPlayer = {
   player_id: string;
-  player_name: string;
+  player_name?: Nullable<string>;
 };
 
 export type RawPlayerSearchResult = {

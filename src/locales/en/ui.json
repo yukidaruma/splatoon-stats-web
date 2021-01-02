@@ -1,14 +1,28 @@
 {
   "bomb_launchers_combined": "Bomb launchers combined",
-  "group_type": "Group Type",
-  "min_power": "Min Power",
-  "min_rank": "Min Rank",
-  "search_result": "Search result",
+  "group_type": "group type",
+  "league_battle": "league battles",
+  "min_power": "min power",
+  "min_rank": "min rank",
+  "rank": "rank",
+  "rule": "rule",
+  "power": "power",
+  "search_result": "search result",
+  "teammates": "teammates",
+  "weapon": "weapon",
+  "group_types": {
+    "P": "pair",
+    "T": "team"
+  },
   "rule_shortnames": {
-    "clam_blitz": "CB",
-    "rainmaker": "RM",
+    "1": "SZ",
     "splat_zones": "SZ",
-    "tower_control": "TC"
+    "2": "TC",
+    "tower_control": "TC",
+    "3": "RM",
+    "rainmaker": "RM",
+    "4": "CB",
+    "clam_blitz": "CB"
   },
   "team_types": {
     "all": "Team+Pair",

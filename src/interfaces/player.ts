@@ -6,7 +6,7 @@ const isRawPlayerSearchResult = (player: Record<string, any>): player is RawPlay
 
 export default class Player {
   public id!: string;
-  public name!: string;
+  public name!: Nullable<string>;
   public lastUsed?: Date;
   public xPower?: number;
 
@@ -17,7 +17,7 @@ export default class Player {
   public static fromRawPlayer(player: RawPlayer | RawPlayerSearchResult): Player {
     const data: ConstructorParameters<typeof Player>[0] = {
       id: player.player_id,
-      name: player.player_name,
+      name: player.player_name ?? null,
     };
 
     if (isRawPlayerSearchResult(player)) {

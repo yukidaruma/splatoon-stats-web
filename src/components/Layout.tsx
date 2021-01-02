@@ -26,6 +26,7 @@ import { FaBars, FaGithub, FaSearch, FaTwitter } from 'react-icons/fa';
 type Props = {
   children?: ReactNode;
   headerTitle?: Nullable<string>;
+  noPathTitle?: boolean;
   title?: Nullable<string>;
 };
 
@@ -67,14 +68,14 @@ const HeaderSearchField: React.FC = () => {
   );
 };
 
-const Layout = ({ children, headerTitle, title }: Props): React.ReactElement => {
+const Layout = ({ children, headerTitle, noPathTitle, title }: Props): React.ReactElement => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const route = useRouter();
   const { t } = useTranslation('ui');
 
-  let headTitle = t(`title.${route.pathname}`);
+  let headTitle = noPathTitle ? '' : t(`title.${route.pathname}`);
   if (title) {
-    headTitle = `${title} - ${headTitle}`;
+    headTitle = headTitle ? `${title} - ${headTitle}` : title;
   }
   headTitle += ` - ${process.env.APP_NAME}`;
 
@@ -126,7 +127,7 @@ const Layout = ({ children, headerTitle, title }: Props): React.ReactElement => 
 
       <Container maxW="1280px" centerContent>
         <VStack alignItems="start" w="100%" spacing="3">
-          <Heading mt="6" as="h2" fontSize="22px">
+          <Heading className="capitalize" mt="6" as="h2" fontSize="22px">
             {headerTitle ?? title}
           </Heading>
           <Box w="100%">{children}</Box>

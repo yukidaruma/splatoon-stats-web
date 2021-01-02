@@ -1,13 +1,27 @@
 {
   "bomb_launchers_combined": "ボムピッチャー合計",
   "group_type": "チーム種別",
+  "league_battle": "リーグマッチ",
   "min_power": "最小パワー",
   "min_rank": "最小順位",
+  "power": "パワー",
+  "rank": "順位",
+  "rule": "ルール",
   "search_result": "検索結果",
+  "teammates": "メンバー",
+  "weapon": "ブキ",
+  "group_types": {
+    "P": "ペア",
+    "T": "チーム"
+  },
   "rule_shortnames": {
+    "1": "エリア",
     "splat_zones": "エリア",
+    "2": "ヤグラ",
     "tower_control": "ヤグラ",
+    "3": "ホコ",
     "rainmaker": "ホコ",
+    "4": "アサリ",
     "clam_blitz": "アサリ"
   },
   "team_types": {

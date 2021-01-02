@@ -34,6 +34,13 @@ module.exports = {
         specialLink: ['hrefLeft', 'hrefRight'],
       },
     ],
+    'jsx-a11y/img-redundant-alt': [
+      'error',
+      {
+        components: ['Image'],
+      },
+    ],
+    'jsx-a11y/no-onchange': 'off',
     'no-restricted-imports': ['error', { patterns: ['./', '../'] }],
     'object-shorthand': 'error',
     'react/prop-types': 'off',
