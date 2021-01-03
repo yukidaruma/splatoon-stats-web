@@ -16,7 +16,7 @@ const sumByCriteria = (data, criteria) => {
 const DistributionChart = {
   name: 'DistributionChart',
   extends: Bar,
-  props: ['color', 'data', 'interval', 'title'],
+  props: ['color', 'data', 'interval', 'title', 'total'],
   computed: {
     chartData() {
       const distributions = sumByCriteria(
@@ -40,9 +40,16 @@ const DistributionChart = {
       const chartData = {
         datasets: [
           {
+            data: data.map((item) => ((this.total - item.accumlativeValue) / this.total) * 100),
+            borderColor: 'white',
+            type: 'line',
+            yAxisID: 'accumulatedPercentage',
+          },
+          {
             data,
             backgroundColor: this.color,
             borderColor: this.color,
+            yAxisID: 'players',
           },
         ],
         labels,
@@ -62,7 +69,12 @@ const DistributionChart = {
             },
           },
         },
-        scales: { yAxes: [{ ticks: { suggestedMin: 0 } }] },
+        scales: {
+          yAxes: [
+            { id: 'accumulatedPercentage', ticks: { max: 100 }, position: 'right' },
+            { id: 'players', ticks: { suggestedMin: 0 } },
+          ],
+        },
       };
     },
   },

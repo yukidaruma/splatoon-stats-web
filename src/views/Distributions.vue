@@ -3,7 +3,7 @@
     <template v-if="distributions">
       <div>
         <ranked-rule-picker v-model="ruleId" as-id no-all-rules />
-        {{ distributions[ruleId].count }} players
+        {{ total }} players
       </div>
 
       <div>
@@ -17,6 +17,7 @@
         :color="chartColor"
         :data="distributions[ruleId]"
         :title="$t(`rules.${findRuleKey(ruleId)}`)"
+        :total="total"
         :interval="interval"
       />
     </template>
@@ -44,6 +45,9 @@ export default {
   computed: {
     chartColor() {
       return chartColors[this.ruleId - 1];
+    },
+    total() {
+      return this.distributions[this.ruleId].count;
     },
   },
   async created() {
