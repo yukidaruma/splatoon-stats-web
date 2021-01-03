@@ -91,12 +91,13 @@ export default {
     LeagueTeamTypePicker,
   },
   data() {
+    const activeTab = this.$route.params.type;
     const intervalOptions = [10, 20, 50, 100];
     return {
-      activeTab: this.$route.params.type,
+      activeTab,
       distributionsRaw: null,
       ruleId: 1,
-      intervalOptions,
+      intervalOptions: activeTab === 'league' ? intervalOptions.slice(1) : intervalOptions,
       interval: intervalOptions[1],
       leagueTeamType: LeagueTeamTypes.team,
     };
