@@ -1,48 +1,20 @@
 import { Bar } from 'vue-chartjs';
 
-const groupByCriteria = (data, criteria) => {
-  const aggregated = {};
-
-  data.forEach((item) => {
-    const [key, value] = criteria(item);
-    if (aggregated[key]) return;
-
-    aggregated[key] = value;
-  });
-
-  return aggregated;
-};
-
 /** @type {import('vue').default} */
 const DistributionChart = {
   name: 'DistributionChart',
   extends: Bar,
-  props: ['color', 'data', 'interval', 'title', 'total'],
+  props: ['color', 'data', 'interval', 'title'],
   computed: {
     chartData() {
-      const distributions = groupByCriteria(
-        Object.entries(this.data.distributions),
-        ([realKey, value]) => {
-          const rating = Number(realKey);
-          const key = rating - (rating % this.interval);
-          return [key, value];
-        },
-      );
-      const labels = Object.keys(distributions);
-      const accumulativeDistributions = Object.values(distributions);
-      const data = accumulativeDistributions.map((count, i) => {
-        let y = count;
-        if (i <= accumulativeDistributions.length) {
-          y -= accumulativeDistributions[i + 1];
-        }
-        return { y, accumlativeValue: count };
-      });
+      const labels = Object.keys(this.data);
+      const data = Object.values(this.data);
 
       /** @type {Chart.ChartData} */
       const chartData = {
         datasets: [
           {
-            data: data.map((item) => ((this.total - item.accumlativeValue) / this.total) * 100),
+            data: data.map(({ percentile }) => percentile),
             borderColor: 'white',
             type: 'line',
             yAxisID: 'accumulatedPercentage',
@@ -79,9 +51,9 @@ const DistributionChart = {
                   return `${percentile}%`;
                 case 1: {
                   const itemData = chartData.datasets[item.datasetIndex].data[item.index];
-                  return `${item.value} (${itemData.accumlativeValue}; Top ${(
-                    100 - percentile
-                  ).toFixed(2)}%)`;
+                  return `${item.value} (${itemData.accumlative}; Top ${(100 - percentile).toFixed(
+                    2,
+                  )}%)`;
                 }
                 default:
               }
