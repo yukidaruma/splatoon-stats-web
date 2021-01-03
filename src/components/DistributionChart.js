@@ -64,8 +64,21 @@ const DistributionChart = {
         tooltips: {
           callbacks: {
             label(item, chartData) {
-              const itemData = chartData.datasets[item.datasetIndex].data[item.index];
-              return `${item.value} (${itemData.accumlativeValue})`;
+              const percentile = Number.parseFloat(chartData.datasets[0].data[item.index]).toFixed(
+                2,
+              );
+
+              switch (item.datasetIndex) {
+                case 0:
+                  return `${percentile}%`;
+                case 1: {
+                  const itemData = chartData.datasets[item.datasetIndex].data[item.index];
+                  return `${item.value} (${itemData.accumlativeValue}; Top ${(
+                    100 - percentile
+                  ).toFixed(2)}%)`;
+                }
+                default:
+              }
             },
           },
         },
