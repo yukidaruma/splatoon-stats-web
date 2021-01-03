@@ -1,13 +1,31 @@
 import { Bar } from 'vue-chartjs';
 
+const sumByCriteria = (data, criteria) => {
+  const aggregated = {};
+
+  data.forEach((item) => {
+    const [key, value] = criteria(item);
+
+    aggregated[key] = (aggregated[key] ?? 0) + value;
+  });
+
+  return aggregated;
+};
+
 /** @type {import('vue').default} */
 const DistributionChart = {
   name: 'DistributionChart',
   extends: Bar,
-  props: ['color', 'data', 'title'],
+  props: ['color', 'data', 'interval', 'title'],
   computed: {
     chartData() {
-      const { distributions } = this.data;
+      const distributions = sumByCriteria(
+        Object.entries(this.data.distributions),
+        ([key, value]) => {
+          const rating = Number(key);
+          return [rating - (rating % this.interval), value];
+        },
+      );
       const labels = Object.keys(distributions);
       const accumulativeDistributions = Object.values(distributions);
       const data = accumulativeDistributions.map((count, i) => {
@@ -54,7 +72,7 @@ const DistributionChart = {
     },
   },
   mounted() {
-    this.$watch(() => [this.data, this.title], this.render, { immediate: true });
+    this.$watch(() => [this.data, this.interval, this.title], this.render, { immediate: true });
   },
 };
 

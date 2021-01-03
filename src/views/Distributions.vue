@@ -6,10 +6,18 @@
         {{ distributions[ruleId].count }} players
       </div>
 
+      <div>
+        Interval:
+        <select v-model="interval">
+          <option :key="value" v-for="value in intervalOptions" :value="value">{{ value }}</option>
+        </select>
+      </div>
+
       <DistributionChart
         :color="chartColor"
         :data="distributions[ruleId]"
         :title="$t(`rules.${findRuleKey(ruleId)}`)"
+        :interval="interval"
       />
     </template>
   </div>
@@ -25,7 +33,13 @@ import { findRuleKey } from '../helper';
 export default {
   components: { DistributionChart, RankedRulePicker },
   data() {
-    return { distributions: null, ruleId: 1 };
+    const intervalOptions = [10, 20, 50, 100];
+    return {
+      distributions: null,
+      ruleId: 1,
+      intervalOptions,
+      interval: intervalOptions[0],
+    };
   },
   computed: {
     chartColor() {
