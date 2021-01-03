@@ -4,6 +4,8 @@ import { findRuleKey } from '../helper';
 
 const RULE_COUNT = 4;
 
+export const chartColors = ['#e74c3c', '#2ecc71', '#3498db', '#f1c40f'];
+
 export default {
   name: 'PlayerSummaryXRankedChart',
   extends: Line,
@@ -11,7 +13,6 @@ export default {
   computed: {
     chartData() {
       this.showXPowerChart = true;
-      const chartColors = ['#e74c3c', '#2ecc71', '#3498db', '#f1c40f'];
       const firstAppeared = moment(this.data[this.data.length - 1].start_time);
       const lastAppeared = moment(this.data[0].start_time);
       const months = 1 + lastAppeared.diff(firstAppeared, 'month');

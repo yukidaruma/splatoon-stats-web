@@ -19,6 +19,11 @@
           Splatfests ranking records:
           <strong>{{ stats.splatfests * 200 }}</strong> of {{ stats.splatfests }} Splatfests
         </p>
+
+        <h3 style="margin-top: 2em">Other data</h3>
+        <p>
+          <router-link to="/distributions">X Power Distributions</router-link>
+        </p>
       </div>
 
       <div class="column is-4 about">
