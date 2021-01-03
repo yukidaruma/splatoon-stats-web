@@ -98,23 +98,25 @@ export default {
 
       const entries = Object.entries(groupedByInterval);
       return Object.fromEntries(
-        entries.map(([rating, accumlative], i) => {
-          let y = accumlative;
-          if (i < entries.length - 1) {
-            y -= entries[i + 1][1];
-          }
+        entries
+          .map(([rating, accumlative], i) => {
+            let y = accumlative;
+            if (i < entries.length - 1) {
+              y -= entries[i + 1][1];
+            }
 
-          const percentile = ((this.total - accumlative) / this.total) * 100;
-          return [
-            rating,
-            {
+            const percentile = ((this.total - accumlative) / this.total) * 100;
+            return [
               rating,
-              y,
-              accumlative,
-              percentile,
-            },
-          ];
-        }),
+              {
+                rating,
+                y,
+                accumlative,
+                percentile,
+              },
+            ];
+          })
+          .filter(([_, item]) => item.accumlative > 0),
       );
     },
   },
