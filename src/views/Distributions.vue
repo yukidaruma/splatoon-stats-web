@@ -39,7 +39,7 @@ export default {
       distributions: null,
       ruleId: 1,
       intervalOptions,
-      interval: intervalOptions[0],
+      interval: intervalOptions[1],
     };
   },
   computed: {

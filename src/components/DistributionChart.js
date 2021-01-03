@@ -44,6 +44,7 @@ const DistributionChart = {
             borderColor: 'white',
             type: 'line',
             yAxisID: 'accumulatedPercentage',
+            lineTension: 0,
           },
           {
             data,
@@ -61,6 +62,8 @@ const DistributionChart = {
     chartOptions() {
       return {
         legend: { display: false },
+        responsive: true,
+        maintainAspectRatio: false,
         tooltips: {
           callbacks: {
             label(item, chartData) {
@@ -84,7 +87,12 @@ const DistributionChart = {
         },
         scales: {
           yAxes: [
-            { id: 'accumulatedPercentage', ticks: { max: 100 }, position: 'right' },
+            {
+              id: 'accumulatedPercentage',
+              ticks: { max: 100, stepSize: 20 },
+              gridLines: { color: 'transparent' },
+              position: 'right',
+            },
             { id: 'players', ticks: { suggestedMin: 0 } },
           ],
         },
