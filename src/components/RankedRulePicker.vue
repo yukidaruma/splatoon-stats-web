@@ -5,13 +5,16 @@
         :value="r.id"
         type="checkbox"
         v-model="selectedRules"
-        @change="$emit('input', selectedRules)">{{ $t(`ui.rule_shortnames.${r.key}`) }}<!--
-      --></label>
+        @change="$emit('input', asId ? r.id : selectedRules)"
+      />{{ $t(`ui.rule_shortnames.${r.key}`) }}</label
+    >
   </div>
   <select v-else v-model="rankedRule" @input="$emit('input', $event.target.value)">
     <!-- Todo: disable and show "Turf wan" when splatfest -->
     <option :value="null" v-if="!noAllRules">All</option>
-    <option v-for="r in rankedRules" :key="r.id" :value="r.key">{{ $t(`rules.${r.key}`) }}</option>
+    <option v-for="r in rankedRules" :key="r.id" :value="asId ? r.id : r.key">{{
+      $t(`rules.${r.key}`)
+    }}</option>
   </select>
 </template>
 
@@ -27,7 +30,12 @@ export const RankedRulePickerTypes = {
 
 export default {
   name: 'RankedRulePicker',
-  props: ['noAllRules', 'type', 'value'],
+  props: {
+    noAllRules: Boolean,
+    type: Number,
+    value: [String, Number],
+    asId: Boolean,
+  },
   computed: {
     inputType() {
       // Make sure to type is valid value.

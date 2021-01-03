@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import { rankedRules } from './helper';
+import Distributions from './views/Distributions.vue';
 import Index from './views/Index.vue';
 import LeagueRankings from './views/LeagueRankings.vue';
 import PlayerSummary from './views/PlayerSummary.vue';
@@ -90,7 +91,12 @@ export default new Router({
       path: `/weapons/:weaponType(${weaponTypePattern})/:rankingType(splatfest)/:region/:splatfestId`,
       component: Weapons,
     },
-    { // Fallback route
+    {
+      path: '/distributions',
+      component: Distributions,
+    },
+    {
+      // Fallback route
       path: '*',
       redirect: '/',
     },
