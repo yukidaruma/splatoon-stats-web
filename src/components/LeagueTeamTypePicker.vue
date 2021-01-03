@@ -1,14 +1,10 @@
 <template>
   <select v-model="teamType" @change="$emit('input', teamType)">
     <option v-for="(v, k) in leagueTeamTypeOptions" :key="k" :value="v">
-      {{$t(`ui.team_types.${k}`)}}
+      {{ $t(`ui.team_types.${k}`) }}
     </option>
   </select>
 </template>
-
-<style scoped>
-
-</style>
 
 <script>
 export const LeagueTeamTypes = {
@@ -35,7 +31,7 @@ export const teamTypeSymbols = {
 
 export default {
   name: 'LeagueTeamTypePicker',
-  props: ['noAll', 'value'],
+  props: { noAll: Boolean, value: Number },
   watch: {
     value() {
       this.teamType = this.value;
@@ -45,8 +41,7 @@ export default {
     leagueTeamTypeOptions() {
       if (this.noAll) {
         return Object.fromEntries(
-          Object.entries(LeagueTeamTypes)
-            .filter(([_, v]) => v !== LeagueTeamTypes.all), // eslint-disable-line no-unused-vars
+          Object.entries(LeagueTeamTypes).filter(([_, v]) => v !== LeagueTeamTypes.all), // eslint-disable-line no-unused-vars
         );
       }
       return LeagueTeamTypes;

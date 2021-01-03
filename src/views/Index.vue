@@ -21,9 +21,8 @@
         </p>
 
         <h3 style="margin-top: 2em">Other data</h3>
-        <p>
-          <router-link to="/distributions">X Power Distributions</router-link>
-        </p>
+        <p><router-link to="/distributions/x">X Power Distributions</router-link></p>
+        <p><router-link to="/distributions/league">League Power Distributions</router-link></p>
       </div>
 
       <div class="column is-4 about">

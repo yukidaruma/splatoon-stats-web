@@ -93,6 +93,10 @@ export default new Router({
     },
     {
       path: '/distributions',
+      redirect: '/distributions/x',
+    },
+    {
+      path: '/distributions/:type(league|x)',
       component: Distributions,
     },
     {
