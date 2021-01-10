@@ -21,11 +21,19 @@
         <button @click="updateRoute()" :disabled="isLoading">Go</button>
       </div>
       <div>
+        <span class="label">Mode</span>
+        <input type="radio" v-model="mode" value="chart" id="rank" />
+        <label for="rank">Chart</label>
+
+        <input type="radio" v-model="mode" value="table" id="count" />
+        <label for="count">Table</label>
+      </div>
+      <div v-if="mode === 'table'">
         <span class="label">Show</span>
-        <input type="radio" v-model="keyToShow" value="rank" id="rank">
+        <input type="radio" v-model="keyToShow" value="rank" id="rank" />
         <label for="rank">Rank</label>
 
-        <input type="radio" v-model="keyToShow" value="count" id="count">
+        <input type="radio" v-model="keyToShow" value="count" id="count" />
         <label for="count">Count</label>
       </div>
     </div>
@@ -33,7 +41,10 @@
     <div v-if="isLoading">
       Loading...
     </div>
-    <div v-else>
+    <div v-else-if="mode === 'chart'">
+      <trends-chart :data="trendsChartData" />
+    </div>
+    <div v-else-if="mode === 'table'">
       <div v-if="result">
         <table class="table is-hoverable is-striped is-fullwidth">
           <thead>
@@ -46,10 +57,8 @@
             <tr v-for="weapon in weaponRecords" :key="weapon.weapon_id">
               <td>{{ weapon.current }}</td>
               <td>
-                <div class="weapon-name-container">
-                  <img class="weapon-icon" :src="weapon.icon">
-                  {{ $t(weapon.localizationKey) }}
-                </div>
+                <weapon-icon-count :weapon-id="weapon.weapon_id" />
+                {{ $t(weapon.localizationKey) }}
               </td>
               <td>{{ weapon.prev }}</td>
               <td>{{ weapon.diff | addSign }}</td>
@@ -72,6 +81,7 @@ import DatePicker from '../components/DatePicker.vue';
 import RankedRulePicker from '../components/RankedRulePicker.vue';
 import WeaponTypePicker from '../components/WeaponTypePicker.vue';
 import WeaponIconCount from '../components/WeaponIconCount.vue';
+import TrendsChart from '../components/TrendsChart.vue';
 
 const defaultNewDate = moment().utc().add({ month: -1 });
 const defaultOldDate = moment().utc().add({ month: -2 });
@@ -79,11 +89,16 @@ const defaultOldDate = moment().utc().add({ month: -2 });
 export default {
   name: 'Trends',
   components: {
-    DatePicker, RankedRulePicker, WeaponTypePicker, WeaponIconCount,
+    DatePicker,
+    RankedRulePicker,
+    WeaponTypePicker,
+    WeaponIconCount,
+    TrendsChart,
   },
   data() {
     return {
       isLoading: false,
+      mode: 'chart',
       dateFormat: 'YYYY-MM',
       keyToShow: 'rank',
       weaponType: 'weapons',
@@ -100,6 +115,15 @@ export default {
     },
   },
   computed: {
+    trendsChartData() {
+      return this.result.trends.map(
+        ({ icon, weapon_id, current_month_count, previous_month_count }) => ({
+          icon,
+          weapon_id,
+          volume: previous_month_count - current_month_count,
+        }),
+      );
+    },
     weaponRecords() {
       return this.result.trends.map((weapon) => {
         // eslint-disable-next-line default-case
