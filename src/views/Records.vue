@@ -50,7 +50,7 @@
         <tbody>
           <tr v-for="weapon in weapons" :key="weapon.weapon_id">
             <td>
-              <div class="weapon-name-container">
+              <div class="is-flex weapon-name-container h-space-between-4">
                 <img class="weapon-icon" :src="weapon.icon">
                 <span class="is-hidden-mobile">{{ $t(weapon.localizationKey) }}</span>
               </div>
@@ -67,7 +67,7 @@
     </div>
 
     <div v-show="activeTab === 'x-weapons'" class="x-weapons">
-      <div class="is-flex" style="align-items: center">
+      <div class="is-flex records-controls" style="align-items: center">
         <weapon-picker :value.sync="xWeapon.id" open-button-label="Select Weapon" single />
         <button @click="fetchXWeaponRecords()" :disabled="xWeapon.isloading">Go</button>
       </div>
@@ -85,13 +85,13 @@
 
     <div v-show="activeTab === 'x-powers'" class="columns is-multiline">
       <div v-for="(records, i) in xRecords" class="column is-6" :key="i">
-        <h3>{{$t(`ui.rule_shortnames.${findRuleKey(i + 1)}`)}}</h3>
+        <h2>{{$t(`rules.${findRuleKey(i + 1)}`)}}</h2>
         <x-records :records="records" :order="i" :rule-id="i + 1" />
       </div>
     </div>
 
     <div v-show="activeTab === 'league-weapons'" class="league-weapons table-container">
-      <div class="is-flex" style="align-items: center">
+      <div class="is-flex records-controls" style="align-items: center">
         <league-team-type-picker v-model="leagueWeapon.groupType" :no-all="true" />
         <weapon-picker style="margin-left: 1em" :value.sync="leagueWeapon.id" open-button-label="Select Weapon" single />
         <button @click="fetchLeagueWeaponRecords()" :disabled="leagueWeapon.isLoading">Go</button>
@@ -100,25 +100,27 @@
       <div v-if="leagueWeapon.isLoading">
         Loading...
       </div>
-      <div v-else v-for="(records, ruleId) in leagueWeapon.records">
-        <h2>{{ $t(`rules.${findRuleKey(ruleId)}`) }}</h2>
-        <table class="table is-hoverable is-striped is-fullwidth">
-          <tbody>
-            <template v-for="(record, rank) in records">
-              <player-ranking-entry
-                rankingType="league"
-                :as-records="true"
-                :rank="rank + 1"
-                :ranking-entry="record"
-              />
-            </template>
-          </tbody>
-        </table>
+      <div v-else class="v-space-between-6">
+        <div v-for="(records, ruleId) in leagueWeapon.records">
+          <h2>{{ $t(`rules.${findRuleKey(ruleId)}`) }}</h2>
+          <table class="table is-hoverable is-striped is-fullwidth">
+            <tbody>
+              <template v-for="(record, rank) in records">
+                <player-ranking-entry
+                  rankingType="league"
+                  :as-records="true"
+                  :rank="rank + 1"
+                  :ranking-entry="record"
+                />
+              </template>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
     <div v-show="activeTab === 'league-weapon-combinations'" class="league-weapon-combinations table-container">
-      <div class="is-flex" style="align-items: center">
+      <div class="is-flex records-controls" style="align-items: center">
         <league-team-type-picker v-model="leagueWeapons.groupType" :no-all="true" />
         <multi-weapon-picker :length="leagueTeamTypeMemers[leagueWeapons.groupType]" :value.sync="leagueWeapons.ids" open-button-label="Select Weapons" />
         <button @click="fetchLeagueWeaponRecords(true)" :disabled="leagueWeapons.isLoading || !leagueWeapons.ids || leagueWeapons.ids.some((id) => typeof id !== 'number')">Go</button>
@@ -127,29 +129,33 @@
       <div v-if="leagueWeapons.isLoading">
         Loading...
       </div>
-      <div v-else v-for="(records, ruleId) in leagueWeapons.records">
-        <h2>{{ $t(`rules.${findRuleKey(ruleId)}`) }}</h2>
-        <table class="table is-hoverable is-striped is-fullwidth">
-          <tbody>
-            <template v-for="(record, rank) in records">
-              <player-ranking-entry
-                rankingType="league"
-                :as-records="true"
-                :rank="rank + 1"
-                :ranking-entry="record"
-              />
-            </template>
-          </tbody>
-        </table>
+      <div v-else class="v-space-between-6">
+        <div v-for="(records, ruleId) in leagueWeapons.records">
+          <h2>{{ $t(`rules.${findRuleKey(ruleId)}`) }}</h2>
+          <table class="table is-hoverable is-striped is-fullwidth">
+            <tbody>
+              <template v-for="(record, rank) in records">
+                <player-ranking-entry
+                  rankingType="league"
+                  :as-records="true"
+                  :rank="rank + 1"
+                  :ranking-entry="record"
+                />
+              </template>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
     <div v-show="activeTab === 'league-powers'" class="league table-container">
-      <league-team-type-picker v-model="leaguePowersActiveTab" :no-all="true" />
+      <div class="records-controls">
+        <league-team-type-picker v-model="leaguePowersActiveTab" :no-all="true" />
+      </div>
 
       <div v-for="(groupTypeRecords, k) in leagueRecords" v-show="leaguePowersActiveTab === LeagueTeamTypes[k]" :key="k">
         <template v-for="(groupRecords, i) in groupTypeRecords">
-          <h3>{{$t(`ui.rule_shortnames.${findRuleKey(i + 1)}`)}}</h3>
+          <h2>{{$t(`rules.${findRuleKey(i + 1)}`)}}</h2>
           <table class="table is-hoverable is-striped is-fullwidth">
             <tbody>
               <template v-for="(record, rank) in groupRecords">
@@ -224,8 +230,12 @@
   }
 }
 
-.league-weapons > div:not(:first-child), .league-weapon-combinations > div:not(:first-child) {
+.records-controls + div {
   margin-top: 1em;
+}
+
+h2 {
+  margin-bottom: .25em;
 }
 </style>
 

@@ -5,8 +5,8 @@
         <td>#{{ i + 1 }}</td>
         <td>{{ record.rating }}</td>
         <td>
-          <div class="weapon-name-container">
-            <weapon-icon-count :weapon-id="record.weapon_id" />
+          <div class="weapon-name-container h-space-between-4">
+            <weapon-icon-count :weapon-id="record.weapon_id" no-margin />
             <player-link :player="new Player(record.player_id, record.player_name)" />
           </div>
         </td>

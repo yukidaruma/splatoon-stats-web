@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="noMargin ? 'no-margin is-flex' : null">
     <img
       :class="['weapon-icon', isActive ? 'is-active' : '']"
       :alt="$t(`weapons.${weaponId}`)"
@@ -24,13 +24,14 @@ export default {
       type: Number,
       required: true,
     },
+    noMargin: Boolean,
   },
   methods: { weaponIcon },
 };
 </script>
 
 <style lang="scss" scoped>
-div {
+div:not(.no-margin) {
   margin: 8px;
   width: 32px;
   height: 32px;

@@ -81,7 +81,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 table a {
   font-weight: 300;
 }
@@ -223,6 +223,29 @@ td.bar-chart-container {
   }
   .navbar-end .navbar-item :first-child {
     flex: 1;
+  }
+}
+
+$spacing-amounts: (1, 2, 3, 4, 5, 6, 8, 10, 12, 16);
+$spacing-multiplier: 0.125rem;
+$sides: (top, bottom, left, right);
+
+@each $amount in $spacing-amounts {
+  @each $side in $sides {
+    .m#{str-slice($side, 0, 1)}-#{$amount} {
+      margin-#{$side}: #{$amount * $spacing-multiplier} !important;
+    }
+
+    .p#{str-slice($side, 0, 1)}-#{$amount} {
+      padding-#{$side}: #{$amount * $spacing-multiplier} !important;
+    }
+  }
+
+  .v-space-between-#{$amount} > :not(:first-child) {
+    margin-top: $amount * $spacing-multiplier !important;
+  }
+  .h-space-between-#{$amount} > :not(:first-child) {
+    margin-left: $amount * $spacing-multiplier !important;
   }
 }
 </style>
