@@ -11,8 +11,15 @@
           </div>
         </td>
         <td>
-          <router-link :to="`/rankings/x/${record.year}/${record.month}/${findRuleKey(ruleId)}`">{{formatTime(record.start_time)}}</router-link>
+          <router-link
+            :to="`/rankings/x/${record.year}/${record.month}/${findRuleKey(record.rule_id)}`"
+          >
+            {{ formatTime(record.start_time) }}
+          </router-link>
         </td>
+        <template v-if="asAllRules">
+          <td>{{ $t(`ui.rule_shortnames.${findRuleKey(record.rule_id)}`) }}</td>
+        </template>
       </tr>
     </tbody>
   </table>
@@ -29,7 +36,7 @@ export default {
   components: { PlayerLink, WeaponIconCount },
   props: {
     records: Array,
-    ruleId: Number,
+    asAllRules: Boolean,
   },
   methods: {
     findRuleKey,

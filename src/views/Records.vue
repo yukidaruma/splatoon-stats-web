@@ -67,25 +67,40 @@
     </div>
 
     <div v-show="activeTab === 'x-weapons'" class="x-weapons">
-      <div class="is-flex records-controls" style="align-items: center">
-        <weapon-picker :value.sync="xWeapon.id" open-button-label="Select Weapon" single />
-        <button @click="fetchXWeaponRecords()" :disabled="xWeapon.isloading">Go</button>
+      <div class="records-controls">
+        <div class="is-flex" style="align-items: center">
+          <weapon-picker :value.sync="xWeapon.id" open-button-label="Select Weapon" single />
+          <button @click="fetchXWeaponRecords()" :disabled="xWeapon.isloading">Go</button>
+        </div>
+        <div>
+          <a @click="xWeapon.allRules = !xWeapon.allRules">
+            {{ xWeapon.allRules ? 'Ungroup' : 'Group by rule' }}
+          </a>
+        </div>
       </div>
 
       <div v-if="xWeapon.isLoading">
         Loading...
       </div>
       <div v-else class="columns is-multiline">
-        <div v-for="({ count, records }, ruleId) in xWeapon.records" class="column is-6" :key="ruleId">
-          <h2>{{ $t(`rules.${findRuleKey(ruleId)}`) }} <small>({{ count }})</small></h2>
-          <x-records :records="records" :rule-id="Number(ruleId)" />
-        </div>
+        <template v-if="xWeapon.allRules">
+          <div class="column">
+            <h2>All rules <small>({{ xWeapon.records[0].count }})</small></h2>
+            <x-records :records="xWeapon.records[0].records" as-all-rules />
+          </div>
+        </template>
+        <template v-else>
+          <div v-for="({ count, records }, ruleId) in xWeaponRuleRecords" class="column is-6" :key="ruleId">
+            <h2>{{ $t(`rules.${findRuleKey(ruleId)}`) }} <small>({{ count }})</small></h2>
+            <x-records :records="records" />
+          </div>
+        </template>
       </div>
     </div>
 
     <div v-show="activeTab === 'x-powers'" class="columns is-multiline">
       <div v-for="(records, i) in xRecords" class="column is-6" :key="i">
-        <h2>{{$t(`rules.${findRuleKey(i + 1)}`)}}</h2>
+        <h2>{{ $t(`rules.${findRuleKey(i + 1)}`) }}</h2>
         <x-records :records="records" :order="i" :rule-id="i + 1" />
       </div>
     </div>
@@ -154,8 +169,9 @@
       </div>
 
       <div v-for="(groupTypeRecords, k) in leagueRecords" v-show="leaguePowersActiveTab === LeagueTeamTypes[k]" :key="k">
+      >
         <template v-for="(groupRecords, i) in groupTypeRecords">
-          <h2>{{$t(`rules.${findRuleKey(i + 1)}`)}}</h2>
+          <h2>{{ $t(`rules.${findRuleKey(i + 1)}`) }}</h2>
           <table class="table is-hoverable is-striped is-fullwidth">
             <tbody>
               <template v-for="(record, rank) in groupRecords">
@@ -273,7 +289,8 @@ export default {
       this.activeTab = activeTab;
       switch (activeTab) {
         case 'x-weapons':
-          this.xWeapon.id = Number.parseInt(data, 10);
+          this.xWeapon.id = Number.parseInt(data.replace('-all', ''), 10);
+          this.xWeapon.allRules = data.includes('-all');
           this.fetchXWeaponRecords();
           break;
         case 'league-weapons': {
@@ -323,6 +340,7 @@ export default {
         id: 0,
         isLoading: false,
         records: null,
+        allRules: false,
       },
       leagueRecords: [],
       weapons: {},
@@ -336,7 +354,7 @@ export default {
 
       switch (this.activeTab) {
         case 'x-weapons':
-          data = this.xWeapon.id;
+          data = this.xWeapon.id.toString() + (this.xWeapon.allRules ? '-all' : '');
           break;
         case 'league-weapons':
           data = teamTypeSymbols[this.leagueWeapon.groupType] + this.leagueWeapon.id;
@@ -351,6 +369,9 @@ export default {
       }
 
       return data !== null ? `${hash};${data}` : hash;
+    },
+    xWeaponRuleRecords() {
+      return Object.fromEntries(Object.entries(this.xWeapon.records).filter(([key, _]) => Number(key) > 0));
     },
   },
   watch: {
