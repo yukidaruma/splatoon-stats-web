@@ -74,7 +74,7 @@
         </div>
         <div>
           <a @click="xWeapon.allRules = !xWeapon.allRules">
-            {{ xWeapon.allRules ? 'Ungroup' : 'Group by rule' }}
+            {{ xWeapon.allRules ? 'Group by rule' : 'Ungroup by rule' }}
           </a>
         </div>
       </div>
@@ -282,39 +282,7 @@ export default {
     LeagueTeamTypePicker, PlayerLink, PlayerRankingEntry, TabSwitcher, WeaponPicker, MultiWeaponPicker, XRecords,
   },
   created() {
-    const hash = this.$route.hash.replace('#', '');
-
-    if (hash) {
-      const [activeTab, data] = hash.split(';');
-      this.activeTab = activeTab;
-      switch (activeTab) {
-        case 'x-weapons':
-          this.xWeapon.id = Number.parseInt(data.replace('-all', ''), 10);
-          this.xWeapon.allRules = data.includes('-all');
-          this.fetchXWeaponRecords();
-          break;
-        case 'league-weapons': {
-          const [teamType, ...weaponId] = data;
-          this.leagueWeapon.groupType = LeagueTeamTypesTable[teamType];
-          this.leagueWeapon.id = Number.parseInt(weaponId.join('', ''), 10);
-          this.fetchLeagueWeaponRecords();
-          break;
-        }
-        case 'league-weapon-combinations': {
-          const [teamType, ...weaponIds] = data;
-          this.leagueWeapons.groupType = LeagueTeamTypesTable[teamType];
-          this.leagueWeapons.ids = weaponIds.join('').split(',').map((id) => Number.parseInt(id, 10));
-          this.fetchLeagueWeaponRecords(true);
-          break;
-        }
-        case 'league-powers':
-          this.leaguePowersActiveTab = LeagueTeamTypesTable[data];
-          break;
-        default:
-      }
-    }
-
-    this.fetchWeaponsTopPlayers();
+    this.restoreStateByHash();
   },
   data() {
     return {
@@ -380,10 +348,56 @@ export default {
         this.$router.push({ hash: value });
       }
     },
+    '$route.hash'() {
+      this.restoreStateByHash(false);
+    },
   },
   methods: {
     findRuleKey,
     Player,
+    restoreStateByHash(shouldFetch = true) {
+      const hash = this.$route.hash.replace('#', '');
+
+      if (hash) {
+        const [activeTab, data] = hash.split(';');
+        this.activeTab = activeTab;
+        switch (activeTab) {
+          case 'x-weapons':
+            this.xWeapon.id = Number.parseInt(data.replace('-all', ''), 10);
+            this.xWeapon.allRules = data.includes('-all');
+            if (shouldFetch) {
+              this.fetchXWeaponRecords();
+            }
+            break;
+          case 'league-weapons': {
+            const [teamType, ...weaponId] = data;
+            this.leagueWeapon.groupType = LeagueTeamTypesTable[teamType];
+            this.leagueWeapon.id = Number.parseInt(weaponId.join('', ''), 10);
+            if (shouldFetch) {
+              this.fetchLeagueWeaponRecords();
+            }
+            break;
+          }
+          case 'league-weapon-combinations': {
+            const [teamType, ...weaponIds] = data;
+            this.leagueWeapons.groupType = LeagueTeamTypesTable[teamType];
+            this.leagueWeapons.ids = weaponIds.join('').split(',').map((id) => Number.parseInt(id, 10));
+            if (shouldFetch) {
+              this.fetchLeagueWeaponRecords(true);
+            }
+            break;
+          }
+          case 'league-powers':
+            this.leaguePowersActiveTab = LeagueTeamTypesTable[data];
+            break;
+          default:
+        }
+      }
+
+      if (shouldFetch) {
+        this.fetchWeaponsTopPlayers();
+      }
+    },
     leagueId(time) {
       return moment(time).format('YYMMDDHH');
     },
