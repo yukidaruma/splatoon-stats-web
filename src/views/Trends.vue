@@ -65,8 +65,10 @@
             <tr v-for="weapon in weaponRecords" :key="weapon.weapon_id">
               <td>{{ weapon.current }}</td>
               <td>
-                <weapon-icon-count :weapon-id="weapon.weapon_id" />
-                {{ $t(weapon.localizationKey) }}
+                <div class="is-flex">
+                  <weapon-icon-count :weapon-id="weapon.weapon_id" no-margin />
+                  <span>{{ $t(weapon.localizationKey) }}</span>
+                </div>
               </td>
               <td>{{ weapon.prev }}</td>
               <td>{{ weapon.diff | addSign }}</td>
