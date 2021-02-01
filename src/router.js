@@ -57,7 +57,7 @@ export default new Router({
       component: XRankings,
     },
     {
-      path: `/rankings/x/:initialYear(\\d{4})/:initialMonth([1-9]|1[0-2])/:initialRankedRule(${rulePattern})?`,
+      path: `/rankings/x/:initialYear(\\d{4})/:initialMonth(0?[1-9]|1[0-2])/:initialRankedRule(${rulePattern})?`,
       name: 'rankingsX',
       component: XRankings,
       props: true,

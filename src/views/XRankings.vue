@@ -113,7 +113,7 @@ export default {
     if (this.initialRankedRule) {
       this.time = moment.utc({
         year: this.initialYear,
-        month: this.initialMonth - 1,
+        month: Number.parseInt(this.initialMonth, 10) - 1,
       });
       this.rankedRule = this.initialRankedRule;
     } else {
