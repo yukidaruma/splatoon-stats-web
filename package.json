@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "array.prototype.flat": "^1.2.3",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bulma": "^0.8.2",
     "chart.js": "^2.9.3",
     "core-js": "^3.6.5",
