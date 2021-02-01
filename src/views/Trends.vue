@@ -20,21 +20,29 @@
         <date-picker v-model="newDate" :initialRankingType="rankingType" />
         <button @click="updateRoute()" :disabled="isLoading">Go</button>
       </div>
-      <div>
-        <span class="label">Mode</span>
-        <input type="radio" v-model="mode" value="chart" id="rank" />
-        <label for="rank">Chart</label>
+      <div class="is-flex h-space-between-8">
+        <div class="is-flex align-center">
+          <span class="label">Mode</span>
+          <input type="radio" v-model="mode" value="chart" id="mode-chart" />
+          <label for="mode-chart">Chart</label>
+        </div>
 
-        <input type="radio" v-model="mode" value="table" id="count" />
-        <label for="count">Table</label>
+        <div class="is-flex align-center">
+          <input type="radio" v-model="mode" value="table" id="mode-count" />
+          <label for="mode-count">Table</label>
+        </div>
       </div>
-      <div v-if="mode === 'table'">
-        <span class="label">Show</span>
-        <input type="radio" v-model="keyToShow" value="rank" id="rank" />
-        <label for="rank">Rank</label>
+      <div v-if="mode === 'table'" class="h-space-between-8">
+        <div class="is-flex align-center">
+          <span class="label">Show</span>
+          <input type="radio" v-model="keyToShow" value="rank" id="show-rank" />
+          <label for="show-rank">Rank</label>
+        </div>
 
-        <input type="radio" v-model="keyToShow" value="count" id="count" />
-        <label for="count">Count</label>
+        <div class="is-flex align-center">
+          <input type="radio" v-model="keyToShow" value="count" id="show-count" />
+          <label for="show-count">Count</label>
+        </div>
       </div>
     </div>
 
