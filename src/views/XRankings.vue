@@ -41,7 +41,7 @@ import DatePicker from '../components/DatePicker.vue';
 import RankedRulePicker from '../components/RankedRulePicker.vue';
 import Ranking from '../components/Ranking.vue';
 import WeaponPicker from '../components/WeaponPicker.vue';
-import { capitalizeFirstLetters, findRuleKey, formatRankingEntry, unique } from '../helper';
+import { capitalizeFirstLetters, formatRankingEntry, rankedRules, unique } from '../helper';
 
 export default {
   mixins: [weaponFilterQueryParamMixin],
@@ -49,7 +49,14 @@ export default {
   components: {
     DatePicker, RankedRulePicker, Ranking, WeaponPicker,
   },
-  props: ['initialYear', 'initialMonth', 'initialRankedRule'],
+  props: {
+    initialYear: String,
+    initialMonth: String,
+    initialRankedRule: {
+      type: String,
+      default: rankedRules[0].key,
+    },
+  },
   data() {
     return {
       ranking: [],
@@ -109,18 +116,11 @@ export default {
     },
   },
   created() {
-    // You can assume year and month are valid, too, if initialRankedRule is valid
-    if (this.initialRankedRule) {
-      this.time = moment.utc({
-        year: this.initialYear,
-        month: Number.parseInt(this.initialMonth, 10) - 1,
-      });
-      this.rankedRule = this.initialRankedRule;
-    } else {
-      const lastMonth = moment.utc().add({ month: -1 });
-      this.time = lastMonth;
-      this.rankedRule = findRuleKey(1);
-    }
+    this.time = moment.utc({
+      year: Number.parseInt(this.initialYear, 10),
+      month: Number.parseInt(this.initialMonth, 10) - 1,
+    });
+    this.rankedRule = this.initialRankedRule;
 
     this.fetchXRanking();
   },

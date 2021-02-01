@@ -1,3 +1,4 @@
+import moment from 'moment';
 import Vue from 'vue';
 import Router from 'vue-router';
 import { rankedRules } from './helper';
@@ -53,14 +54,19 @@ export default new Router({
       component: SplatfestRankings,
     },
     {
-      path: '/rankings/x',
-      component: XRankings,
-    },
-    {
       path: `/rankings/x/:initialYear(\\d{4})/:initialMonth(0?[1-9]|1[0-2])/:initialRankedRule(${rulePattern})?`,
       name: 'rankingsX',
       component: XRankings,
       props: true,
+    },
+    {
+      path: '/rankings/x',
+      redirect() {
+        const lastMonth = moment().utc().subtract(1, 'month');
+        return `/rankings/x/${lastMonth.year()}/${lastMonth.month() + 1}/${
+          rankedRules[0].key
+        }`;
+      },
     },
     {
       path: '/records',
