@@ -339,6 +339,10 @@ export default {
       return data !== null ? `${hash};${data}` : hash;
     },
     xWeaponRuleRecords() {
+      if (!this.xWeapon.records) {
+        return {};
+      }
+
       return Object.fromEntries(Object.entries(this.xWeapon.records).filter(([key, _]) => Number(key) > 0));
     },
   },
