@@ -169,7 +169,6 @@
       </div>
 
       <div v-for="(groupTypeRecords, k) in leagueRecords" v-show="leaguePowersActiveTab === LeagueTeamTypes[k]" :key="k">
-      >
         <template v-for="(groupRecords, i) in groupTypeRecords">
           <h2>{{ $t(`rules.${findRuleKey(i + 1)}`) }}</h2>
           <table class="table is-hoverable is-striped is-fullwidth">
