@@ -6,4 +6,6 @@ const client = axios.create({
   responseType: 'json',
 });
 
+export { apiBaseUrl };
+
 export default client;

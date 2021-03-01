@@ -1,10 +1,11 @@
 import moment from 'moment';
+import { apiBaseUrl } from './api-client';
 import { weaponReskins } from './constants';
 
 const weaponIcon = (weaponType, weaponId) => {
   const singularWeaponType = weaponType.substring(0, weaponType.length - 1);
   // eslint-disable-next-line no-undef
-  return `${VUE_APP_API_URL}/static/images/${singularWeaponType}/${weaponId}.png`;
+  return `${apiBaseUrl}/static/images/${singularWeaponType}/${weaponId}.png`;
 };
 
 const capitalizeFirstLetters = (string) => string.split(/ +/).map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
