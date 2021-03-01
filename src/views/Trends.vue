@@ -130,7 +130,7 @@ export default {
         ({ icon, weapon_id, current_month_count, previous_month_count }) => ({
           icon,
           weapon_id,
-          volume: previous_month_count - current_month_count,
+          volume: current_month_count - previous_month_count,
         }),
       );
     },
