@@ -147,8 +147,10 @@ export default {
     },
   },
   watch: {
-    value(_) {
-      this.selectedWeapons = Array.isArray(this.value) ? this.value : [this.value];
+    value(newValue) {
+      if (typeof newValue === 'number') {
+        this.selectedWeapons = [newValue];
+      }
     },
     selectedWeapons() {
       if (this.single) {
