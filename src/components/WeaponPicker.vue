@@ -9,9 +9,7 @@
         <span v-if="single" @click="openModal">
           <weapon-icon-count v-if="selectedWeapons.length" :weapon-id="selectedWeapons[0]" />
         </span>
-        <span v-else-if="!hideCounter">
-          ({{selectedWeapons.length}}/{{weapons.length}})
-        </span>
+        <span v-else-if="!hideCounter"> ({{ selectedWeapons.length }}/{{ weapons.length }}) </span>
       </div>
     </template>
 

@@ -47,5 +47,8 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "volta": {
+    "node": "15.14.0"
+  }
 }

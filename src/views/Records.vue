@@ -117,14 +117,14 @@
       </div>
       <div v-else class="v-space-between-6">
         <div v-for="(records, ruleId) in leagueWeapon.records">
-          <h2>{{ $t(`rules.${findRuleKey(ruleId)}`) }}</h2>
+          <h2>Clam Blitz</h2>
           <table class="table is-hoverable is-striped is-fullwidth">
             <tbody>
               <template v-for="(record, rank) in records">
                 <player-ranking-entry
                   rankingType="league"
                   :as-records="true"
-                  :rank="rank + 1"
+                  :rank="record.rank + 1"
                   :ranking-entry="record"
                 />
               </template>
@@ -163,21 +163,17 @@
       </div>
     </div>
 
-    <div v-show="activeTab === 'league-powers'" class="league table-container">
-      <div class="records-controls">
-        <league-team-type-picker v-model="leaguePowersActiveTab" :no-all="true" />
-      </div>
-
-      <div v-for="(groupTypeRecords, k) in leagueRecords" v-show="leaguePowersActiveTab === LeagueTeamTypes[k]" :key="k">
+    <div v-show="activeTab === 'league-powers'" class="league table-container" style="display: flex; flex-direction: row;">
+      <div v-for="(groupTypeRecords, k) in leagueRecords" :key="k" :style="`margin-right: ${k}em`">
         <template v-for="(groupRecords, i) in groupTypeRecords">
-          <h2>{{ $t(`rules.${findRuleKey(i + 1)}`) }}</h2>
+          <h2>Clam Blitz</h2>
           <table class="table is-hoverable is-striped is-fullwidth">
             <tbody>
-              <template v-for="(record, rank) in groupRecords">
+              <template v-for="(record) in groupRecords">
                 <player-ranking-entry
                   rankingType="league"
                   :as-records="true"
-                  :rank="rank + 1"
+                  :rank="record.rank + 1"
                   :ranking-entry="mapLeagueRecord(record, i + 1)"
                 />
               </template>
@@ -449,6 +445,24 @@ export default {
         .get('/records')
         .then((res) => {
           this.leagueRecords = res.data.league_rating_records;
+          this.leagueRecords.team = [this.leagueRecords.team[3].map((pro, i) => {
+            return {
+              ...pro,
+              rank: i,
+            }
+          }).filter((it) => {
+            return it.teammates.some((teammate) => teammate[0] === 'e74f5fd8d37b9416');
+          })];
+          this.leagueRecords.pair = [this.leagueRecords.pair[3].map((pro, i) => {
+            return {
+              ...pro,
+              rank: i,
+            }
+          }).filter((it) => {
+            return it.teammates.some((teammate) => teammate[0] === 'e74f5fd8d37b9416');
+          })];
+
+          console.log(this.leagueRecords);
           this.monthlyLeagueBattlesRecords = res.data.monthly_league_battles_records;
           this.weapons = res.data.weapons_top_players.map((weapon) => formatRankingEntry(weapon, 'weapons'));
           this.xRecords = res.data.x_ranked_rating_records
